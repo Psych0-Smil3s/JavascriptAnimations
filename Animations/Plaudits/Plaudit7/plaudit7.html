@@ -1,0 +1,266 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+	<style type="text/css">
+		/******************************
+		 * The following styles are only
+		 * for browser based testing.
+		 ******************************/
+		.wrapper {
+			position: relative;
+			width: 600px;
+			margin: 100px;
+			overflow: visible;
+			border-radius: 5px;
+		}
+		.wrapper .editor {
+			margin-top: 10px !important;
+		}
+		/******************************
+		 * Message styles 
+		 ******************************/
+* {
+	overflow: auto;
+	margin: 0;
+	padding: 0;
+}
+.loader {
+	position: absolute;
+}
+.plaudits-7 {
+	border: solid 1px #000;
+	border-radius: inherit;
+	min-height: 113px;
+	height:auto !important;
+	height: 113px;
+}
+.plaudits-7 .canvas {
+	width: 100%;
+	height: 113px;
+}
+.plaudits-7 .plaudits-7-header {
+	width: 100%;
+	position: absolute;
+	z-index: 11;
+	top: 0;
+	left: 0;
+}
+.plaudits-7-header .timestamp, .plaudits-7-header .flags, .plaudits-7-header .nickname {
+	float: left;
+	padding: 2px 5px;
+	color: #666;
+}
+.plaudits-7-header .timestamp, .plaudits-7-header .flags {
+	float: right;
+	padding-left: 10px;
+}
+.plaudits-7.editor {
+	background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/woo1.png) center center no-repeat;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	.plaudits-7.editor {
+		background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/x2/woo1.png) center center no-repeat;
+		background-size: 87px 87px;
+	}
+}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+<script type="text/javascript" defer="defer">
+	/**
+	 * Provide a cross-browser/fall back
+	 * solution for the requestAnimationFrame.
+	 */
+	window.requestAnimFrame = (function(){ 
+		return  window.requestAnimationFrame       ||  
+				window.webkitRequestAnimationFrame ||  
+				window.mozRequestAnimationFrame    ||  
+				window.oRequestAnimationFrame      ||  
+				window.msRequestAnimationFrame     ||  
+				function( callback ){ 
+					window.setTimeout(callback, 1000 / 60); 
+				};
+	})(); 
+	
+	/**
+	 * Preload the scene images.
+	 */
+	var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
+		plaudits_7_imagesLoaded = 0,
+		plaudits_7_totalImages = 5,
+		plaudits_7_frameCount = 30,
+		plaudits_7_sprite_1 = new Image(),
+		plaudits_7_sprite_1_width,
+		plaudits_7_sprite_1_height,
+		plaudits_7_sprite_2 = new Image(),
+		plaudits_7_sprite_2_width,
+		plaudits_7_sprite_2_height,
+		plaudits_7_sprite_3 = new Image(),
+		plaudits_7_sprite_3_width,
+		plaudits_7_sprite_3_height,
+		plaudits_7_sprite_4 = new Image(),
+		plaudits_7_sprite_4_width,
+		plaudits_7_sprite_4_height,
+		plaudits_7_sprite_5 = new Image(),
+		plaudits_7_sprite_5_width,
+		plaudits_7_sprite_5_height,
+		plaudits_7_baseY = 20,
+		plaudits_7_baseUrl = 'http://media.parlingo.com/website/live/messagepacks/plaudits/'
+
+	plaudits_7_sprite_1.onload = function() {
+		plaudits_7_imagesLoaded++;
+		plaudits_7_sprite_1_width = this.width;
+		plaudits_7_sprite_1_height = this.height / plaudits_7_frameCount;
+	};
+	plaudits_7_sprite_1.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo1_1x30.png';
+
+	plaudits_7_sprite_2.onload = function() {
+		plaudits_7_imagesLoaded++;
+		plaudits_7_sprite_2_width = this.width;
+		plaudits_7_sprite_2_height = this.height / plaudits_7_frameCount;
+	};
+	plaudits_7_sprite_2.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo3_1x30.png';
+
+	plaudits_7_sprite_3.onload = function() {
+		plaudits_7_imagesLoaded++;
+		plaudits_7_sprite_3_width = this.width;
+		plaudits_7_sprite_3_height = this.height / plaudits_7_frameCount;
+	};
+	plaudits_7_sprite_3.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo4_1x30.png';
+
+	plaudits_7_sprite_4.onload = function() {
+		plaudits_7_imagesLoaded++;
+		plaudits_7_sprite_4_width = this.width;
+		plaudits_7_sprite_4_height = this.height / plaudits_7_frameCount;
+	};
+	plaudits_7_sprite_4.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo5_1x30.png';
+
+	plaudits_7_sprite_5.onload = function() {
+		plaudits_7_imagesLoaded++;
+		plaudits_7_sprite_5_width = this.width;
+		plaudits_7_sprite_5_height = this.height / plaudits_7_frameCount;
+	};
+	plaudits_7_sprite_5.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo6_1x30.png';
+
+	function plaudits_7_draw(c) {
+		setTimeout(function()
+        {
+			window.requestAnimFrame(function() {
+				plaudits_7_draw(c);
+			});
+			if (plaudits_7_imagesLoaded < plaudits_7_totalImages)
+				return;
+			var can = $('canvas#' + c);
+			can.each(function() {
+				var tick = $(this).parent().data('tick'),
+					ctx = this.getContext('2d');
+
+				ctx.clearRect(0, 0, this.width, this.height);
+				ctx.save();
+
+				var frame = tick % plaudits_7_frameCount,
+					pos = frame * plaudits_7_sprite_1_height,
+					reducedWidth = plaudits_7_sprite_1_width / 2.4,
+					reducedHeight = plaudits_7_sprite_1_height / 2.4;
+
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, (this.width / 2) - (reducedWidth / 2), plaudits_7_baseY, reducedHeight, reducedHeight);
+
+				reducedWidth = plaudits_7_sprite_2_width / 2.2,
+				reducedHeight = plaudits_7_sprite_2_height / 2.2,
+				frame = (tick + 15) % plaudits_7_frameCount,
+				pos = frame * plaudits_7_sprite_2_height;
+
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 1.5), plaudits_7_baseY + 10, reducedHeight, reducedHeight);
+
+				reducedWidth = plaudits_7_sprite_3_width / 2.1,
+				reducedHeight = plaudits_7_sprite_3_height / 2.1,
+				frame = (tick + 20) % plaudits_7_frameCount,
+				pos = frame * plaudits_7_sprite_3_height;
+
+				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1.5), plaudits_7_baseY + 5, reducedHeight, reducedHeight);
+
+				reducedWidth = plaudits_7_sprite_4_width / 1.9,
+				reducedHeight = plaudits_7_sprite_4_height / 1.9,
+				frame = (tick + 17) % plaudits_7_frameCount,
+				pos = frame * plaudits_7_sprite_4_height;
+
+				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1), plaudits_7_baseY + 10, reducedHeight, reducedHeight);
+
+				reducedWidth = plaudits_7_sprite_2_width / 1.9,
+				reducedHeight = plaudits_7_sprite_2_height / 1.9,
+				frame = (tick + 8) % plaudits_7_frameCount,
+				pos = frame * plaudits_7_sprite_2_height;
+
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 2.5), plaudits_7_baseY + 20, reducedHeight, reducedHeight);
+
+				reducedWidth = plaudits_7_sprite_5_width / 1.9,
+				reducedHeight = plaudits_7_sprite_5_height / 1.9,
+				frame = (tick + 8) % plaudits_7_frameCount,
+				pos = frame * plaudits_7_sprite_5_height;
+
+				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 3.8), plaudits_7_baseY + 30, reducedHeight, reducedHeight);
+
+				reducedWidth = plaudits_7_sprite_1_width / 1.6,
+				reducedHeight = plaudits_7_sprite_1_height / 1.6,
+				frame = (tick + 22) % plaudits_7_frameCount,
+				pos = frame * plaudits_7_sprite_1_height;
+
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth), plaudits_7_baseY + 20, reducedHeight, reducedHeight);
+
+				reducedWidth = plaudits_7_sprite_2_width / 1.6,
+				reducedHeight = plaudits_7_sprite_2_height / 1.6,
+				frame = (tick + 15) % plaudits_7_frameCount,
+				pos = frame * plaudits_7_sprite_2_height;
+
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth), plaudits_7_baseY + 30, reducedHeight, reducedHeight);
+
+				ctx.restore();
+
+				$(this).parent().data('tick', tick+1);
+			});
+		}, 1000 / (25 * pixelRatio));
+	}
+	function plaudits_7_loaded(preloaded) {
+		var me = $(this).closest('.plaudits-7');
+		if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+			setTimeout(function() {
+				me.data('tick', 0);
+				var canvas = me.find('.canvas'),
+					width = me.width(),
+					height = me.height();
+				canvas.css({
+					width : width,
+					height : height
+				});
+				if (pixelRatio) {
+					canvas.attr({
+						'width' : width * pixelRatio,
+						'height' : height * pixelRatio
+					});        
+				}
+				var id = Math.floor(Math.random() * new Date().getTime());
+				canvas.attr('id', id);
+				plaudits_7_draw(id);
+			}, 200);
+		} else {
+			me.addClass('msie');
+		}
+	}
+</script>
+<div class="plaudits-7">
+	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_7_loaded.call(this)">
+	<div class="plaudits-7-header">
+		<span class="timestamp"></span>
+		<span class="flags"></span>
+		<strong class="nickname"></strong>
+	</div>
+	<canvas class="canvas"></canvas>
+</div>
+<div class="plaudits-7 editor"></div>
+	</div>
+</body>
+</html>
