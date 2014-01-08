@@ -62,7 +62,7 @@
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
 	.plaudits-7.editor {
-		background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/x2/woo1.png) center center no-repeat;
+		background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/woo1.png) center center no-repeat;
 		background-size: 87px 87px;
 	}
 }
@@ -116,35 +116,35 @@
 		plaudits_7_sprite_1_width = this.width;
 		plaudits_7_sprite_1_height = this.height / plaudits_7_frameCount;
 	};
-	plaudits_7_sprite_1.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo1_1x30.png';
+	plaudits_7_sprite_1.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo1_1x30.png';
 
 	plaudits_7_sprite_2.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_2_width = this.width;
 		plaudits_7_sprite_2_height = this.height / plaudits_7_frameCount;
 	};
-	plaudits_7_sprite_2.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo3_1x30.png';
+	plaudits_7_sprite_2.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo3_1x30.png';
 
 	plaudits_7_sprite_3.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_3_width = this.width;
 		plaudits_7_sprite_3_height = this.height / plaudits_7_frameCount;
 	};
-	plaudits_7_sprite_3.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo4_1x30.png';
+	plaudits_7_sprite_3.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo4_1x30.png';
 
 	plaudits_7_sprite_4.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_4_width = this.width;
 		plaudits_7_sprite_4_height = this.height / plaudits_7_frameCount;
 	};
-	plaudits_7_sprite_4.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo5_1x30.png';
+	plaudits_7_sprite_4.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo5_1x30.png';
 
 	plaudits_7_sprite_5.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_5_width = this.width;
 		plaudits_7_sprite_5_height = this.height / plaudits_7_frameCount;
 	};
-	plaudits_7_sprite_5.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'x2/') + 'woo6_1x30.png';
+	plaudits_7_sprite_5.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo6_1x30.png';
 
 	function plaudits_7_draw(c) {
 		setTimeout(function()
@@ -162,12 +162,13 @@
 				ctx.clearRect(0, 0, this.width, this.height);
 				ctx.save();
 
+                // was 1 - 2.4 - 2
 				var frame = tick % plaudits_7_frameCount,
-					pos = frame * plaudits_7_sprite_1_height,
-					reducedWidth = plaudits_7_sprite_1_width / 2.4,
-					reducedHeight = plaudits_7_sprite_1_height / 2.4;
+					pos = frame * plaudits_7_sprite_5_height,
+					reducedWidth = plaudits_7_sprite_5_width / 2.6,
+					reducedHeight = plaudits_7_sprite_5_height / 2.6;
 
-				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, (this.width / 2) - (reducedWidth / 2), plaudits_7_baseY, reducedHeight, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, (this.width / 2) - (reducedWidth / 1.2), plaudits_7_baseY - 5, reducedHeight, reducedHeight);
 
 				reducedWidth = plaudits_7_sprite_2_width / 2.2,
 				reducedHeight = plaudits_7_sprite_2_height / 2.2,
@@ -176,6 +177,7 @@
 
 				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 1.5), plaudits_7_baseY + 10, reducedHeight, reducedHeight);
 
+                // was 3
 				reducedWidth = plaudits_7_sprite_3_width / 2.1,
 				reducedHeight = plaudits_7_sprite_3_height / 2.1,
 				frame = (tick + 20) % plaudits_7_frameCount,
@@ -183,12 +185,13 @@
 
 				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1.5), plaudits_7_baseY + 5, reducedHeight, reducedHeight);
 
+                // was /1
 				reducedWidth = plaudits_7_sprite_4_width / 1.9,
 				reducedHeight = plaudits_7_sprite_4_height / 1.9,
 				frame = (tick + 17) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_4_height;
 
-				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1), plaudits_7_baseY + 10, reducedHeight, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth * 1.2), plaudits_7_baseY + 10, reducedHeight, reducedHeight);
 
 				reducedWidth = plaudits_7_sprite_2_width / 1.9,
 				reducedHeight = plaudits_7_sprite_2_height / 1.9,
@@ -197,23 +200,25 @@
 
 				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 2.5), plaudits_7_baseY + 20, reducedHeight, reducedHeight);
 
-				reducedWidth = plaudits_7_sprite_5_width / 1.9,
-				reducedHeight = plaudits_7_sprite_5_height / 1.9,
+                // was 5 - 1.9 - 3.8
+				reducedWidth = plaudits_7_sprite_1_width / 1.5,
+				reducedHeight = plaudits_7_sprite_1_height / 1.5,
 				frame = (tick + 8) % plaudits_7_frameCount,
-				pos = frame * plaudits_7_sprite_5_height;
+				pos = frame * plaudits_7_sprite_1_height;
 
-				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 3.8), plaudits_7_baseY + 30, reducedHeight, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 5), plaudits_7_baseY + 25, reducedHeight, reducedHeight);
 
-				reducedWidth = plaudits_7_sprite_1_width / 1.6,
-				reducedHeight = plaudits_7_sprite_1_height / 1.6,
+                // was 1.6 - 20
+				reducedWidth = plaudits_7_sprite_1_width / 1.7,
+				reducedHeight = plaudits_7_sprite_1_height / 1.7,
 				frame = (tick + 22) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_1_height;
 
-				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth), plaudits_7_baseY + 20, reducedHeight, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1.1), plaudits_7_baseY + 23, reducedHeight, reducedHeight);
 
 				reducedWidth = plaudits_7_sprite_2_width / 1.6,
 				reducedHeight = plaudits_7_sprite_2_height / 1.6,
-				frame = (tick + 15) % plaudits_7_frameCount,
+				frame = (tick) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
 				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth), plaudits_7_baseY + 30, reducedHeight, reducedHeight);
