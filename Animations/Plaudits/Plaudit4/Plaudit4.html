@@ -111,20 +111,20 @@
 
         plaudits_4_sprite.onload = function() {
 		plaudits_4_imagesLoaded++;
-		plaudits_4_sprite_width = this.width;
-		plaudits_4_sprite_height = this.height / plaudits_4_frameCount;
+		plaudits_4_sprite_width  =  this.width;
+		plaudits_4_sprite_height =  this.height / plaudits_4_frameCount;
 	};
 	plaudits_4_sprite.src =  plaudits_4_baseURL + (pixelRatio === 1 ? '' : 'X2/') + 'clap2_1x90.png';
 
     plaudits_4_spriteBoo.onload = function() {
         plaudits_4_imagesLoaded++;
-        plaudits_4_sprite_widthBoo = this.width;
+        plaudits_4_sprite_widthBoo  = this.width;
         plaudits_4_sprite_heightBoo = this.height / plaudits_4_frameCountBoo;
     };
     plaudits_4_spriteBoo.src = plaudits_4_baseURL + (pixelRatio === 1 ? '' : 'X2/') + 'boo_1x70.png';
 
 	function plaudits_4_draw(c) {
-		setTimeout(function() {
+        setTimeout(function() {
 			window.requestAnimFrame(function() {
 				plaudits_4_draw(c);
 			});
@@ -144,7 +144,8 @@
                     reducedWidth = plaudits_4_sprite_width / 1.9,
                     reducedHeight = plaudits_4_sprite_height / 1.9;
 
-				ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1.6), plaudits_4_baseY, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1.6), plaudits_4_baseY * pixelRatio, reducedWidth, reducedHeight);
+
 
                 // Boo
                 frame = tick % plaudits_4_frameCountBoo,
@@ -152,7 +153,7 @@
                 reducedWidth = plaudits_4_sprite_widthBoo / 2.2,
                 reducedHeight = plaudits_4_sprite_heightBoo / 2.2;
 
-                ctx.drawImage(plaudits_4_spriteBoo, 0, pos, plaudits_4_sprite_widthBoo, plaudits_4_sprite_heightBoo, (this.width / 2) - (reducedWidth * 5) + (reducedWidth * 3.3), plaudits_4_baseY - 12, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_spriteBoo, 0, pos, plaudits_4_sprite_widthBoo, plaudits_4_sprite_heightBoo, (this.width / 2) - (reducedWidth * 5) + (reducedWidth * 3.3), (plaudits_4_baseY - 12) * pixelRatio, reducedWidth, reducedHeight);
 
                 // clap at back
                 reducedWidth = plaudits_4_sprite_width / 2.2,
@@ -160,7 +161,7 @@
                 frame = (tick + 8) % plaudits_4_frameCount,
                 pos = frame * plaudits_4_sprite_height;
 
-                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 4), plaudits_4_baseY - 10, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 4), (plaudits_4_baseY - 10) * pixelRatio, reducedWidth, reducedHeight);
 
                 // Clap far left
                 reducedWidth = plaudits_4_sprite_width / 1.9,
@@ -168,7 +169,7 @@
                 frame = (tick + 17) % plaudits_4_frameCount,
                 pos = frame * plaudits_4_sprite_height;
 
-                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth * 1.8) , plaudits_4_baseY, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth * 1.8) , (plaudits_4_baseY) * pixelRatio, reducedWidth, reducedHeight);
 
                 // clap front left
                 reducedWidth = plaudits_4_sprite_width / 1.5,
@@ -176,7 +177,7 @@
                 frame = (tick + 30) % plaudits_4_frameCount,
                 pos = frame * plaudits_4_sprite_height;
 
-                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 2.1), plaudits_4_baseY + 20, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 2.1), (plaudits_4_baseY + 20) * pixelRatio, reducedWidth, reducedHeight);
 
                 // clap front right
                 reducedWidth = plaudits_4_sprite_width / 1.4,
@@ -184,13 +185,14 @@
                 frame = (tick + 8) % plaudits_4_frameCount,
                 pos = frame * plaudits_4_sprite_height;
 
-                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth * 1.2), plaudits_4_baseY + 15, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth * 1.2), (plaudits_4_baseY + 15) * pixelRatio, reducedWidth, reducedHeight);
+
 
                 ctx.restore();
 
 				$(this).parent().data('tick', tick+1);
 			});
-		}, 1000 / (25 * pixelRatio));
+        }, 1000 / (25 * pixelRatio));
 	}
 	function plaudits_4_loaded(preloaded) {
 		var me = $(this).closest('.plaudits-4');
