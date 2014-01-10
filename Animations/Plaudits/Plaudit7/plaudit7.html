@@ -174,7 +174,7 @@
 					reducedWidth = plaudits_7_sprite_5_width / 2,
 					reducedHeight = plaudits_7_sprite_5_height / 2;
 
-				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, Math.floor((halfCanvas) - (reducedWidth / 1.6)), plaudits_7_baseY - 10, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, Math.floor((halfCanvas) - (reducedWidth / 1.6)), (plaudits_7_baseY - 10) * pixelRatio, reducedWidth, reducedHeight);
 
                 // Middle teapot left
 				reducedWidth = plaudits_7_sprite_2_width / 1.9,
@@ -182,7 +182,7 @@
 				frame = (tick + 15) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.3)), plaudits_7_baseY + 6, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.3)), (plaudits_7_baseY + 6) * pixelRatio, reducedWidth, reducedHeight);
 
                 // middle arm wave
 				reducedWidth = plaudits_7_sprite_3_width / 2.1,
@@ -190,7 +190,7 @@
 				frame = (tick + 20) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_3_height;
 
-				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.2)), plaudits_7_baseY , reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.2)), (plaudits_7_baseY) * pixelRatio , reducedWidth, reducedHeight);
 
                 // Sad
 				reducedWidth = plaudits_7_sprite_4_width / 1.9,
@@ -198,7 +198,7 @@
 				frame = (tick + 17) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_4_height;
 
-				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth * 1.2)), plaudits_7_baseY + 10, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth * 1.2)), (plaudits_7_baseY + 10) * pixelRatio, reducedWidth, reducedHeight);
 
                 // Front middle smile
 				reducedWidth = plaudits_7_sprite_2_width / 1.9,
@@ -206,7 +206,7 @@
 				frame = (tick + 8) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 2.5)), plaudits_7_baseY + 20, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 2.5)), (plaudits_7_baseY + 20) * pixelRatio, reducedWidth, reducedHeight);
 
                 // Front middle wave
 				reducedWidth = plaudits_7_sprite_1_width / 1.5,
@@ -214,7 +214,7 @@
 				frame = (tick + 8) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_1_height;
 
-				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 5)), plaudits_7_baseY + 25, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 5)), (plaudits_7_baseY + 25) * pixelRatio, reducedWidth, reducedHeight);
 
                 // Front right wave
 				reducedWidth = plaudits_7_sprite_1_width / 1.7,
@@ -222,7 +222,7 @@
 				frame = (tick + 22) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_1_height;
 
-				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.1)), plaudits_7_baseY + 25, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.1)), (plaudits_7_baseY + 25) * pixelRatio, reducedWidth, reducedHeight);
 
                 // Front left teapot wave
 				reducedWidth = plaudits_7_sprite_2_width / 1.6,
@@ -230,7 +230,7 @@
 				frame = (tick) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 1.6) - (reducedWidth)), plaudits_7_baseY + 30, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 1.6) - (reducedWidth)), (plaudits_7_baseY + 30) * pixelRatio, reducedWidth, reducedHeight);
 
 				ctx.restore();
 
