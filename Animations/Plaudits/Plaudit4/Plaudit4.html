@@ -197,6 +197,7 @@
 	function plaudits_4_loaded(preloaded) {
 		var me = $(this).closest('.plaudits-4');
 		if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+            me.removeClass('msie');
 			setTimeout(function() {
 				me.data('tick', 0);
 				var canvas = me.find('.canvas'),
@@ -216,12 +217,10 @@
 				canvas.attr('id', id);
 				plaudits_4_draw(id);
 			}, 200);
-		} else {
-			me.addClass('msie');
 		}
 	}
 </script>
-<div class="plaudits-4">
+<div class="plaudits-4 msie">
 	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_4_loaded.call(this)">
 	<div class="plaudits-4-header">
 		<span class="timestamp"></span>
