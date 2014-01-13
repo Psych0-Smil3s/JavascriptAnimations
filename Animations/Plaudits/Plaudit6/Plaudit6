@@ -105,7 +105,7 @@
         plaudits_6_sprite.onload = function() {
             plaudits_6_imagesLoaded++;
             plaudits_6_sprite_width = this.width;
-            plaudits_6_sprite_height = this.height / plaudits_6_frameCount;
+            plaudits_6_sprite_height = Math.floor(this.height / plaudits_6_frameCount);
         };
         plaudits_6_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'drum2_1x60.png';
 
@@ -126,25 +126,25 @@
 
                     var frame = (tick + 30) % plaudits_6_frameCount,
                         pos = frame * plaudits_6_sprite_height,
-                        reducedWidth = plaudits_6_sprite_width / 1.4,
-                        reducedHeight = plaudits_6_sprite_height / 1.4;
+                        reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
+                        reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, ((this.width / 2) - (plaudits_6_sprite_width / 2))  - (reducedWidth), (plaudits_4_baseY + 10) * pixelRatio, reducedWidth, reducedHeight);
+                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2))  - (reducedWidth)), Math.floor((plaudits_4_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
 
                     frame = (tick + 15) % plaudits_6_frameCount,
                     pos = frame * plaudits_6_sprite_height
-                    reducedWidth = plaudits_6_sprite_width / 1.4,
-                    reducedHeight = plaudits_6_sprite_height / 1.4;
+                    reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
+                    reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, (this.width / 2) - (plaudits_6_sprite_width / 2), plaudits_4_baseY  * pixelRatio, reducedWidth, reducedHeight);
+                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor((this.width / 2) - (plaudits_6_sprite_width / 2)), Math.floor(plaudits_4_baseY  * pixelRatio), reducedWidth, reducedHeight);
 
 
                     frame = (tick) % plaudits_6_frameCount,
                     pos = frame * plaudits_6_sprite_height
-                    reducedWidth = plaudits_6_sprite_width / 1.4,
-                    reducedHeight = plaudits_6_sprite_height / 1.4;
+                    reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
+                    reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, ((this.width / 2) - (plaudits_6_sprite_width / 2)) + (reducedWidth), (plaudits_4_baseY + 10) * pixelRatio, reducedWidth, reducedHeight);
+                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2)) + (reducedWidth)), Math.floor((plaudits_4_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
 
                     ctx.restore();
 

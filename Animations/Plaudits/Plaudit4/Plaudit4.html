@@ -112,14 +112,14 @@
         plaudits_4_sprite.onload = function() {
 		plaudits_4_imagesLoaded++;
 		plaudits_4_sprite_width  =  this.width;
-		plaudits_4_sprite_height =  this.height / plaudits_4_frameCount;
+		plaudits_4_sprite_height =  Math.floor(this.height / plaudits_4_frameCount);
 	};
 	plaudits_4_sprite.src =  plaudits_4_baseURL + (pixelRatio === 1 ? '' : 'X2/') + 'clap2_1x90.png';
 
     plaudits_4_spriteBoo.onload = function() {
         plaudits_4_imagesLoaded++;
         plaudits_4_sprite_widthBoo  = this.width;
-        plaudits_4_sprite_heightBoo = this.height / plaudits_4_frameCountBoo;
+        plaudits_4_sprite_heightBoo = Math.floor(this.height / plaudits_4_frameCountBoo);
     };
     plaudits_4_spriteBoo.src = plaudits_4_baseURL + (pixelRatio === 1 ? '' : 'X2/') + 'boo_1x70.png';
 
@@ -141,52 +141,51 @@
                 // clap middle
 				var frame = tick % plaudits_4_frameCount,
 					pos = frame * plaudits_4_sprite_height,
-                    reducedWidth = plaudits_4_sprite_width / 1.9,
-                    reducedHeight = plaudits_4_sprite_height / 1.9;
+                    reducedWidth =  Math.floor(plaudits_4_sprite_width / 1.9),
+                    reducedHeight = Math.floor(plaudits_4_sprite_height / 1.9);
 
-				ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1.6), plaudits_4_baseY * pixelRatio, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) + (reducedWidth / 1.6)), Math.floor(plaudits_4_baseY * pixelRatio), reducedWidth, reducedHeight);
 
 
                 // Boo
                 frame = tick % plaudits_4_frameCountBoo,
                 pos = frame * plaudits_4_sprite_heightBoo;
-                reducedWidth = plaudits_4_sprite_widthBoo / 2.2,
-                reducedHeight = plaudits_4_sprite_heightBoo / 2.2;
+                reducedWidth =  Math.floor(plaudits_4_sprite_widthBoo / 2.2),
+                reducedHeight = Math.floor(plaudits_4_sprite_heightBoo / 2.2);
 
-                ctx.drawImage(plaudits_4_spriteBoo, 0, pos, plaudits_4_sprite_widthBoo, plaudits_4_sprite_heightBoo, (this.width / 2) - (reducedWidth * 5) + (reducedWidth * 3.3), (plaudits_4_baseY - 12) * pixelRatio, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_spriteBoo, 0, pos, plaudits_4_sprite_widthBoo, plaudits_4_sprite_heightBoo, Math.floor((this.width / 2) - (reducedWidth * 5) + (reducedWidth * 3.3)), Math.floor((plaudits_4_baseY - 12) * pixelRatio), reducedWidth, reducedHeight);
 
                 // clap at back
-                reducedWidth = plaudits_4_sprite_width / 2.2,
-                reducedHeight = plaudits_4_sprite_height / 2.2,
+                reducedWidth =  Math.floor(plaudits_4_sprite_width / 2.2),
+                reducedHeight = Math.floor(plaudits_4_sprite_height / 2.2),
                 frame = (tick + 8) % plaudits_4_frameCount,
                 pos = frame * plaudits_4_sprite_height;
 
-                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 4), (plaudits_4_baseY - 10) * pixelRatio, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) - (reducedWidth / 4)), Math.floor((plaudits_4_baseY - 10) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Clap far left
-                reducedWidth = plaudits_4_sprite_width / 1.9,
-                reducedHeight = plaudits_4_sprite_height / 1.9,
+                reducedWidth =  Math.floor(plaudits_4_sprite_width / 1.9),
+                reducedHeight = Math.floor(plaudits_4_sprite_height / 1.9),
                 frame = (tick + 17) % plaudits_4_frameCount,
                 pos = frame * plaudits_4_sprite_height;
 
-                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth * 1.8) , (plaudits_4_baseY) * pixelRatio, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) - (reducedWidth * 1.8)) , Math.floor((plaudits_4_baseY) * pixelRatio), reducedWidth, reducedHeight);
 
                 // clap front left
-                reducedWidth = plaudits_4_sprite_width / 1.5,
-                reducedHeight = plaudits_4_sprite_height / 1.5,
+                reducedWidth =  Math.floor(plaudits_4_sprite_width / 1.5),
+                reducedHeight = Math.floor(plaudits_4_sprite_height / 1.5),
                 frame = (tick + 30) % plaudits_4_frameCount,
                 pos = frame * plaudits_4_sprite_height;
 
-                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) - (reducedWidth / 2.1), (plaudits_4_baseY + 20) * pixelRatio, reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) - (reducedWidth / 2.1)), Math.floor((plaudits_4_baseY + 20) * pixelRatio), reducedWidth, reducedHeight);
 
                 // clap front right
-                reducedWidth = plaudits_4_sprite_width / 1.4,
-                reducedHeight = plaudits_4_sprite_height / 1.4,
+                reducedWidth =  Math.floor(plaudits_4_sprite_width / 1.4),
+                reducedHeight = Math.floor(plaudits_4_sprite_height / 1.4),
                 frame = (tick + 8) % plaudits_4_frameCount,
                 pos = frame * plaudits_4_sprite_height;
 
-                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, (this.width / 2) - (reducedWidth / 2) + (reducedWidth * 1.2), (plaudits_4_baseY + 15) * pixelRatio, reducedWidth, reducedHeight);
-
+                ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) + (reducedWidth * 1.2)), Math.floor((plaudits_4_baseY + 15) * pixelRatio), reducedWidth, reducedHeight);
 
                 ctx.restore();
 
@@ -233,3 +232,117 @@
 	</div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" defer="defer">
+    /**
+     * Provide a cross-browser/fall back
+     * solution for the requestAnimationFrame.
+     */
+    window.requestAnimFrame = (function(){
+        return  window.requestAnimationFrame       ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                window.oRequestAnimationFrame      ||
+                window.msRequestAnimationFrame     ||
+                function( callback ){
+                    window.setTimeout(callback, 1000 / 60);
+                };
+    })();
+
+    /**
+     * Preload the scene images.
+     */
+    var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
+            plaudits_3_imagesLoaded = 0,
+            plaudits_3_totalImages = 1,
+            plaudits_3_frameCount = 70,
+            plaudits_3_sprite = new Image(),
+            plaudits_3_sprite_width,
+            plaudits_3_sprite_height;
+
+    plaudits_3_sprite.onload = function() {
+        plaudits_3_imagesLoaded++;
+        plaudits_3_sprite_width = this.width;
+        plaudits_3_sprite_height = Math.floor(this.height / plaudits_3_frameCount);
+    };
+    plaudits_3_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'clap1_1x70.png';
+
+    function plaudits_3_draw(c) {
+        setTimeout(function() {
+            window.requestAnimFrame(function() {
+                plaudits_3_draw(c);
+            });
+            if (plaudits_3_imagesLoaded < plaudits_3_totalImages)
+                return;
+            var can = $('canvas#' + c);
+            can.each(function() {
+                var tick = $(this).parent().data('tick'),
+                        ctx = this.getContext('2d');
+
+                ctx.clearRect(0, 0, this.width, this.height);
+                ctx.save();
+
+                var frame = tick % plaudits_3_frameCount,
+                        pos = frame * plaudits_3_sprite_height;
+
+                ctx.drawImage(plaudits_3_sprite, 0, pos, plaudits_3_sprite_width, plaudits_3_sprite_height, Math.floor((this.width / 2) - (plaudits_3_sprite_width / 2)), Math.floor((this.height / 2) - (plaudits_3_sprite_height / 2)), plaudits_3_sprite_width, plaudits_3_sprite_height);
+
+                ctx.restore();
+
+                $(this).parent().data('tick', tick+1);
+            });
+        }, 1000 / (25 * pixelRatio));
+    }
+    function plaudits_3_loaded(preloaded) {
+        var me = $(this).closest('.plaudits-3');
+        if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+            me.removeClass('msie');
+            setTimeout(function() {
+                me.data('tick', 0);
+                var canvas = me.find('.canvas'),
+                        width = me.width(),
+                        height = me.height();
+                canvas.css({
+                    width : width,
+                    height : height
+                });
+                if (pixelRatio) {
+                    canvas.attr({
+                        'width' : width * pixelRatio,
+                        'height' : height * pixelRatio
+                    });
+                }
+                var id = Math.floor(Math.random() * new Date().getTime());
+                canvas.attr('id', id);
+                plaudits_3_draw(id);
+            }, 200);
+        }
+    }
+</script>
+<div class="plaudits-3 msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_3_loaded.call(this)">
+    <div class="plaudits-3-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname"></strong>
+    </div>
+    <canvas class="canvas"></canvas>
+</div>

@@ -119,35 +119,35 @@
 	plaudits_7_sprite_1.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_1_width = this.width;
-		plaudits_7_sprite_1_height = this.height / plaudits_7_frameCount;
+		plaudits_7_sprite_1_height = Math.floor(this.height / plaudits_7_frameCount);
 	};
 	plaudits_7_sprite_1.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo1_1x30.png';
 
 	plaudits_7_sprite_2.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_2_width = this.width;
-		plaudits_7_sprite_2_height = this.height / plaudits_7_frameCount;
+		plaudits_7_sprite_2_height = Math.floor(this.height / plaudits_7_frameCount);
 	};
 	plaudits_7_sprite_2.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo3_1x30.png';
 
 	plaudits_7_sprite_3.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_3_width = this.width;
-		plaudits_7_sprite_3_height = this.height / plaudits_7_frameCount;
+		plaudits_7_sprite_3_height = Math.floor(this.height / plaudits_7_frameCount);
 	};
 	plaudits_7_sprite_3.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo4_1x30.png';
 
 	plaudits_7_sprite_4.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_4_width = this.width;
-		plaudits_7_sprite_4_height = this.height / plaudits_7_frameCount;
+		plaudits_7_sprite_4_height = Math.floor(this.height / plaudits_7_frameCount);
 	};
 	plaudits_7_sprite_4.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo5_1x30.png';
 
 	plaudits_7_sprite_5.onload = function() {
 		plaudits_7_imagesLoaded++;
 		plaudits_7_sprite_5_width = this.width;
-		plaudits_7_sprite_5_height = this.height / plaudits_7_frameCount;
+		plaudits_7_sprite_5_height = Math.floor(this.height / plaudits_7_frameCount);
 	};
 	plaudits_7_sprite_5.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo6_1x30.png';
 
@@ -171,66 +171,66 @@
 				var halfCanvas = this.width / 2,
                     frame = tick % plaudits_7_frameCount,
 					pos = frame * plaudits_7_sprite_5_height,
-					reducedWidth = plaudits_7_sprite_5_width / 2,
-					reducedHeight = plaudits_7_sprite_5_height / 2;
+					reducedWidth = Math.floor(plaudits_7_sprite_5_width / 2),
+					reducedHeight = Math.floor(plaudits_7_sprite_5_height / 2);
 
-				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, Math.floor((halfCanvas) - (reducedWidth / 1.6)), (plaudits_7_baseY - 10) * pixelRatio, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, Math.floor((halfCanvas) - (reducedWidth / 1.6)), Math.floor((plaudits_7_baseY - 10) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Middle teapot left
-				reducedWidth = plaudits_7_sprite_2_width / 1.9,
-				reducedHeight = plaudits_7_sprite_2_height / 1.9,
+				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.9),
+				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.9),
 				frame = (tick + 15) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.3)), (plaudits_7_baseY + 6) * pixelRatio, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.3)), Math.floor((plaudits_7_baseY + 6) * pixelRatio), reducedWidth, reducedHeight);
 
                 // middle arm wave
-				reducedWidth = plaudits_7_sprite_3_width / 2.1,
-				reducedHeight = plaudits_7_sprite_3_height / 2.1,
+				reducedWidth = Math.floor(plaudits_7_sprite_3_width / 2.1),
+				reducedHeight = Math.floor(plaudits_7_sprite_3_height / 2.1),
 				frame = (tick + 20) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_3_height;
 
-				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.2)), (plaudits_7_baseY) * pixelRatio , reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.2)), Math.floor((plaudits_7_baseY) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Sad
-				reducedWidth = plaudits_7_sprite_4_width / 1.9,
-				reducedHeight = plaudits_7_sprite_4_height / 1.9,
+				reducedWidth = Math.floor(plaudits_7_sprite_4_width / 1.9),
+				reducedHeight = Math.floor(plaudits_7_sprite_4_height / 1.9),
 				frame = (tick + 17) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_4_height;
 
-				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth * 1.2)), (plaudits_7_baseY + 10) * pixelRatio, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth * 1.2)), Math.floor((plaudits_7_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front middle smile
-				reducedWidth = plaudits_7_sprite_2_width / 1.9,
-				reducedHeight = plaudits_7_sprite_2_height / 1.9,
+				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.9),
+				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.9),
 				frame = (tick + 8) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 2.5)), (plaudits_7_baseY + 20) * pixelRatio, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 2.5)), Math.floor((plaudits_7_baseY + 20) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front middle wave
-				reducedWidth = plaudits_7_sprite_1_width / 1.5,
-				reducedHeight = plaudits_7_sprite_1_height / 1.5,
+				reducedWidth =  Math.floor(plaudits_7_sprite_1_width / 1.5),
+				reducedHeight = Math.floor(plaudits_7_sprite_1_height / 1.5),
 				frame = (tick + 8) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_1_height;
 
-				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 5)), (plaudits_7_baseY + 25) * pixelRatio, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 5)), Math.floor((plaudits_7_baseY + 25) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front right wave
-				reducedWidth = plaudits_7_sprite_1_width / 1.7,
-				reducedHeight = plaudits_7_sprite_1_height / 1.7,
+				reducedWidth = Math.floor(plaudits_7_sprite_1_width / 1.7),
+				reducedHeight = Math.floor(plaudits_7_sprite_1_height / 1.7),
 				frame = (tick + 22) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_1_height;
 
-				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.1)), (plaudits_7_baseY + 25) * pixelRatio, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.1)), Math.floor((plaudits_7_baseY + 25) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front left teapot wave
-				reducedWidth = plaudits_7_sprite_2_width / 1.6,
-				reducedHeight = plaudits_7_sprite_2_height / 1.6,
+				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.6),
+				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.6),
 				frame = (tick) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 1.6) - (reducedWidth)), (plaudits_7_baseY + 30) * pixelRatio, reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 1.6) - (reducedWidth)), Math.floor((plaudits_7_baseY + 30) * pixelRatio), reducedWidth, reducedHeight);
 
 				ctx.restore();
 
