@@ -19,57 +19,57 @@
         .wrapper .editor {
             margin-top: 10px !important;
         }
-        /******************************
-         * Message styles
-         ******************************/
-        * {
-            overflow: auto;
-            margin: 0;
-            padding: 0;
-        }
-        .loader {
-            position: absolute;
-        }
-        .plaudits-6 {
-            border: solid 1px #000;
-            border-radius: inherit;
-            min-height: 113px;
-            height:auto !important;
-            height: 113px;
-            background-color: #FFF;
-        }
-        .plaudits-6 .canvas {
-            width: 100%;
-            height: 113px;
-        }
-        .plaudits-6 .plaudits-6-header {
-            width: 100%;
-            position: absolute;
-            z-index: 11;
-            top: 0;
-            left: 0;
-        }
-        .plaudits-6-header .timestamp, .plaudits-6-header .flags, .plaudits-6-header .nickname {
-            float: left;
-            padding: 2px 5px;
-            color: #666;
-        }
-        .plaudits-6-header .timestamp, .plaudits-6-header .flags {
-            float: right;
-            padding-left: 10px;
-        }
-        .plaudits-6.msie canvas {
-            display: none;
-        }
-        .plaudits-6.editor, .plaudits-6.msie {
-            background: #FFF url(http://media.parlingo.com/website/live/messagepacks/plaudits/drum2.png) center center no-repeat;
-        }
-        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-            .plaudits-6.editor {
-                background: #FFF url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum2.png) center center no-repeat;
-                background-size: 70px 91px;
-            }
-        }
+/******************************
+ * Message styles
+ ******************************/
+* {
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+}
+.loader {
+    position: absolute;
+}
+.plaudits-6 {
+    border: solid 1px #000;
+    border-radius: inherit;
+    min-height: 113px;
+    height:auto !important;
+    height: 113px;
+    background-color: #c1f0ff;
+}
+.plaudits-6 .canvas {
+    width: 100%;
+    height: 113px;
+}
+.plaudits-6 .plaudits-6-header {
+    width: 100%;
+    position: absolute;
+    z-index: 11;
+    top: 0;
+    left: 0;
+}
+.plaudits-6-header .timestamp, .plaudits-6-header .flags, .plaudits-6-header .nickname {
+    float: left;
+    padding: 2px 5px;
+    color: #666;
+}
+.plaudits-6-header .timestamp, .plaudits-6-header .flags {
+    float: right;
+    padding-left: 10px;
+}
+.plaudits-6.msie canvas {
+    display: none;
+}
+.plaudits-6.editor, .plaudits-6.msie {
+    background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/drum2.png) center center no-repeat;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    .plaudits-6.editor {
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum2.png) center center no-repeat;
+        background-size: 70px 91px;
+    }
+}
     </style>
 </head>
 <body>
@@ -127,19 +127,22 @@
                 ctx.clearRect(0, 0, this.width, this.height);
                 ctx.save();
 
+                var scene = plaudits_6_drawScene(this);
+                ctx.drawImage(scene, 0, 0, this.width, this.height);
+
                 var frame = (tick + 30) % plaudits_6_frameCount,
                         pos = frame * plaudits_6_sprite_height,
                         reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
                         reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2))  - (reducedWidth)), Math.floor((plaudits_4_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2))  - (reducedWidth)), Math.floor((plaudits_4_baseY + 20) * pixelRatio), reducedWidth, reducedHeight);
 
                 frame = (tick + 15) % plaudits_6_frameCount,
                         pos = frame * plaudits_6_sprite_height
                         reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
                         reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor((this.width / 2) - (plaudits_6_sprite_width / 2)), Math.floor(plaudits_4_baseY  * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor((this.width / 2) - (plaudits_6_sprite_width / 2)), Math.floor((plaudits_4_baseY - 2)  * pixelRatio), reducedWidth, reducedHeight);
 
 
                 frame = (tick) % plaudits_6_frameCount,
@@ -147,12 +150,29 @@
                         reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
                         reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2)) + (reducedWidth)), Math.floor((plaudits_4_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2)) + (reducedWidth)), Math.floor((plaudits_4_baseY + 20) * pixelRatio), reducedWidth, reducedHeight);
 
                 ctx.restore();
 
                 $(this).parent().data('tick', tick+1);
             });
+        }
+
+        function plaudits_6_drawScene(par) {
+            if (!par.scene) {
+                var canvas = document.createElement('canvas'),
+                        ctx = canvas.getContext('2d');
+
+                canvas.width = par.width;
+                canvas.height = par.height;
+
+                // green base
+                ctx.fillStyle = '#94d5a5';
+                ctx.fillRect(0, (par.height / 5) * 3, par.width, par.height);
+
+                par.scene = canvas;
+            }
+            return par.scene;
         }
 
         function plaudits_6_draw(c) {

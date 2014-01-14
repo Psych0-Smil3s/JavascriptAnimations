@@ -35,7 +35,7 @@
     min-height: 113px;
     height:auto !important;
     height: 113px;
-    background-color: #FFF;
+    background-color: #c1f0ff;
 }
 .plaudits-5 .canvas {
     width: 100%;
@@ -61,11 +61,11 @@
     display: none;
 }
 .plaudits-5.editor, .plaudits-5.msie {
-    background: #FFF url(http://media.parlingo.com/website/live/messagepacks/plaudits/drum1.png) center center no-repeat;
+    background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/drum1.png) center center no-repeat;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .plaudits-5.editor {
-        background: #FFF url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum1.png) center center no-repeat;
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum1.png) center center no-repeat;
         background-size: 86px 90px;
     }
 }
@@ -123,6 +123,9 @@
                 ctx.clearRect(0, 0, this.width, this.height);
                 ctx.save();
 
+                var scene = plaudits_5_drawScene(this);
+                ctx.drawImage(scene, 0, 0, this.width, this.height);
+
                 var frame = tick % plaudits_5_frameCount,
                     pos = frame * plaudits_5_sprite_height;
 
@@ -132,6 +135,23 @@
 
                 $(this).parent().data('tick', tick+1);
             });
+    }
+
+    function plaudits_5_drawScene(par) {
+        if (!par.scene) {
+            var canvas = document.createElement('canvas'),
+                    ctx = canvas.getContext('2d');
+
+            canvas.width = par.width;
+            canvas.height = par.height;
+
+            // green base
+            ctx.fillStyle = '#94d5a5';
+            ctx.fillRect(0, (par.height / 5) * 3, par.width, par.height);
+
+            par.scene = canvas;
+        }
+        return par.scene;
     }
 
     function plaudits_5_draw(c) {
