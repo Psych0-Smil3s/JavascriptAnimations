@@ -95,6 +95,9 @@
 	 * Preload the scene images.
 	 */
 	var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
+        lastUpdateTime = 0,
+        acDelta = 0,
+        msPerFrame = 1000 / (25 * pixelRatio), //FPS
 		plaudits_7_imagesLoaded = 0,
 		plaudits_7_totalImages = 5,
 		plaudits_7_frameCount = 30,
@@ -151,14 +154,11 @@
 	};
 	plaudits_7_sprite_5.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo6_1x30.png';
 
-	function plaudits_7_draw(c) {
-		setTimeout(function()
-        {
-			window.requestAnimFrame(function() {
-				plaudits_7_draw(c);
-			});
-			if (plaudits_7_imagesLoaded < plaudits_7_totalImages)
-				return;
+	function plaudits_7_render(c) {
+
+        if (plaudits_7_imagesLoaded < plaudits_7_totalImages)
+            return;
+
 			var can = $('canvas#' + c);
 			can.each(function() {
 				var tick = $(this).parent().data('tick'),
@@ -236,8 +236,27 @@
 
 				$(this).parent().data('tick', tick+1);
 			});
-		}, 1000 / (25 * pixelRatio));
 	}
+
+    function plaudits_7_draw(c) {
+
+        window.requestAnimFrame(
+            function() {plaudits_7_draw(c)
+        });
+
+        var delta = Date.now() - lastUpdateTime;
+        if (acDelta > msPerFrame)
+        {
+            acDelta = 0;
+            plaudits_7_render(c);
+        }
+        else
+        {
+            acDelta += delta;
+        }
+        lastUpdateTime = Date.now();
+    }
+
 	function plaudits_7_loaded(preloaded) {
 		var me = $(this).closest('.plaudits-7');
 		if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
