@@ -94,13 +94,16 @@
          * Preload the scene images.
          */
         var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
-                plaudits_4_baseY = 20,
-                plaudits_6_imagesLoaded = 0,
-                plaudits_6_totalImages = 1,
-                plaudits_6_frameCount = 60,
-                plaudits_6_sprite = new Image(),
-                plaudits_6_sprite_width,
-                plaudits_6_sprite_height;
+            lastUpdateTime = 0,
+            acDelta = 0,
+            msPerFrame = 1000 / (25 * pixelRatio), //FPS
+            plaudits_4_baseY = 20,
+            plaudits_6_imagesLoaded = 0,
+            plaudits_6_totalImages = 1,
+            plaudits_6_frameCount = 60,
+            plaudits_6_sprite = new Image(),
+            plaudits_6_sprite_width,
+            plaudits_6_sprite_height;
 
         plaudits_6_sprite.onload = function() {
             plaudits_6_imagesLoaded++;
@@ -109,54 +112,76 @@
         };
         plaudits_6_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'drum2_1x60.png';
 
-        function plaudits_6_draw(c) {
-            setTimeout(function() {
-                window.requestAnimFrame(function() {
-                    plaudits_6_draw(c);
-                });
-                if (plaudits_6_imagesLoaded < plaudits_6_totalImages)
-                    return;
-                var can = $('canvas#' + c);
-                can.each(function() {
-                    var tick = $(this).parent().data('tick'),
-                            ctx = this.getContext('2d');
 
-                    ctx.clearRect(0, 0, this.width, this.height);
-                    ctx.save();
+        function plaudits_6_render(c) {
 
-                    var frame = (tick + 30) % plaudits_6_frameCount,
+            if (plaudits_6_imagesLoaded < plaudits_6_totalImages)
+                return;
+
+            var can = $('canvas#' + c);
+
+            can.each(function() {
+                var tick = $(this).parent().data('tick'),
+                        ctx = this.getContext('2d');
+
+                ctx.clearRect(0, 0, this.width, this.height);
+                ctx.save();
+
+                var frame = (tick + 30) % plaudits_6_frameCount,
                         pos = frame * plaudits_6_sprite_height,
                         reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
                         reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2))  - (reducedWidth)), Math.floor((plaudits_4_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2))  - (reducedWidth)), Math.floor((plaudits_4_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
 
-                    frame = (tick + 15) % plaudits_6_frameCount,
-                    pos = frame * plaudits_6_sprite_height
-                    reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
-                    reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
+                frame = (tick + 15) % plaudits_6_frameCount,
+                        pos = frame * plaudits_6_sprite_height
+                        reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
+                        reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor((this.width / 2) - (plaudits_6_sprite_width / 2)), Math.floor(plaudits_4_baseY  * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor((this.width / 2) - (plaudits_6_sprite_width / 2)), Math.floor(plaudits_4_baseY  * pixelRatio), reducedWidth, reducedHeight);
 
 
-                    frame = (tick) % plaudits_6_frameCount,
-                    pos = frame * plaudits_6_sprite_height
-                    reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
-                    reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
+                frame = (tick) % plaudits_6_frameCount,
+                        pos = frame * plaudits_6_sprite_height
+                        reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
+                        reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                    ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2)) + (reducedWidth)), Math.floor((plaudits_4_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2)) + (reducedWidth)), Math.floor((plaudits_4_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
 
-                    ctx.restore();
+                ctx.restore();
 
-                    $(this).parent().data('tick', tick+1);
-                });
-            }, 1000 / (25 * pixelRatio));
+                $(this).parent().data('tick', tick+1);
+            });
         }
+
+        function plaudits_6_draw(c) {
+
+            window.requestAnimFrame(
+                    function() {plaudits_6_draw(c)
+            });
+
+            var delta = Date.now() - lastUpdateTime;
+            if (acDelta > msPerFrame)
+            {
+                acDelta = 0;
+                plaudits_6_render(c);
+            }
+            else
+            {
+                acDelta += delta;
+            }
+            lastUpdateTime = Date.now();
+        }
+
+
         function plaudits_6_loaded(preloaded) {
+
             var me = $(this).closest('.plaudits-6');
             if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
                 me.removeClass('msie');
                 setTimeout(function() {
+
                     me.data('tick', 0);
                     var canvas = me.find('.canvas'),
                             width = me.width(),
@@ -171,9 +196,12 @@
                             'height' : height * pixelRatio
                         });
                     }
+
                     var id = Math.floor(Math.random() * new Date().getTime());
                     canvas.attr('id', id);
+
                     plaudits_6_draw(id);
+
                 }, 200);
             }
         }
