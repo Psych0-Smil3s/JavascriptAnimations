@@ -1,0 +1,194 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+	<style type="text/css">
+		/******************************
+		 * The following styles are only
+		 * for browser based testing.
+		 ******************************/
+		.wrapper {
+			position: relative;
+			width: 600px;
+			margin: 100px;
+			overflow: visible;
+			border-radius: 5px;
+		}
+		.wrapper .editor {
+			margin-top: 10px !important;
+		}
+/******************************
+ * Message styles
+ ******************************/
+* {
+    margin: 0;
+    padding: 0;
+}
+.loader {
+    position: absolute;
+}
+.plaudits-5 {
+    border: solid 1px #000;
+    border-radius: inherit;
+    min-height: 113px;
+    height:auto !important;
+    height: 113px;
+    background-color: #FFF;
+}
+.plaudits-5 .canvas {
+    width: 100%;
+    height: 113px;
+}
+.plaudits-5 .plaudits-5-header {
+    width: 100%;
+    position: absolute;
+    z-index: 11;
+    top: 0;
+    left: 0;
+}
+.plaudits-5-header .timestamp, .plaudits-5-header .flags, .plaudits-5-header .nickname {
+    float: left;
+    padding: 2px 5px;
+    color: #666;
+}
+.plaudits-5-header .timestamp, .plaudits-5-header .flags {
+    float: right;
+    padding-left: 10px;
+}
+.plaudits-5.msie canvas {
+    display: none;
+}
+.plaudits-5.editor, .plaudits-5.msie {
+    background: #FFF url(http://media.parlingo.com/website/live/messagepacks/plaudits/drum1.png) center center no-repeat;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    .plaudits-5.editor {
+        background: #FFF url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum1.png) center center no-repeat;
+        background-size: 86px 90px;
+    }
+}
+	</style>
+</head>
+<body>
+<div class="wrapper">
+<script type="text/javascript" defer="defer">
+    /**
+     * Provide a cross-browser/fall back
+     * solution for the requestAnimationFrame.
+     */
+    window.requestAnimFrame = (function(){
+        return  window.requestAnimationFrame       ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                window.oRequestAnimationFrame      ||
+                window.msRequestAnimationFrame     ||
+                function( callback ){
+                    window.setTimeout(callback, 1000 / 60);
+                };
+    })();
+
+    /**
+     * Preload the scene images.
+     */
+    var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
+        lastUpdateTime = 0,
+        acDelta = 0,
+        msPerFrame = 1000 / (25 * pixelRatio), //FPS
+        plaudits_5_imagesLoaded = 0,
+        plaudits_5_totalImages = 1,
+        plaudits_5_frameCount = 40,
+        plaudits_5_sprite = new Image(),
+        plaudits_5_sprite_width,
+        plaudits_5_sprite_height;
+
+    plaudits_5_sprite.onload = function() {
+        plaudits_5_imagesLoaded++;
+        plaudits_5_sprite_width = this.width;
+        plaudits_5_sprite_height = Math.floor(this.height / plaudits_5_frameCount);
+    };
+    plaudits_5_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'drum1_1x40.png';
+
+    function plaudits_5_render(c) {
+
+        if (plaudits_5_imagesLoaded < plaudits_5_totalImages)
+            return;
+
+            var can = $('canvas#' + c);
+            can.each(function() {
+                var tick = $(this).parent().data('tick'),
+                    ctx = this.getContext('2d');
+
+                ctx.clearRect(0, 0, this.width, this.height);
+                ctx.save();
+
+                var frame = tick % plaudits_5_frameCount,
+                    pos = frame * plaudits_5_sprite_height;
+
+                ctx.drawImage(plaudits_5_sprite, 0, pos, plaudits_5_sprite_width, plaudits_5_sprite_height, Math.floor((this.width / 2) - (plaudits_5_sprite_width / 2)), Math.floor((this.height / 2) - (plaudits_5_sprite_height / 2)), plaudits_5_sprite_width, plaudits_5_sprite_height);
+
+                ctx.restore();
+
+                $(this).parent().data('tick', tick+1);
+            });
+    }
+
+    function plaudits_5_draw(c) {
+
+        window.requestAnimFrame(
+            function() {plaudits_5_draw(c)
+        });
+
+        var delta = Date.now() - lastUpdateTime;
+        if (acDelta > msPerFrame)
+        {
+            acDelta = 0;
+            plaudits_5_render(c);
+        }
+        else
+        {
+            acDelta += delta;
+        }
+        lastUpdateTime = Date.now();
+    }
+
+    function plaudits_5_loaded(preloaded) {
+        var me = $(this).closest('.plaudits-5');
+        if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+            me.removeClass('msie');
+            setTimeout(function() {
+                me.data('tick', 0);
+                var canvas = me.find('.canvas'),
+                        width = me.width(),
+                        height = me.height();
+                canvas.css({
+                    width : width,
+                    height : height
+                });
+                if (pixelRatio) {
+                    canvas.attr({
+                        'width' : width * pixelRatio,
+                        'height' : height * pixelRatio
+                    });
+                }
+                var id = Math.floor(Math.random() * new Date().getTime());
+                canvas.attr('id', id);
+                plaudits_5_draw(id);
+            }, 200);
+        }
+    }
+</script>
+<div class="plaudits-5 msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_5_loaded.call(this)">
+    <div class="plaudits-5-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname"></strong>
+    </div>
+    <canvas class="canvas"></canvas>
+</div>
+<div class="plaudits-5 editor"></div>
+	</div>
+</body>
+</html>
