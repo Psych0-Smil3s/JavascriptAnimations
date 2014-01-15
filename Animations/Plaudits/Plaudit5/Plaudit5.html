@@ -61,12 +61,25 @@
     display: none;
 }
 .plaudits-5.editor, .plaudits-5.msie {
-    background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/drum1.png) center center no-repeat;
+    background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+}
+.plaudits-5.editor .blob, .plaudits-5.msie .blob {
+    margin: 0 auto;
+    width: 86px;
+    height: 90px;
+    margin-top: 10px;
+    background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/drum1.png) center center no-repeat;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-    .plaudits-5.editor {
-        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum1.png) center center no-repeat;
-        background-size: 86px 90px;
+    .plaudits-5.editor, .plaudits-5.msie {
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+    }
+    .plaudits-5.editor span.blob, .plaudits-5.msie span.blob {
+        margin: 0 auto;
+        width: 86px;
+        height: 90px;
+        margin-top: 10px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum1.png) center center no-repeat;
     }
 }
 	</style>
@@ -147,7 +160,7 @@
 
             // green base
             ctx.fillStyle = '#94d5a5';
-            ctx.fillRect(0, (par.height / 5) * 3, par.width, par.height);
+            ctx.fillRect(0, Math.floor((par.height / 5) * 3), par.width, par.height);
 
             par.scene = canvas;
         }
@@ -206,9 +219,13 @@
         <span class="flags"></span>
         <strong class="nickname"></strong>
     </div>
+    <div class="blob"></div>
     <canvas class="canvas"></canvas>
 </div>
-<div class="plaudits-5 editor"></div>
-	</div>
+<div class="plaudits-5 editor">
+    <div class="blob"></div>
+</div>
+
+</div>
 </body>
 </html>

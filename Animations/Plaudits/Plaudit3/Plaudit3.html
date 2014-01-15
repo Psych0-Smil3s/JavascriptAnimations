@@ -61,12 +61,26 @@
     display: none;
 }
 .plaudits-3.editor, .plaudits-3.msie {
-    background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/clap1.png) center center no-repeat;
+    background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
 }
+.plaudits-3.editor .blob, .plaudits-3.msie .blob {
+    margin: 0 auto;
+    width: 106px;
+    height: 90px;
+    margin-top: 10px;
+    background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/clap1.png) center center no-repeat;
+}
+
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-    .plaudits-3.editor {
-        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png) center center no-repeat;
-        background-size: 106px 90px;
+    .plaudits-3.editor, .plaudits-3.msie {
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) center center no-repeat;
+    }
+    .plaudits-3.editor .blob, .plaudits-3.msie .blob {
+        margin: 0 auto;
+        width: 106px;
+        height: 90px;
+        margin-top: 10px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png) center center no-repeat;
     }
 }
 	</style>
@@ -147,7 +161,7 @@
 
             // green base
             ctx.fillStyle = '#94d5a5';
-            ctx.fillRect(0, (par.height / 5) * 3, par.width, par.height);
+            ctx.fillRect(0, Math.floor((par.height / 5) * 3), par.width, par.height);
 
             par.scene = canvas;
         }
@@ -203,12 +217,16 @@
     <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_3_loaded.call(this)">
     <div class="plaudits-3-header">
         <span class="timestamp"></span>
-        <span class="flags"></span>
-        <strong class="nickname"></strong>
+        <span class="flags">test</span>
+        <strong class="nickname">test</strong>
     </div>
+    <div class="blob"></div>
     <canvas class="canvas"></canvas>
 </div>
-<div class="plaudits-3 editor"></div>
-	</div>
+<div class="plaudits-3 editor">
+    <div class="blob"></div>
+</div>
+
+</div>
 </body>
 </html>
