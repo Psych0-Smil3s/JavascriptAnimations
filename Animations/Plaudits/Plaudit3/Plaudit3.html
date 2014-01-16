@@ -30,7 +30,7 @@
     position: absolute;
 }
 .plaudits-3 {
-    border: solid 1px #000;
+    border: solid 1px #999;
     border-radius: inherit;
     min-height: 113px;
     height:auto !important;
@@ -73,14 +73,25 @@
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .plaudits-3.editor, .plaudits-3.msie {
-        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) center center no-repeat;
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
     }
     .plaudits-3.editor .blob, .plaudits-3.msie .blob {
         margin: 0 auto;
-        width: 106px;
-        height: 90px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png)  no-repeat;
+        background-size: 106px 90px;
+    }
+}
+@-moz-document url-prefix() {
+    .plaudits-3.editor, .plaudits-3.msie {
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
+    }
+    .plaudits-3.editor .blob, .plaudits-3.msie .blob {
+        margin: 0 auto;
         margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png) center center no-repeat;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png)  no-repeat;
+        background-size: 106px 90px;
     }
 }
 	</style>
@@ -187,6 +198,19 @@
         lastUpdateTime = Date.now();
     }
 
+    function plaudits_3_playSound(clip) {
+
+        var sound = clip[0];
+        sound.play();
+
+
+
+
+
+
+
+    }
+
     function plaudits_3_loaded(preloaded) {
         var me = $(this).closest('.plaudits-3');
         if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
@@ -209,6 +233,16 @@
                 var id = Math.floor(Math.random() * new Date().getTime());
                 canvas.attr('id', id);
                 plaudits_3_draw(id);
+
+                var clip = me.find('.clip');
+                clip.find('source').each(function() {
+                    // !! converts  value to a boolean and ensures a boolean type.
+                    if (!!(this.parentNode.canPlayType && this.parentNode.canPlayType($(this).attr('type')).replace(/no/, ''))) {
+                        plaudits_3_playSound(clip);
+                        return false;
+                    }
+                });
+
             }, 200);
         }
     }
@@ -216,12 +250,19 @@
 <div class="plaudits-3 msie">
     <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_3_loaded.call(this)">
     <div class="plaudits-3-header">
-        <span class="timestamp"></span>
+        <span class="timestamp">test</span>
         <span class="flags">test</span>
         <strong class="nickname">test</strong>
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
+
+    <audio preload="auto" class="clip">
+        <source src="" type="audio/x-wav"></source>
+        <source src="" type="audio/mpeg"></source>
+        <source src="" type="audio/ogg"></source>
+        <source src="" type="audio/mp4a-latm"></source>
+    </audio>
 </div>
 <div class="plaudits-3 editor">
     <div class="blob"></div>
