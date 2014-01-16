@@ -30,7 +30,7 @@
     position: absolute;
 }
 .plaudits-5 {
-    border: solid 1px #000;
+    border: solid 1px #999;
     border-radius: inherit;
     min-height: 113px;
     height:auto !important;
@@ -73,13 +73,25 @@
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .plaudits-5.editor, .plaudits-5.msie {
         background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
     }
-    .plaudits-5.editor span.blob, .plaudits-5.msie span.blob {
+    .plaudits-5.editor .blob, .plaudits-5.msie .blob {
         margin: 0 auto;
-        width: 86px;
-        height: 90px;
         margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum1.png) center center no-repeat;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum1.png) no-repeat;
+        background-size: 86px 90px;
+    }
+}
+@-moz-document url-prefix() {
+    .plaudits-5.editor, .plaudits-5.msie {
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
+    }
+    .plaudits-5.editor .blob, .plaudits-5.msie .blob {
+        margin: 0 auto;
+        margin-top: 10px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum1.png) no-repeat;
+        background-size: 86px 90px;
     }
 }
 	</style>

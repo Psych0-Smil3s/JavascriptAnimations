@@ -31,7 +31,7 @@
 	position: absolute;
 }
 .plaudits-7 {
-	border: solid 1px #000;
+	border: solid 1px #999;
 	border-radius: inherit;
 	min-height: 113px;
 	height:auto !important;
@@ -61,6 +61,9 @@
 .plaudits-7.msie canvas {
     display: none;
 }
+.plaudits-7.editor canvas {
+    display: none;
+}
 .plaudits-7.editor, .plaudits-7.msie {
 	background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
 }
@@ -73,15 +76,27 @@
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-    .plaudits-4.editor, .plaudits-4.msie {
+    .plaudits-7.editor, .plaudits-7.msie {
         background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
     }
-    .plaudits-4.editor span.blob, .plaudits-4.msie span.blob {
+    .plaudits-7.editor .blob, .plaudits-7.msie .blob {
         margin: 0 auto;
-        width: 87px;
-        height: 87px;
         margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/woo1.png) center center no-repeat;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/woo1.png)  no-repeat;
+        background-size: 87px 87px;
+    }
+}
+@-moz-document url-prefix() {
+    .plaudits-7.editor, .plaudits-7.msie {
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
+    }
+    .plaudits-7.editor .blob, .plaudits-7.msie .blob {
+        margin: 0 auto;
+        margin-top: 10px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/woo1.png)  no-repeat;
+        background-size: 87px 87px;
     }
 }
 	</style>
@@ -89,6 +104,23 @@
 <body>
 	<div class="wrapper">
 <script type="text/javascript" defer="defer">
+
+   /* $(document).ready(function(){
+
+        // COMPOSING CONTENT
+        $( ".loader" ).load(function() {
+            if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+                //plaudits_7_loaded.call(this, true);
+            }
+        });
+
+        // CONTENT
+        $( ".loader" ).load(function() {
+            plaudits_7_loaded.call(this);
+        });
+
+    });*/
+
 	/**
 	 * Provide a cross-browser/fall back
 	 * solution for the requestAnimationFrame.
@@ -186,7 +218,6 @@
 
                 // Back angry
 				var halfCanvas = this.width / 2,
-                    frame = tick % plaudits_7_frameCount,
 
                 /*
 				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, Math.floor((halfCanvas) - (reducedWidth / 1.2)), Math.floor((plaudits_7_baseY + 2) * pixelRatio), reducedWidth, reducedHeight);
@@ -215,7 +246,7 @@
 				frame = (tick + 17) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_4_height;
 
-				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth * 1.5)), Math.floor((plaudits_7_baseY + 8) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth * 1.5)), Math.floor((plaudits_7_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front middle smile
 				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.7),
@@ -223,7 +254,7 @@
 				frame = (tick + 8) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 2)), Math.floor((plaudits_7_baseY + 8) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 2)), Math.floor((plaudits_7_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front middle wave
 				reducedWidth =  Math.floor(plaudits_7_sprite_1_width / 1.3),
@@ -236,7 +267,7 @@
                 // Front right wave
 				reducedWidth = Math.floor(plaudits_7_sprite_1_width / 1.5),
 				reducedHeight = Math.floor(plaudits_7_sprite_1_height / 1.5),
-				frame = (tick + 22) % plaudits_7_frameCount,
+				frame = (tick + 25) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_1_height;
 
 				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) + reducedWidth), Math.floor((plaudits_7_baseY + 25) * pixelRatio), reducedWidth, reducedHeight);
@@ -272,29 +303,38 @@
         return par.scene;
     }
 
-    function plaudits_7_draw(c) {
+    function plaudits_7_draw(c, staticImg) {
 
-        window.requestAnimFrame(
-            function() {plaudits_7_draw(c)
-        });
-
-        var delta = Date.now() - lastUpdateTime;
-        if (acDelta > msPerFrame)
-        {
-            acDelta = 0;
+        if (staticImg)
             plaudits_7_render(c);
-        }
         else
         {
-            acDelta += delta;
+            window.requestAnimFrame(
+                    function() {plaudits_7_draw(c)
+                    });
+
+            var delta = Date.now() - lastUpdateTime;
+            if (acDelta > msPerFrame)
+            {
+                acDelta = 0;
+                plaudits_7_render(c);
+            }
+            else
+            {
+                acDelta += delta;
+            }
+            lastUpdateTime = Date.now();
         }
-        lastUpdateTime = Date.now();
     }
 
-	function plaudits_7_loaded(preloaded) {
+	function plaudits_7_loaded(staticImg) {
 		var me = $(this).closest('.plaudits-7');
 		if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
             me.removeClass('msie');
+
+            if (staticImg)
+                me.removeClass('editor');
+
 			setTimeout(function() {
 				me.data('tick', 0);
 				var canvas = me.find('.canvas'),
@@ -312,24 +352,28 @@
 				}
 				var id = Math.floor(Math.random() * new Date().getTime());
 				canvas.attr('id', id);
-				plaudits_7_draw(id);
+				plaudits_7_draw(id, staticImg);
 			}, 200);
 		}
 	}
 </script>
 <div class="plaudits-7 msie">
-	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_7_loaded.call(this)">
-	<div class="plaudits-7-header">
-		<span class="timestamp"></span>
-		<span class="flags"></span>
-		<strong class="nickname"></strong>
-	</div>
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_7_loaded.call(this);">
+    <div class="plaudits-7-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname"></strong>
+    </div>
     <div class="blob"></div>
-	<canvas class="canvas"></canvas>
+    <canvas class="canvas"></canvas>
 </div>
+
 <div class="plaudits-7 editor">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_7_loaded.call(this, true);">
     <div class="blob"></div>
+    <canvas class="canvas"></canvas>
 </div>
+
 	</div>
 </body>
 </html>

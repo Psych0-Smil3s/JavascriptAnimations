@@ -31,7 +31,7 @@
 	position: absolute;
 }
 .plaudits-4 {
-	border: solid 1px #000;
+	border: solid 1px #999;
 	border-radius: inherit;
 	min-height: 113px;
 	height:auto !important;
@@ -61,6 +61,9 @@
 .plaudits-4.msie canvas {
     display: none;
 }
+.plaudits-4.editor canvas {
+    display: none;
+}
 .plaudits-4.editor, .plaudits-4.msie {
 	background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
 }
@@ -74,13 +77,25 @@
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .plaudits-4.editor, .plaudits-4.msie {
         background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
     }
-    .plaudits-4.editor span.blob, .plaudits-4.msie span.blob {
+    .plaudits-4.editor .blob, .plaudits-4.msie .blob {
         margin: 0 auto;
-        width: 67px;
-        height: 90px;
         margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap2.png) center center no-repeat;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap2.png) no-repeat;
+        background-size: 67px 90px
+    }
+}
+@-moz-document url-prefix() {
+    .plaudits-4.editor, .plaudits-4.msie {
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
+    }
+    .plaudits-4.editor .blob, .plaudits-4.msie .blob {
+        margin: 0 auto;
+        margin-top: 10px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap2.png) no-repeat;
+        background-size: 67px 90px
     }
 }
 	</style>
@@ -89,6 +104,23 @@
 	<div class="wrapper">
 
 <script type="text/javascript" defer="defer">
+
+    $(document).ready(function(){
+
+        // COMPOSING CONTENT
+        $( ".loader" ).load(function() {
+            if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+                //plaudits_4_loaded.call(this, true);
+            }
+        });
+
+        // CONTENT
+        $( ".loader" ).load(function() {
+            plaudits_4_loaded.call(this);
+        });
+
+    });
+
 	/**
 	 * Provide a cross-browser/fall back
 	 * solution for the requestAnimationFrame.
@@ -164,7 +196,7 @@
                 reducedHeight = Math.floor(plaudits_4_sprite_height / 1.7);
 
 
-            ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) + (reducedWidth / 2)), Math.floor((plaudits_4_baseY + 5) * pixelRatio), reducedWidth, reducedHeight);
+            ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) + (reducedWidth / 2)), Math.floor((plaudits_4_baseY + 7) * pixelRatio), reducedWidth, reducedHeight);
 
             // Boo
             /*frame = tick % plaudits_4_frameCountBoo,
@@ -190,7 +222,7 @@
             frame = (tick + 17) % plaudits_4_frameCount,
             pos = frame * plaudits_4_sprite_height;
 
-            ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) - (reducedWidth * 1.8)) , Math.floor((plaudits_4_baseY + 5) * pixelRatio), reducedWidth, reducedHeight);
+            ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) - (reducedWidth * 1.8)) , Math.floor((plaudits_4_baseY + 7) * pixelRatio), reducedWidth, reducedHeight);
 
 
             // clap front left
@@ -232,29 +264,38 @@
         return par.scene;
     }
 
-    function plaudits_4_draw(c) {
+    function plaudits_4_draw(c, staticImg) {
 
-        window.requestAnimFrame(
-                function() {plaudits_4_draw(c)
-        });
-
-        var delta = Date.now() - lastUpdateTime;
-        if (acDelta > msPerFrame)
-        {
-            acDelta = 0;
+        if (staticImg)
             plaudits_4_render(c);
-        }
         else
         {
-            acDelta += delta;
+            window.requestAnimFrame(
+                    function() {plaudits_4_draw(c)
+                    });
+
+            var delta = Date.now() - lastUpdateTime;
+            if (acDelta > msPerFrame)
+            {
+                acDelta = 0;
+                plaudits_4_render(c);
+            }
+            else
+            {
+                acDelta += delta;
+            }
+            lastUpdateTime = Date.now();
         }
-        lastUpdateTime = Date.now();
     }
 
-	function plaudits_4_loaded(preloaded) {
+	function plaudits_4_loaded(staticImg) {
 		var me = $(this).closest('.plaudits-4');
 		if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
             me.removeClass('msie');
+
+            if (staticImg)
+                me.removeClass('editor');
+
 			setTimeout(function() {
 				me.data('tick', 0);
 				var canvas = me.find('.canvas'),
@@ -273,14 +314,14 @@
 				var id = Math.floor(Math.random() * new Date().getTime());
 				canvas.attr('id', id);
 
-                plaudits_4_draw(id);
+                plaudits_4_draw(id, staticImg);
 
 			}, 200);
 		}
 	}
 </script>
 <div class="plaudits-4 msie">
-	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_4_loaded.call(this)">
+	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader">
 	<div class="plaudits-4-header">
 		<span class="timestamp"></span>
 		<span class="flags"></span>
@@ -289,9 +330,13 @@
     <div class="blob"></div>
 	<canvas class="canvas"></canvas>
 </div>
+
 <div class="plaudits-4 editor">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader">
     <div class="blob"></div>
+    <canvas class="canvas"></canvas>
 </div>
+
 	</div>
 </body>
 </html>

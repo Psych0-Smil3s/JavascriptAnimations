@@ -31,7 +31,7 @@
     position: absolute;
 }
 .plaudits-6 {
-    border: solid 1px #000;
+    border: solid 1px #999;
     border-radius: inherit;
     min-height: 113px;
     height:auto !important;
@@ -61,6 +61,9 @@
 .plaudits-6.msie canvas {
     display: none;
 }
+.plaudits-6.editor canvas {
+    display: none;
+}
 .plaudits-6.editor, .plaudits-6.msie {
     background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
 }
@@ -74,13 +77,25 @@
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .plaudits-6.editor, .plaudits-6.msie {
         background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
     }
-    .plaudits-6.editor span.blob, .plaudits-6.msie span.blob {
+    .plaudits-6.editor .blob, .plaudits-6.msie .blob {
         margin: 0 auto;
-        width: 70px;
-        height: 91px;
         margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum2.png) center center no-repeat;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum2.png)  no-repeat;
+        background-size: 70px 91px;
+    }
+}
+@-moz-document url-prefix() {
+    .plaudits-6.editor, .plaudits-6.msie {
+        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background-size: 456px 113px;
+    }
+    .plaudits-6.editor .blob, .plaudits-6.msie .blob {
+        margin: 0 auto;
+        margin-top: 10px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/drum2.png)  no-repeat;
+        background-size: 70px 91px;
     }
 }
     </style>
@@ -88,6 +103,23 @@
 <body>
 <div class="wrapper">
     <script type="text/javascript" defer="defer">
+
+        $(document).ready(function(){
+
+            // COMPOSING CONTENT
+            $( ".loader" ).load(function() {
+                if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+                  plaudits_6_loaded.call(this, true)
+                }
+            });
+
+            // CONTENT
+            $( ".loader" ).load(function() {
+               //plaudits_6_loaded.call(this)
+            });
+
+        });
+
         /**
          * Provide a cross-browser/fall back
          * solution for the requestAnimationFrame.
@@ -188,31 +220,40 @@
             return par.scene;
         }
 
-        function plaudits_6_draw(c) {
+        function plaudits_6_draw(c, staticImg) {
 
-            window.requestAnimFrame(
-                    function() {plaudits_6_draw(c)
-            });
-
-            var delta = Date.now() - lastUpdateTime;
-            if (acDelta > msPerFrame)
-            {
-                acDelta = 0;
+            if (staticImg)
                 plaudits_6_render(c);
-            }
             else
             {
-                acDelta += delta;
+                window.requestAnimFrame(
+                        function() {plaudits_6_draw(c)
+                });
+
+                var delta = Date.now() - lastUpdateTime;
+                if (acDelta > msPerFrame)
+                {
+                    acDelta = 0;
+                    plaudits_6_render(c);
+                }
+                else
+                {
+                    acDelta += delta;
+                }
+                lastUpdateTime = Date.now();
             }
-            lastUpdateTime = Date.now();
         }
 
 
-        function plaudits_6_loaded(preloaded) {
+        function plaudits_6_loaded(staticImg) {
 
             var me = $(this).closest('.plaudits-6');
             if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
                 me.removeClass('msie');
+
+                if (staticImg)
+                    me.removeClass('editor');
+
                 setTimeout(function() {
 
                     me.data('tick', 0);
@@ -233,14 +274,14 @@
                     var id = Math.floor(Math.random() * new Date().getTime());
                     canvas.attr('id', id);
 
-                    plaudits_6_draw(id);
+                    plaudits_6_draw(id, staticImg);
 
                 }, 200);
             }
         }
     </script>
     <div class="plaudits-6 msie">
-        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_6_loaded.call(this)">
+        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader">
         <div class="plaudits-6-header">
             <span class="timestamp"></span>
             <span class="flags"></span>
@@ -249,8 +290,11 @@
         <div class="blob"></div>
         <canvas class="canvas"></canvas>
     </div>
+
     <div class="plaudits-6 editor">
+        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader">
         <div class="blob"></div>
+        <canvas class="canvas"></canvas>
     </div>
 
 </div>
