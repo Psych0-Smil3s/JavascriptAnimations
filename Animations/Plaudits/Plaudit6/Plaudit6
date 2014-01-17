@@ -104,22 +104,6 @@
 <div class="wrapper">
     <script type="text/javascript" defer="defer">
 
-        $(document).ready(function(){
-
-            // COMPOSING CONTENT
-            $( ".loader" ).load(function() {
-                if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
-                  plaudits_6_loaded.call(this, true)
-                }
-            });
-
-            // CONTENT
-            $( ".loader" ).load(function() {
-               //plaudits_6_loaded.call(this)
-            });
-
-        });
-
         /**
          * Provide a cross-browser/fall back
          * solution for the requestAnimationFrame.
@@ -146,6 +130,11 @@
             plaudits_6_imagesLoaded = 0,
             plaudits_6_totalImages = 1,
             plaudits_6_frameCount = 60,
+
+            plaudits_6_isSoundSupported = false,
+            plaudits_6_soundPlayCount = 0,
+            plaudits_6_stopSoundLoop = false,
+
             plaudits_6_sprite = new Image(),
             plaudits_6_sprite_width,
             plaudits_6_sprite_height;
@@ -158,7 +147,7 @@
         plaudits_6_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'drum2_1x60.png';
 
 
-        function plaudits_6_render(c) {
+        function plaudits_6_render(c,clip) {
 
             if (plaudits_6_imagesLoaded < plaudits_6_totalImages)
                 return;
@@ -174,6 +163,10 @@
 
                 var scene = plaudits_6_drawScene(this);
                 ctx.drawImage(scene, 0, 0, this.width, this.height);
+
+                var currentOriginalFrame = tick % plaudits_6_frameCount;
+                if (plaudits_6_isSoundSupported && !plaudits_6_stopSoundLoop && currentOriginalFrame == 0) // sound trigger
+                    plaudits_6_playSound(clip);
 
                 var frame = (tick + 30) % plaudits_6_frameCount,
                         pos = frame * plaudits_6_sprite_height,
@@ -220,21 +213,21 @@
             return par.scene;
         }
 
-        function plaudits_6_draw(c, staticImg) {
+        function plaudits_6_draw(c, staticImg, clip) {
 
             if (staticImg)
-                plaudits_6_render(c);
+                plaudits_6_render(c,clip);
             else
             {
                 window.requestAnimFrame(
-                        function() {plaudits_6_draw(c)
+                        function() {plaudits_6_draw(c,staticImg,clip)
                 });
 
                 var delta = Date.now() - lastUpdateTime;
                 if (acDelta > msPerFrame)
                 {
                     acDelta = 0;
-                    plaudits_6_render(c);
+                    plaudits_6_render(c,clip);
                 }
                 else
                 {
@@ -242,6 +235,42 @@
                 }
                 lastUpdateTime = Date.now();
             }
+        }
+
+        function plaudits_6_playSound(clip) {
+
+            var sound = clip[0];
+            sound.volume = 1;
+
+            if (plaudits_6_soundPlayCount > 0) {
+                sound.pause();
+                sound.currentTime = 0;
+            }
+
+            // limit sound loop
+            if (plaudits_6_soundPlayCount === 3) {
+                plaudits_6_soundPlayCount = 0;
+                plaudits_6_stopSoundLoop = true;
+            }
+            else
+            {
+                sound.play();
+                plaudits_6_soundPlayCount++;
+            }
+        }
+
+        function plaudits_6_setIsSoundSupported(me) {
+
+            var clip = me.find('.clip');
+
+            clip.find('source').each(function() {
+                // !! converts value to a boolean and ensures a boolean type.
+                if (!!(this.parentNode.canPlayType && this.parentNode.canPlayType($(this).attr('type')).replace(/no/, ''))) {
+                    plaudits_6_isSoundSupported = true;
+                    return false;
+                }
+            });
+            return clip;
         }
 
 
@@ -271,17 +300,23 @@
                         });
                     }
 
+                    var clip = plaudits_6_setIsSoundSupported(me);
                     var id = Math.floor(Math.random() * new Date().getTime());
                     canvas.attr('id', id);
 
-                    plaudits_6_draw(id, staticImg);
+                    plaudits_6_draw(id, staticImg, clip);
 
                 }, 200);
             }
+            // bind click event - allow sound to loop if clicked
+            me.click(function(e) {
+                e.preventDefault();
+                plaudits_6_stopSoundLoop = false;
+            });
         }
     </script>
     <div class="plaudits-6 msie">
-        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader">
+        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_6_loaded.call(this);">
         <div class="plaudits-6-header">
             <span class="timestamp"></span>
             <span class="flags"></span>
@@ -289,10 +324,17 @@
         </div>
         <div class="blob"></div>
         <canvas class="canvas"></canvas>
+
+        <audio preload="auto" class="clip">
+            <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.wav" type="audio/x-wav">
+            <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.mp3" type="audio/mpeg">
+            <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.ogg" type="audio/ogg">
+            <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.m4a" type="audio/mp4a-latm">
+        </audio>
     </div>
 
     <div class="plaudits-6 editor">
-        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader">
+        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_6_loaded.call(this, true);">
         <div class="blob"></div>
         <canvas class="canvas"></canvas>
     </div>

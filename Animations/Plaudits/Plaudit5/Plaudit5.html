@@ -124,6 +124,11 @@
         plaudits_5_imagesLoaded = 0,
         plaudits_5_totalImages = 1,
         plaudits_5_frameCount = 40,
+
+        plaudits_5_isSoundSupported = false,
+        plaudits_5_soundPlayCount = 0,
+        plaudits_5_stopSoundLoop = false,
+
         plaudits_5_sprite = new Image(),
         plaudits_5_sprite_width,
         plaudits_5_sprite_height;
@@ -135,7 +140,7 @@
     };
     plaudits_5_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'drum1_1x40.png';
 
-    function plaudits_5_render(c) {
+    function plaudits_5_render(c,clip) {
 
         if (plaudits_5_imagesLoaded < plaudits_5_totalImages)
             return;
@@ -153,6 +158,9 @@
 
                 var frame = tick % plaudits_5_frameCount,
                     pos = frame * plaudits_5_sprite_height;
+
+                if (plaudits_5_isSoundSupported && !plaudits_5_stopSoundLoop && frame == 5) // sound trigger
+                    plaudits_5_playSound(clip);
 
                 ctx.drawImage(plaudits_5_sprite, 0, pos, plaudits_5_sprite_width, plaudits_5_sprite_height, Math.floor((this.width / 2) - (plaudits_5_sprite_width / 2)), Math.floor((this.height / 2) - (plaudits_5_sprite_height / 2)), plaudits_5_sprite_width, plaudits_5_sprite_height);
 
@@ -179,23 +187,59 @@
         return par.scene;
     }
 
-    function plaudits_5_draw(c) {
+    function plaudits_5_draw(c,clip) {
 
         window.requestAnimFrame(
-            function() {plaudits_5_draw(c)
+            function() {plaudits_5_draw(c,clip)
         });
 
         var delta = Date.now() - lastUpdateTime;
         if (acDelta > msPerFrame)
         {
             acDelta = 0;
-            plaudits_5_render(c);
+            plaudits_5_render(c,clip);
         }
         else
         {
             acDelta += delta;
         }
         lastUpdateTime = Date.now();
+    }
+
+    function plaudits_5_playSound(clip) {
+
+        var sound = clip[0];
+        sound.volume = 1;
+
+        if (plaudits_5_soundPlayCount > 0) {
+            sound.pause();
+            sound.currentTime = 0;
+        }
+
+        // limit sound loop
+        if (plaudits_5_soundPlayCount === 3) {
+            plaudits_5_soundPlayCount = 0;
+            plaudits_5_stopSoundLoop = true;
+        }
+        else
+        {
+            sound.play();
+            plaudits_5_soundPlayCount++;
+        }
+    }
+
+    function plaudits_5_setIsSoundSupported(me) {
+
+        var clip = me.find('.clip');
+
+        clip.find('source').each(function() {
+            // !! converts value to a boolean and ensures a boolean type.
+            if (!!(this.parentNode.canPlayType && this.parentNode.canPlayType($(this).attr('type')).replace(/no/, ''))) {
+                plaudits_5_isSoundSupported = true;
+                return false;
+            }
+        });
+        return clip;
     }
 
     function plaudits_5_loaded(preloaded) {
@@ -217,11 +261,18 @@
                         'height' : height * pixelRatio
                     });
                 }
+
+                var clip = plaudits_5_setIsSoundSupported(me);
                 var id = Math.floor(Math.random() * new Date().getTime());
                 canvas.attr('id', id);
-                plaudits_5_draw(id);
+                plaudits_5_draw(id,clip);
             }, 200);
         }
+        // bind click event - allow sound to loop if clicked
+        me.click(function(e) {
+            e.preventDefault();
+            plaudits_5_stopSoundLoop = false;
+        });
     }
 </script>
 <div class="plaudits-5 msie">
@@ -233,6 +284,13 @@
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
+
+    <audio preload="auto" class="clip">
+        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.wav" type="audio/x-wav">
+        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.mp3" type="audio/mpeg">
+        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.ogg" type="audio/ogg">
+        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.m4a" type="audio/mp4a-latm">
+    </audio>
 </div>
 <div class="plaudits-5 editor">
     <div class="blob"></div>

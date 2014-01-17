@@ -105,22 +105,6 @@
 	<div class="wrapper">
 <script type="text/javascript" defer="defer">
 
-   /* $(document).ready(function(){
-
-        // COMPOSING CONTENT
-        $( ".loader" ).load(function() {
-            if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
-                //plaudits_7_loaded.call(this, true);
-            }
-        });
-
-        // CONTENT
-        $( ".loader" ).load(function() {
-            plaudits_7_loaded.call(this);
-        });
-
-    });*/
-
 	/**
 	 * Provide a cross-browser/fall back
 	 * solution for the requestAnimationFrame.
@@ -146,6 +130,11 @@
 		plaudits_7_imagesLoaded = 0,
 		plaudits_7_totalImages = 4,
 		plaudits_7_frameCount = 30,
+
+        plaudits_7_isSoundSupported = false,
+        plaudits_7_soundPlayCount = 0,
+        plaudits_7_stopSoundLoop = false,
+
 		plaudits_7_sprite_1 = new Image(),
 		plaudits_7_sprite_1_width,
 		plaudits_7_sprite_1_height,
@@ -158,9 +147,6 @@
 		plaudits_7_sprite_4 = new Image(),
 		plaudits_7_sprite_4_width,
 		plaudits_7_sprite_4_height,
-        /*plaudits_7_sprite_5 = new Image(),
-		plaudits_7_sprite_5_width,
-		plaudits_7_sprite_5_height,*/
 		plaudits_7_baseY = 20,
 		plaudits_7_baseUrl = 'http://media.parlingo.com/website/live/messagepacks/plaudits/';
 
@@ -192,15 +178,7 @@
 	};
 	plaudits_7_sprite_4.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo5_1x30.png';
 
-	/*plaudits_7_sprite_5.onload = function() {
-		plaudits_7_imagesLoaded++;
-		plaudits_7_sprite_5_width = this.width;
-		plaudits_7_sprite_5_height = Math.floor(this.height / plaudits_7_frameCount);
-	};
-	plaudits_7_sprite_5.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo6_1x30.png';
-	*/
-
-	function plaudits_7_render(c) {
+	function plaudits_7_render(c,clip) {
 
         if (plaudits_7_imagesLoaded < plaudits_7_totalImages)
             return;
@@ -216,12 +194,12 @@
                 var scene = plaudits_7_drawScene(this);
                 ctx.drawImage(scene, 0, 0, this.width, this.height);
 
+                var currentOriginalFrame = tick % plaudits_7_frameCount;
+                if (plaudits_7_isSoundSupported && !plaudits_7_stopSoundLoop && currentOriginalFrame == 0) // sound trigger
+                    plaudits_7_playSound(clip);
+
                 // Back angry
 				var halfCanvas = this.width / 2,
-
-                /*
-				ctx.drawImage(plaudits_7_sprite_5, 0, pos, plaudits_7_sprite_5_width, plaudits_7_sprite_5_height, Math.floor((halfCanvas) - (reducedWidth / 1.2)), Math.floor((plaudits_7_baseY + 2) * pixelRatio), reducedWidth, reducedHeight);
-                */
 
                 // Arm wave back
 				reducedWidth = Math.floor(plaudits_7_sprite_3_width / 1.7),
@@ -230,15 +208,6 @@
 				pos = frame * plaudits_7_sprite_3_height;
 
 				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.1)), Math.floor((plaudits_7_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
-
-                // middle arm wave
-				/*reducedWidth = Math.floor(plaudits_7_sprite_3_width / 2.1),
-				reducedHeight = Math.floor(plaudits_7_sprite_3_height / 2.1),
-				frame = (tick + 20) % plaudits_7_frameCount,
-				pos = frame * plaudits_7_sprite_3_height;
-
-				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 1.2)), Math.floor((plaudits_7_baseY) * pixelRatio), reducedWidth, reducedHeight);
-                */
 
                 // Sad
 				reducedWidth = Math.floor(plaudits_7_sprite_4_width / 1.7),
@@ -303,21 +272,21 @@
         return par.scene;
     }
 
-    function plaudits_7_draw(c, staticImg) {
+    function plaudits_7_draw(c, staticImg, clip) {
 
         if (staticImg)
-            plaudits_7_render(c);
+            plaudits_7_render(c, clip);
         else
         {
             window.requestAnimFrame(
-                    function() {plaudits_7_draw(c)
+                    function() {plaudits_7_draw(c, staticImg, clip)
                     });
 
             var delta = Date.now() - lastUpdateTime;
             if (acDelta > msPerFrame)
             {
                 acDelta = 0;
-                plaudits_7_render(c);
+                plaudits_7_render(c, clip);
             }
             else
             {
@@ -325,6 +294,42 @@
             }
             lastUpdateTime = Date.now();
         }
+    }
+
+    function plaudits_7_playSound(clip) {
+
+        var sound = clip[0];
+        sound.volume = 1;
+
+        if (plaudits_7_soundPlayCount > 0) {
+            sound.pause();
+            sound.currentTime = 0;
+        }
+
+        // limit sound loop
+        if (plaudits_7_soundPlayCount === 3) {
+            plaudits_7_soundPlayCount = 0;
+            plaudits_7_stopSoundLoop = true;
+        }
+        else
+        {
+            sound.play();
+            plaudits_7_soundPlayCount++;
+        }
+    }
+
+    function plaudits_7_setIsSoundSupported(me) {
+
+        var clip = me.find('.clip');
+
+        clip.find('source').each(function() {
+            // !! converts value to a boolean and ensures a boolean type.
+            if (!!(this.parentNode.canPlayType && this.parentNode.canPlayType($(this).attr('type')).replace(/no/, ''))) {
+                plaudits_7_isSoundSupported = true;
+                return false;
+            }
+        });
+        return clip;
     }
 
 	function plaudits_7_loaded(staticImg) {
@@ -350,11 +355,18 @@
 						'height' : height * pixelRatio
 					});        
 				}
+
+                var clip = plaudits_7_setIsSoundSupported(me);
 				var id = Math.floor(Math.random() * new Date().getTime());
 				canvas.attr('id', id);
-				plaudits_7_draw(id, staticImg);
+				plaudits_7_draw(id, staticImg, clip);
 			}, 200);
 		}
+        // bind click event - allow sound to loop if clicked
+        me.click(function(e) {
+            e.preventDefault();
+            plaudits_7_stopSoundLoop = false;
+        });
 	}
 </script>
 <div class="plaudits-7 msie">
@@ -366,6 +378,13 @@
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
+
+    <audio preload="auto" class="clip">
+        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.wav" type="audio/x-wav">
+        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.mp3" type="audio/mpeg">
+        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.ogg" type="audio/ogg">
+        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.m4a" type="audio/mp4a-latm">
+    </audio>
 </div>
 
 <div class="plaudits-7 editor">
