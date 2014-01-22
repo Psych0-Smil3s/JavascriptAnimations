@@ -23,40 +23,43 @@
 		 * Message styles 
 		 ******************************/
 * {
-	overflow: auto;
-	margin: 0;
-	padding: 0;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+}
+.plaudits-4, .plaudits-4 * {
+    overflow: visible;
 }
 .loader {
-	position: absolute;
+    position: absolute;
 }
 .plaudits-4 {
-	border: solid 1px #999;
-	border-radius: inherit;
-	min-height: 113px;
-	height:auto !important;
-	height: 113px;
-    background-color: #c1f0ff;
-}
-.plaudits-4 .canvas {
-	width: 100%;
-	height: 113px;
+    border-radius: inherit;
+    height: 113px;
+    position: relative;
+    background: #fff;
+    border: solid 1px #999;
+    text-align: center;
 }
 .plaudits-4 .plaudits-4-header {
-	width: 100%;
-	position: absolute;
-	z-index: 11;
-	top: 0;
-	left: 0;
+    width: 100%;
+    position: absolute;
+    z-index: 11;
+    top: 0;
+    left: 0;
 }
 .plaudits-4-header .timestamp, .plaudits-4-header .flags, .plaudits-4-header .nickname {
-	float: left;
-	padding: 2px 5px;
-	color: #666;
+    float: left;
+    padding: 2px 5px;
+    color: #666;
 }
 .plaudits-4-header .timestamp, .plaudits-4-header .flags {
-	float: right;
-	padding-left: 10px;
+    float: right;
+    padding-left: 10px;
+}
+.plaudits-4-header canvas {
+    z-index: 2;
+    position: relative;
 }
 .plaudits-4.msie canvas {
     display: none;
@@ -65,37 +68,38 @@
     display: none;
 }
 .plaudits-4.editor, .plaudits-4.msie {
-	background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+	background: #fff /*url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png)*/ repeat-x;
 }
 .plaudits-4.editor .blob, .plaudits-4.msie .blob {
     margin: 0 auto;
-    width: 67px;
+    width: 243px;
     height: 90px;
     margin-top: 10px;
-    background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/clap2.png) center center no-repeat;
+    background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/Plaudits4.png) center center no-repeat;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .plaudits-4.editor, .plaudits-4.msie {
-        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background: #fff /*url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png)*/ repeat-x;
         background-size: 456px 113px;
     }
     .plaudits-4.editor .blob, .plaudits-4.msie .blob {
         margin: 0 auto;
         margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap2.png) no-repeat;
-        background-size: 67px 90px
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/Plaudits4.png) no-repeat;
+        background-size: 243px 90px
     }
 }
+
 @-moz-document url-prefix() {
     .plaudits-4.editor, .plaudits-4.msie {
-        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background: #fff /*url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png)*/ repeat-x;
         background-size: 456px 113px;
     }
     .plaudits-4.editor .blob, .plaudits-4.msie .blob {
         margin: 0 auto;
         margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap2.png) no-repeat;
-        background-size: 67px 90px
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/Plaudits4.png) no-repeat;
+        background-size: 243px 90px
     }
 }
 	</style>
@@ -134,7 +138,7 @@
 
         plaudits_4_isSoundSupported = false,
         plaudits_4_soundPlayCount = 0,
-        plaudits_4_stopSoundLoop = false,
+        plaudits_4_stopSoundLoop = true,
 
 		plaudits_4_sprite = new Image(),
         plaudits_4_frameCount = 90,
@@ -174,11 +178,11 @@
             ctx.clearRect(0, 0, this.width, this.height);
             ctx.save();
 
-            var scene = plaudits_5_drawScene(this);
-            ctx.drawImage(scene, 0, 0, this.width, this.height);
+            /*var scene = plaudits_5_drawScene(this);
+            ctx.drawImage(scene, 0, 0, this.width, this.height);*/
 
             var currentOriginalFrame = tick % plaudits_4_frameCount;
-            if (plaudits_4_isSoundSupported && !plaudits_4_stopSoundLoop && currentOriginalFrame == 0) // sound trigger
+            if (plaudits_4_isSoundSupported && !plaudits_4_stopSoundLoop /*&& (currentOriginalFrame === 0 || currentOriginalFrame === 40)*/) // sequence is 80 frames - sound trigger
                 plaudits_4_playSound(clip);
 
             // clap middle
@@ -268,12 +272,8 @@
         sound.volume = 1;
 
         if (plaudits_4_soundPlayCount > 0) {
-            sound.pause();
-            sound.currentTime = 0;
-        }
-
-        // limit sound loop
-        if (plaudits_4_soundPlayCount === 3) {
+            //sound.pause();
+            //sound.currentTime = 0;
             plaudits_4_soundPlayCount = 0;
             plaudits_4_stopSoundLoop = true;
         }
@@ -328,17 +328,18 @@
 
                 plaudits_4_draw(id, staticImg, clip);
 
+                // bind click event - allow sound to loop if clicked
+                me.click(function(e) {
+                    e.preventDefault();
+                    plaudits_4_stopSoundLoop = false;
+                });
+
 			}, 200);
 		}
-        // bind click event - allow sound to loop if clicked
-        me.click(function(e) {
-            e.preventDefault();
-            plaudits_4_stopSoundLoop = false;
-        });
 	}
 </script>
 <div class="plaudits-4 msie">
-	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="/*plaudits_4_loaded.call(this);*/">
+	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_4_loaded.call(this);">
 	<div class="plaudits-4-header">
 		<span class="timestamp"></span>
 		<span class="flags"></span>
@@ -348,15 +349,15 @@
 	<canvas class="canvas"></canvas>
 
     <audio preload="auto" class="clip">
-        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.wav" type="audio/x-wav">
-        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.mp3" type="audio/mpeg">
-        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.ogg" type="audio/ogg">
-        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.m4a" type="audio/mp4a-latm">
+        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.ogg" type="audio/ogg">
+        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.mp3" type="audio/mpeg">
+        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.m4a" type="audio/mp4a-latm">
+        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.wav" type="audio/x-wav">
     </audio>
 </div>
 
 <div class="plaudits-4 editor">
-    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_4_loaded.call(this, true);">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="/*plaudits_4_loaded.call(this, true);*/">
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
 </div>

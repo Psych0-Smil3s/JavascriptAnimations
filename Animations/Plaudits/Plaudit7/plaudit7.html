@@ -23,40 +23,43 @@
 		 * Message styles 
 		 ******************************/
 * {
-	overflow: auto;
-	margin: 0;
-	padding: 0;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+}
+.plaudits-7, .plaudits-7 * {
+    overflow: visible;
 }
 .loader {
-	position: absolute;
+    position: absolute;
 }
 .plaudits-7 {
-	border: solid 1px #999;
-	border-radius: inherit;
-	min-height: 113px;
-	height:auto !important;
-	height: 113px;
-    background-color: #c1f0ff;
-}
-.plaudits-7 .canvas {
-	width: 100%;
-	height: 113px;
+    border-radius: inherit;
+    height: 113px;
+    position: relative;
+    background: #fff;
+    border: solid 1px #999;
+    text-align: center;
 }
 .plaudits-7 .plaudits-7-header {
-	width: 100%;
-	position: absolute;
-	z-index: 11;
-	top: 0;
-	left: 0;
+    width: 100%;
+    position: absolute;
+    z-index: 11;
+    top: 0;
+    left: 0;
 }
 .plaudits-7-header .timestamp, .plaudits-7-header .flags, .plaudits-7-header .nickname {
-	float: left;
-	padding: 2px 5px;
-	color: #666;
+    float: left;
+    padding: 2px 5px;
+    color: #666;
 }
 .plaudits-7-header .timestamp, .plaudits-7-header .flags {
-	float: right;
-	padding-left: 10px;
+    float: right;
+    padding-left: 10px;
+}
+.plaudits-7-header canvas {
+    z-index: 2;
+    position: relative;
 }
 .plaudits-7.msie canvas {
     display: none;
@@ -65,38 +68,39 @@
     display: none;
 }
 .plaudits-7.editor, .plaudits-7.msie {
-	background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+	background: #fff /*url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png)*/ repeat-x;
 }
 .plaudits-7.editor .blob, .plaudits-7.msie .blob {
     margin: 0 auto;
-    width: 87px;
-    height: 87px;
-    margin-top: 10px;
-    background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/woo1.png) center center no-repeat;
+    width: 243px;
+    height: 90px;
+    margin-top: 20px;
+    background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/Plaudits7.png) center center no-repeat;
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .plaudits-7.editor, .plaudits-7.msie {
-        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background: #fff /*url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png)*/ repeat-x;
         background-size: 456px 113px;
     }
     .plaudits-7.editor .blob, .plaudits-7.msie .blob {
         margin: 0 auto;
-        margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/woo1.png)  no-repeat;
-        background-size: 87px 87px;
+        margin-top: 20px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/Plaudits7.png)  no-repeat;
+        background-size: 243px 90px;
     }
 }
+
 @-moz-document url-prefix() {
     .plaudits-7.editor, .plaudits-7.msie {
-        background: #c1f0ff url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x;
+        background: #fff /*url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png)*/ repeat-x;
         background-size: 456px 113px;
     }
     .plaudits-7.editor .blob, .plaudits-7.msie .blob {
         margin: 0 auto;
-        margin-top: 10px;
-        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/woo1.png)  no-repeat;
-        background-size: 87px 87px;
+        margin-top: 20px;
+        background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/Plaudits7.png)  no-repeat;
+        background-size: 243px 90px;
     }
 }
 	</style>
@@ -133,7 +137,8 @@
 
         plaudits_7_isSoundSupported = false,
         plaudits_7_soundPlayCount = 0,
-        plaudits_7_stopSoundLoop = false,
+        plaudits_7_stopSoundLoop = true,
+        plaudits_7_isSoundPlaying = false,
 
 		plaudits_7_sprite_1 = new Image(),
 		plaudits_7_sprite_1_width,
@@ -194,60 +199,60 @@
                 var scene = plaudits_7_drawScene(this);
                 ctx.drawImage(scene, 0, 0, this.width, this.height);
 
-                var currentOriginalFrame = tick % plaudits_7_frameCount;
-                if (plaudits_7_isSoundSupported && !plaudits_7_stopSoundLoop && currentOriginalFrame == 0) // sound trigger
-                    plaudits_7_playSound(clip);
+                /*var currentOriginalFrame = tick % plaudits_7_frameCount;
+                if (plaudits_7_isSoundSupported && !plaudits_7_stopSoundLoop && currentOriginalFrame == 0 )
+                    plaudits_7_playSound(clip);*/
 
                 // Back angry
 				var halfCanvas = this.width / 2,
 
                 // Arm wave back
-				reducedWidth = Math.floor(plaudits_7_sprite_3_width / 1.7),
-				reducedHeight = Math.floor(plaudits_7_sprite_3_height / 1.7),
+				reducedWidth = Math.floor(plaudits_7_sprite_3_width / 1.5),
+				reducedHeight = Math.floor(plaudits_7_sprite_3_height / 1.5),
 				frame = (tick + 15) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_3_height;
 
-				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.1)), Math.floor((plaudits_7_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.1)), Math.floor((plaudits_7_baseY + 3) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Sad
-				reducedWidth = Math.floor(plaudits_7_sprite_4_width / 1.7),
-				reducedHeight = Math.floor(plaudits_7_sprite_4_height / 1.7),
+				reducedWidth = Math.floor(plaudits_7_sprite_4_width / 1.5),
+				reducedHeight = Math.floor(plaudits_7_sprite_4_height / 1.5),
 				frame = (tick + 17) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_4_height;
 
-				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth * 1.5)), Math.floor((plaudits_7_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_4, 0, pos, plaudits_7_sprite_4_width, plaudits_7_sprite_4_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth * 1.5)), Math.floor((plaudits_7_baseY + 3) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front middle smile
-				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.7),
-				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.7),
+				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.5),
+				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.5),
 				frame = (tick + 8) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 2)), Math.floor((plaudits_7_baseY + 10) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 2) + (reducedWidth / 2)), Math.floor((plaudits_7_baseY + 3) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front middle wave
-				reducedWidth =  Math.floor(plaudits_7_sprite_1_width / 1.3),
-				reducedHeight = Math.floor(plaudits_7_sprite_1_height / 1.3),
+				reducedWidth =  Math.floor(plaudits_7_sprite_1_width / 1.1),
+				reducedHeight = Math.floor(plaudits_7_sprite_1_height / 1.1),
 				frame = (tick + 8) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_1_height;
 
-				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 5)), Math.floor((plaudits_7_baseY + 23) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 5)), Math.floor((plaudits_7_baseY + 12) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front right wave
-				reducedWidth = Math.floor(plaudits_7_sprite_1_width / 1.5),
-				reducedHeight = Math.floor(plaudits_7_sprite_1_height / 1.5),
+				reducedWidth = Math.floor(plaudits_7_sprite_1_width / 1.3),
+				reducedHeight = Math.floor(plaudits_7_sprite_1_height / 1.3),
 				frame = (tick + 25) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_1_height;
 
-				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) + reducedWidth), Math.floor((plaudits_7_baseY + 25) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) + reducedWidth), Math.floor((plaudits_7_baseY + 17) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front left teapot wave
-				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.4),
-				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.4),
+				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.2),
+				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.2),
 				frame = (tick) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 1.6) - (reducedWidth * 1.2)), Math.floor((plaudits_7_baseY + 25) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 1.6) - (reducedWidth * 1.2)), Math.floor((plaudits_7_baseY + 17) * pixelRatio), reducedWidth, reducedHeight);
 
 				ctx.restore();
 
@@ -264,7 +269,7 @@
             canvas.height = par.height;
 
             // green base
-            ctx.fillStyle = '#94d5a5';
+            ctx.fillStyle = '#94d5a5'; /* 94d5a5 */
             ctx.fillRect(0, Math.floor((par.height / 5) * 3), par.width, par.height);
 
             par.scene = canvas;
@@ -302,12 +307,8 @@
         sound.volume = 1;
 
         if (plaudits_7_soundPlayCount > 0) {
-            sound.pause();
-            sound.currentTime = 0;
-        }
-
-        // limit sound loop
-        if (plaudits_7_soundPlayCount === 3) {
+            //sound.pause();
+            //sound.currentTime = 0;
             plaudits_7_soundPlayCount = 0;
             plaudits_7_stopSoundLoop = true;
         }
@@ -360,13 +361,30 @@
 				var id = Math.floor(Math.random() * new Date().getTime());
 				canvas.attr('id', id);
 				plaudits_7_draw(id, staticImg, clip);
+
+                if (plaudits_7_isSoundSupported) {
+
+                    var sound = clip[0];
+                    sound.volume = 1;
+
+                    sound.addEventListener('ended',function(){
+                        sound.pause();
+                        sound.currentTime = 0;
+                        plaudits_7_isSoundPlaying = false;
+                    });
+
+                    me.click(function(e) {
+                        e.preventDefault();
+                        //plaudits_7_stopSoundLoop = false;
+                        if (!plaudits_7_isSoundPlaying) {
+                            sound.play();
+                            plaudits_7_isSoundPlaying = true;
+                        }
+                    });
+                }
+
 			}, 200);
 		}
-        // bind click event - allow sound to loop if clicked
-        me.click(function(e) {
-            e.preventDefault();
-            plaudits_7_stopSoundLoop = false;
-        });
 	}
 </script>
 <div class="plaudits-7 msie">
@@ -380,15 +398,15 @@
     <canvas class="canvas"></canvas>
 
     <audio preload="auto" class="clip">
-        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.wav" type="audio/x-wav">
-        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.mp3" type="audio/mpeg">
-        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.ogg" type="audio/ogg">
-        <source src="http://media.parlingo.com/website/live/messagepacks/gavintest/pc-errors/Chord.m4a" type="audio/mp4a-latm">
+        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.ogg" type="audio/ogg">
+        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.mp3" type="audio/mpeg">
+        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.m4a" type="audio/mp4a-latm">
+        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.wav" type="audio/x-wav">
     </audio>
 </div>
 
 <div class="plaudits-7 editor">
-    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_7_loaded.call(this, true);">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="/*plaudits_7_loaded.call(this, true);*/">
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
 </div>
