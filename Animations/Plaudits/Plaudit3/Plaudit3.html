@@ -71,7 +71,7 @@
     margin: 0 auto;
     width: 106px;
     height: 90px;
-    margin-top: 20px;
+    margin-top: 10px;
     background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/clap1.png) center center no-repeat;
 }
 
@@ -82,6 +82,7 @@
     }
     .plaudits-3.editor .blob, .plaudits-3.msie .blob {
         margin: 0 auto;
+        margin-top: 10px;
         background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png)  no-repeat;
         background-size: 106px 90px;
     }
@@ -180,8 +181,10 @@
                 ctx.clearRect(0, 0, this.width, this.height);
                 ctx.save();
 
-                //var scene = plaudits_3_drawScene(this);
-                //ctx.drawImage(scene, 0, 0, this.width, this.height);
+                if (!plaudits_3_isSoundPlaying && plaudits_3_isSoundSupported) {
+                    var scene = plaudits_3_drawScene(this);
+                    ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+                }
 
                 var frame = tick % plaudits_3_frameCount,
                     pos = frame * plaudits_3_sprite_height;
@@ -202,9 +205,11 @@
             canvas.width = par.width;
             canvas.height = par.height;
 
-            // green base
-            ctx.fillStyle = '#94d5a5'; /* 94d5a5 */
-            ctx.fillRect(0, Math.floor((par.height / 5) * 3), par.width, par.height);
+            ctx.beginPath();
+            ctx.moveTo(75 * pixelRatio,50 * pixelRatio);
+            ctx.lineTo(50 * pixelRatio,75 * pixelRatio);
+            ctx.lineTo(50 * pixelRatio,25 * pixelRatio);
+            ctx.fill();
 
             par.scene = canvas;
         }
@@ -304,13 +309,6 @@
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
-
-    <!--<audio preload="auto" class="clip">
-        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg" type="audio/ogg">
-        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3" type="audio/mpeg">
-        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a" type="audio/mp4a-latm">
-        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav" type="audio/x-wav">
-    </audio>-->
 </div>
 <div class="plaudits-3 editor">
     <div class="blob"></div>

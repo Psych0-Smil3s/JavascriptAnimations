@@ -187,8 +187,10 @@
                 ctx.clearRect(0, 0, this.width, this.height);
                 ctx.save();
 
-                /*var scene = plaudits_6_drawScene(this);
-                ctx.drawImage(scene, 0, 0, this.width, this.height);*/
+                if (!plaudits_6_isSoundPlaying && plaudits_6_isSoundSupported) {
+                    var scene = plaudits_6_drawScene(this);
+                    ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+                }
 
                 var frame = (tick + 30) % plaudits_6_frameCount,
                         pos = frame * plaudits_6_sprite_height,
@@ -223,12 +225,14 @@
                 var canvas = document.createElement('canvas'),
                         ctx = canvas.getContext('2d');
 
-                canvas.width = par.width;
+                canvas.width =  par.width;
                 canvas.height = par.height;
 
-                // green base
-                ctx.fillStyle = '#000'; /* 94d5a5 */
-                ctx.fillRect(0, Math.floor((par.height / 5) * 3), par.width, par.height);
+                ctx.beginPath();
+                ctx.moveTo(75 * pixelRatio,50 * pixelRatio);
+                ctx.lineTo(50 * pixelRatio,75 * pixelRatio);
+                ctx.lineTo(50 * pixelRatio,25 * pixelRatio);
+                ctx.fill();
 
                 par.scene = canvas;
             }
@@ -334,19 +338,12 @@
     <div class="plaudits-6 msie">
         <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_6_loaded.call(this);"/>
         <div class="plaudits-6-header">
-            <span class="timestamp"></span>
-            <span class="flags"></span>
-            <strong class="nickname"></strong>
+            <span class="timestamp">test</span>
+            <span class="flags">test</span>
+            <strong class="nickname">test</strong>
         </div>
         <div class="blob"></div>
         <canvas class="canvas"></canvas>
-
-        <!--<audio preload="auto" class="clip">
-            <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit6Audio.ogg" type="audio/ogg">
-            <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit6Audio.mp3" type="audio/mpeg">
-            <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit6Audio.m4a" type="audio/mp4a-latm">
-            <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit6Audio.wav" type="audio/x-wav">
-        </audio>-->
     </div>
 
     <div class="plaudits-6 editor">

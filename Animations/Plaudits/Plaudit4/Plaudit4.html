@@ -200,8 +200,10 @@
             ctx.clearRect(0, 0, this.width, this.height);
             ctx.save();
 
-            /*var scene = plaudits_5_drawScene(this);
-            ctx.drawImage(scene, 0, 0, this.width, this.height);*/
+            if (!plaudits_4_isSoundPlaying && plaudits_4_isSoundSupported) {
+                var scene = plaudits_4_drawScene(this);
+                ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+            }
 
             // clap middle
             var frame = tick % plaudits_4_frameCount,
@@ -242,7 +244,7 @@
         });
 	}
 
-    function plaudits_5_drawScene(par) {
+    function plaudits_4_drawScene(par) {
         if (!par.scene) {
             var canvas = document.createElement('canvas'),
                     ctx = canvas.getContext('2d');
@@ -250,9 +252,11 @@
             canvas.width = par.width;
             canvas.height = par.height;
 
-            // green base
-            ctx.fillStyle = '#94d5a5';
-            ctx.fillRect(0, Math.floor((par.height / 5) * 3), par.width, par.height);
+            ctx.beginPath();
+            ctx.moveTo(75 * pixelRatio,50 * pixelRatio);
+            ctx.lineTo(50 * pixelRatio,75 * pixelRatio);
+            ctx.lineTo(50 * pixelRatio,25 * pixelRatio);
+            ctx.fill();
 
             par.scene = canvas;
         }
@@ -361,12 +365,6 @@
 	</div>
     <div class="blob"></div>
 	<canvas class="canvas"></canvas>
-    <!--<audio preload="auto" class="clip">
-        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.ogg" type="audio/ogg">
-        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.mp3" type="audio/mpeg">
-        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.m4a" type="audio/mp4a-latm">
-        <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.wav" type="audio/x-wav">
-    </audio>-->
 </div>
 
 <div class="plaudits-4 editor">
