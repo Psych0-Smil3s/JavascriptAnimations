@@ -108,7 +108,7 @@
 <body>
 	<div class="wrapper">
 <script type="text/javascript" defer="defer">
-
+    //<![CDATA[
 	/**
 	 * Provide a cross-browser/fall back
 	 * solution for the requestAnimationFrame.
@@ -136,8 +136,6 @@
 		plaudits_7_frameCount = 30,
 
         plaudits_7_isSoundSupported = false,
-        plaudits_7_soundPlayCount = 0,
-        plaudits_7_stopSoundLoop = true,
         plaudits_7_isSoundPlaying = false,
 
 		plaudits_7_sprite_1 = new Image(),
@@ -183,7 +181,7 @@
 	};
 	plaudits_7_sprite_4.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo5_1x30.png';
 
-	function plaudits_7_render(c,clip) {
+	function plaudits_7_render(c) {
 
         if (plaudits_7_imagesLoaded < plaudits_7_totalImages)
             return;
@@ -196,12 +194,8 @@
 				ctx.clearRect(0, 0, this.width, this.height);
 				ctx.save();
 
-                var scene = plaudits_7_drawScene(this);
-                ctx.drawImage(scene, 0, 0, this.width, this.height);
-
-                /*var currentOriginalFrame = tick % plaudits_7_frameCount;
-                if (plaudits_7_isSoundSupported && !plaudits_7_stopSoundLoop && currentOriginalFrame == 0 )
-                    plaudits_7_playSound(clip);*/
+                /*var scene = plaudits_7_drawScene(this);
+                ctx.drawImage(scene, 0, 0, this.width, this.height);*/
 
                 // Back angry
 				var halfCanvas = this.width / 2,
@@ -277,45 +271,27 @@
         return par.scene;
     }
 
-    function plaudits_7_draw(c, staticImg, clip) {
+    function plaudits_7_draw(c, staticImg) {
 
         if (staticImg)
-            plaudits_7_render(c, clip);
+            plaudits_7_render(c);
         else
         {
             window.requestAnimFrame(
-                    function() {plaudits_7_draw(c, staticImg, clip)
+                    function() {plaudits_7_draw(c, staticImg)
                     });
 
             var delta = Date.now() - lastUpdateTime;
             if (acDelta > msPerFrame)
             {
                 acDelta = 0;
-                plaudits_7_render(c, clip);
+                plaudits_7_render(c);
             }
             else
             {
                 acDelta += delta;
             }
             lastUpdateTime = Date.now();
-        }
-    }
-
-    function plaudits_7_playSound(clip) {
-
-        var sound = clip[0];
-        sound.volume = 1;
-
-        if (plaudits_7_soundPlayCount > 0) {
-            //sound.pause();
-            //sound.currentTime = 0;
-            plaudits_7_soundPlayCount = 0;
-            plaudits_7_stopSoundLoop = true;
-        }
-        else
-        {
-            sound.play();
-            plaudits_7_soundPlayCount++;
         }
     }
 
@@ -360,7 +336,7 @@
                 var clip = plaudits_7_setIsSoundSupported(me);
 				var id = Math.floor(Math.random() * new Date().getTime());
 				canvas.attr('id', id);
-				plaudits_7_draw(id, staticImg, clip);
+				plaudits_7_draw(id, staticImg);
 
                 if (plaudits_7_isSoundSupported) {
 
@@ -375,7 +351,6 @@
 
                     me.click(function(e) {
                         e.preventDefault();
-                        //plaudits_7_stopSoundLoop = false;
                         if (!plaudits_7_isSoundPlaying) {
                             sound.play();
                             plaudits_7_isSoundPlaying = true;
@@ -386,9 +361,10 @@
 			}, 200);
 		}
 	}
+    //]]>
 </script>
 <div class="plaudits-7 msie">
-    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_7_loaded.call(this);">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_7_loaded.call(this);"/>
     <div class="plaudits-7-header">
         <span class="timestamp"></span>
         <span class="flags"></span>
@@ -396,7 +372,6 @@
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
-
     <audio preload="auto" class="clip">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.ogg" type="audio/ogg">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.mp3" type="audio/mpeg">

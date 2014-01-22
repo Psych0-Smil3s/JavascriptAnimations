@@ -108,6 +108,7 @@
 	<div class="wrapper">
 
 <script type="text/javascript" defer="defer">
+    //<![CDATA[
 
 	/**
 	 * Provide a cross-browser/fall back
@@ -137,8 +138,7 @@
         plaudits_4_baseURL = 'http://media.parlingo.com/website/live/messagepacks/plaudits/',
 
         plaudits_4_isSoundSupported = false,
-        plaudits_4_soundPlayCount = 0,
-        plaudits_4_stopSoundLoop = true,
+        plaudits_4_isSoundPlaying = false,
 
 		plaudits_4_sprite = new Image(),
         plaudits_4_frameCount = 90,
@@ -164,7 +164,7 @@
     };
     plaudits_4_spriteBoo.src = plaudits_4_baseURL + (pixelRatio === 1 ? '' : 'X2/') + 'boo_1x70.png';
 
-    function plaudits_4_render(c,clip) {
+    function plaudits_4_render(c) {
 
         if (plaudits_4_imagesLoaded < plaudits_4_totalImages)
             return;
@@ -180,10 +180,6 @@
 
             /*var scene = plaudits_5_drawScene(this);
             ctx.drawImage(scene, 0, 0, this.width, this.height);*/
-
-            var currentOriginalFrame = tick % plaudits_4_frameCount;
-            if (plaudits_4_isSoundSupported && !plaudits_4_stopSoundLoop /*&& (currentOriginalFrame === 0 || currentOriginalFrame === 40)*/) // sequence is 80 frames - sound trigger
-                plaudits_4_playSound(clip);
 
             // clap middle
             var frame = tick % plaudits_4_frameCount,
@@ -201,7 +197,6 @@
             pos = frame * plaudits_4_sprite_height;
 
             ctx.drawImage(plaudits_4_sprite, 0, pos, plaudits_4_sprite_width, plaudits_4_sprite_height, Math.floor((this.width / 2) - (reducedWidth / 2) - (reducedWidth * 1.8)) , Math.floor((plaudits_4_baseY + 7) * pixelRatio), reducedWidth, reducedHeight);
-
 
             // clap front left
             reducedWidth =  Math.floor(plaudits_4_sprite_width / 1.3),
@@ -242,45 +237,27 @@
         return par.scene;
     }
 
-    function plaudits_4_draw(c, staticImg, clip) {
+    function plaudits_4_draw(c, staticImg) {
 
         if (staticImg)
-            plaudits_4_render(c,clip);
+            plaudits_4_render(c);
         else
         {
             window.requestAnimFrame(
-                    function() {plaudits_4_draw(c,staticImg,clip)
+                    function() {plaudits_4_draw(c,staticImg)
                     });
 
             var delta = Date.now() - lastUpdateTime;
             if (acDelta > msPerFrame)
             {
                 acDelta = 0;
-                plaudits_4_render(c,clip);
+                plaudits_4_render(c);
             }
             else
             {
                 acDelta += delta;
             }
             lastUpdateTime = Date.now();
-        }
-    }
-
-    function plaudits_4_playSound(clip) {
-
-        var sound = clip[0];
-        sound.volume = 1;
-
-        if (plaudits_4_soundPlayCount > 0) {
-            //sound.pause();
-            //sound.currentTime = 0;
-            plaudits_4_soundPlayCount = 0;
-            plaudits_4_stopSoundLoop = true;
-        }
-        else
-        {
-            sound.play();
-            plaudits_4_soundPlayCount++;
         }
     }
 
@@ -326,20 +303,35 @@
 				var id = Math.floor(Math.random() * new Date().getTime());
 				canvas.attr('id', id);
 
-                plaudits_4_draw(id, staticImg, clip);
+                plaudits_4_draw(id, staticImg);
 
-                // bind click event - allow sound to loop if clicked
-                me.click(function(e) {
-                    e.preventDefault();
-                    plaudits_4_stopSoundLoop = false;
-                });
+                if (plaudits_4_isSoundSupported) {
+
+                    var sound = clip[0];
+                    sound.volume = 1;
+
+                    sound.addEventListener('ended',function(){
+                        sound.pause();
+                        sound.currentTime = 0;
+                        plaudits_4_isSoundPlaying = false;
+                    });
+
+                    me.click(function(e) {
+                        e.preventDefault();
+                        if (!plaudits_4_isSoundPlaying) {
+                            sound.play();
+                            plaudits_4_isSoundPlaying = true;
+                        }
+                    });
+                }
 
 			}, 200);
 		}
 	}
+    //]]>
 </script>
 <div class="plaudits-4 msie">
-	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_4_loaded.call(this);">
+	<img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_4_loaded.call(this);"/>
 	<div class="plaudits-4-header">
 		<span class="timestamp"></span>
 		<span class="flags"></span>
@@ -347,7 +339,6 @@
 	</div>
     <div class="blob"></div>
 	<canvas class="canvas"></canvas>
-
     <audio preload="auto" class="clip">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.ogg" type="audio/ogg">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit4Audio.mp3" type="audio/mpeg">

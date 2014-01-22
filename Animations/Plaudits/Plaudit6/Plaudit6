@@ -107,6 +107,7 @@
 <body>
 <div class="wrapper">
      <script type="text/javascript" defer="defer">
+     //<![CDATA[
 
         /**
          * Provide a cross-browser/fall back
@@ -136,8 +137,7 @@
             plaudits_6_frameCount = 60,
 
             plaudits_6_isSoundSupported = false,
-            plaudits_6_soundPlayCount = 0,
-            plaudits_6_stopSoundLoop = true,
+            plaudits_6_isSoundPlaying = false,
 
             plaudits_6_sprite = new Image(),
             plaudits_6_sprite_width,
@@ -151,7 +151,7 @@
         plaudits_6_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'drum2_1x60.png';
 
 
-        function plaudits_6_render(c,clip) {
+        function plaudits_6_render(c) {
 
             if (plaudits_6_imagesLoaded < plaudits_6_totalImages)
                 return;
@@ -165,13 +165,8 @@
                 ctx.clearRect(0, 0, this.width, this.height);
                 ctx.save();
 
-                var scene = plaudits_6_drawScene(this);
-                ctx.drawImage(scene, 0, 0, this.width, this.height);
-
-                var currentOriginalFrame = tick % plaudits_6_frameCount;
-                if (plaudits_6_isSoundSupported && !plaudits_6_stopSoundLoop /*&& currentOriginalFrame == 0*/ ) {
-                    plaudits_6_playSound(clip);
-                }
+                /*var scene = plaudits_6_drawScene(this);
+                ctx.drawImage(scene, 0, 0, this.width, this.height);*/
 
                 var frame = (tick + 30) % plaudits_6_frameCount,
                         pos = frame * plaudits_6_sprite_height,
@@ -218,45 +213,27 @@
             return par.scene;
         }
 
-        function plaudits_6_draw(c, staticImg, clip) {
+        function plaudits_6_draw(c, staticImg) {
 
             if (staticImg)
-                plaudits_6_render(c,clip);
+                plaudits_6_render(c);
             else
             {
                 window.requestAnimFrame(
-                        function() {plaudits_6_draw(c,staticImg,clip)
+                        function() {plaudits_6_draw(c,staticImg)
                 });
 
                 var delta = Date.now() - lastUpdateTime;
                 if (acDelta > msPerFrame)
                 {
                     acDelta = 0;
-                    plaudits_6_render(c,clip);
+                    plaudits_6_render(c);
                 }
                 else
                 {
                     acDelta += delta;
                 }
                 lastUpdateTime = Date.now();
-            }
-        }
-
-        function plaudits_6_playSound(clip) {
-
-            var sound = clip[0];
-            sound.volume = 1;
-
-            if (plaudits_6_soundPlayCount > 0) {
-                //sound.pause();
-                //sound.currentTime = 0;
-                plaudits_6_soundPlayCount = 0;
-                plaudits_6_stopSoundLoop = true;
-            }
-            else
-            {
-                sound.play();
-                plaudits_6_soundPlayCount++;
             }
         }
 
@@ -305,20 +282,35 @@
                     var id = Math.floor(Math.random() * new Date().getTime());
                     canvas.attr('id', id);
 
-                    plaudits_6_draw(id, staticImg, clip);
+                    plaudits_6_draw(id, staticImg);
 
-                    // bind click event - allow sound to loop if clicked
-                    me.click(function(e) {
-                        e.preventDefault();
-                        plaudits_6_stopSoundLoop = false;
-                    });
+                    if (plaudits_6_isSoundSupported) {
+
+                        var sound = clip[0];
+                        sound.volume = 1;
+
+                        sound.addEventListener('ended',function(){
+                            sound.pause();
+                            sound.currentTime = 0;
+                            plaudits_6_isSoundPlaying = false;
+                        });
+
+                        me.click(function(e) {
+                            e.preventDefault();
+                            if (!plaudits_6_isSoundPlaying) {
+                                sound.play();
+                                plaudits_6_isSoundPlaying = true;
+                            }
+                        });
+                    }
 
                 }, 200);
             }
         }
+        //]]>
     </script>
     <div class="plaudits-6 msie">
-        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_6_loaded.call(this);">
+        <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_6_loaded.call(this);"/>
         <div class="plaudits-6-header">
             <span class="timestamp"></span>
             <span class="flags"></span>
