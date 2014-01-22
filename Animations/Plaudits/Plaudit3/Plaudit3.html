@@ -207,15 +207,15 @@
 
             ctx.beginPath();
             ctx.fillStyle = '#999';
-            ctx.moveTo(75 * pixelRatio,50 * pixelRatio);
-            ctx.lineTo(100 * pixelRatio,75 * pixelRatio);
-            ctx.lineTo(100 * pixelRatio,25 * pixelRatio);
+            ctx.moveTo(40 * pixelRatio,50 * pixelRatio);
+            ctx.lineTo(65 * pixelRatio,75 * pixelRatio);
+            ctx.lineTo(65 * pixelRatio,25 * pixelRatio);
             ctx.fill();
 
-            ctx.fillRect(70 * pixelRatio, 40 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+            ctx.fillRect(35 * pixelRatio, 40 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
 
             // add .5 to straddle the pixels - make drawing smoother
-            var x = 105.5 * pixelRatio;
+            var x = 70.5 * pixelRatio;
             var y = 50.5  * pixelRatio;
             var radius = 10;
             var startAngle = 1.5 * Math.PI;
@@ -230,7 +230,7 @@
 
             ctx.beginPath();
             radius = 20;
-            x = 105.5 * pixelRatio;
+            x = 70.5 * pixelRatio;
             ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
             ctx.stroke();
 
@@ -328,7 +328,7 @@
     <div class="plaudits-3-header">
         <span class="timestamp"></span>
         <span class="flags"></span>
-        <strong class="nickname"></strong>
+        <strong class="nickname">test</strong>
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
