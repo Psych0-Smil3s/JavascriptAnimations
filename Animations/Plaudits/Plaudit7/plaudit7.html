@@ -181,6 +181,28 @@
 	};
 	plaudits_7_sprite_4.src = plaudits_7_baseUrl + (pixelRatio === 1 ? '' : 'X2/') + 'woo5_1x30.png';
 
+    var plaudits_7_audio = new Audio();
+    var source = document.createElement('source');
+
+    if (plaudits_7_audio.canPlayType('audio/ogg;')) {
+        source.type= 'audio/ogg';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.ogg';
+        plaudits_7_isSoundSupported = true;
+    } else if (plaudits_7_audio.canPlayType('audio/mpeg')) {
+        source.type= 'audio/mpeg';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.mp3';
+        plaudits_7_isSoundSupported = true;
+    } else if (plaudits_7_audio.canPlayType('audio/mp4a-latm')) {
+        source.type= 'audio/mp4a-latm';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.m4a';
+        plaudits_7_isSoundSupported = true;
+    } else if (plaudits_7_audio.canPlayType('audio/x-wav')) {
+        source.type= 'audio/x-wav';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.wav';
+        plaudits_7_isSoundSupported = true;
+    }
+    plaudits_7_audio.appendChild(source);
+
 	function plaudits_7_render(c) {
 
         if (plaudits_7_imagesLoaded < plaudits_7_totalImages)
@@ -333,14 +355,14 @@
 					});        
 				}
 
-                var clip = plaudits_7_setIsSoundSupported(me);
+                //var clip = plaudits_7_setIsSoundSupported(me);
 				var id = Math.floor(Math.random() * new Date().getTime());
 				canvas.attr('id', id);
 				plaudits_7_draw(id, staticImg);
 
                 if (plaudits_7_isSoundSupported) {
 
-                    var sound = clip[0];
+                    var sound = plaudits_7_audio;
                     sound.volume = 1;
 
                     sound.addEventListener('ended',function(){
@@ -372,12 +394,12 @@
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
-    <audio preload="auto" class="clip">
+    <!--<audio preload="auto" class="clip">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.ogg" type="audio/ogg">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.mp3" type="audio/mpeg">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.m4a" type="audio/mp4a-latm">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit7Audio.wav" type="audio/x-wav">
-    </audio>
+    </audio>-->
 </div>
 
 <div class="plaudits-7 editor">

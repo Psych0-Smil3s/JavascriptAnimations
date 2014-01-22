@@ -146,6 +146,28 @@
     };
     plaudits_5_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'drum1_1x40.png';
 
+    var plaudits_5_audio = new Audio();
+    var source = document.createElement('source');
+
+    if (plaudits_5_audio.canPlayType('audio/ogg;')) {
+        source.type= 'audio/ogg';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.ogg';
+        plaudits_5_isSoundSupported = true;
+    } else if (plaudits_5_audio.canPlayType('audio/mpeg')) {
+        source.type= 'audio/mpeg';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.mp3';
+        plaudits_5_isSoundSupported = true;
+    } else if (plaudits_5_audio.canPlayType('audio/mp4a-latm')) {
+        source.type= 'audio/mp4a-latm';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.m4a';
+        plaudits_5_isSoundSupported = true;
+    } else if (plaudits_5_audio.canPlayType('audio/x-wav')) {
+        source.type= 'audio/x-wav';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.wav';
+        plaudits_5_isSoundSupported = true;
+    }
+    plaudits_5_audio.appendChild(source);
+
     function plaudits_5_render(c) {
 
         if (plaudits_5_imagesLoaded < plaudits_5_totalImages)
@@ -245,14 +267,14 @@
                     });
                 }
 
-                var clip = plaudits_5_setIsSoundSupported(me);
+                //var clip = plaudits_5_setIsSoundSupported(me);
                 var id = Math.floor(Math.random() * new Date().getTime());
                 canvas.attr('id', id);
                 plaudits_5_draw(id);
 
                 if (plaudits_5_isSoundSupported) {
 
-                    var sound = clip[0];
+                    var sound = plaudits_5_audio;
                     sound.volume = 1;
 
                     sound.addEventListener('ended',function(){
@@ -286,12 +308,12 @@
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
 
-    <audio preload="auto" class="clip">
+    <!--<audio preload="auto" class="clip">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.ogg" type="audio/ogg">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.mp3" type="audio/mpeg">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.m4a" type="audio/mp4a-latm">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.wav" type="audio/x-wav">
-    </audio>
+    </audio>-->
 </div>
 <div class="plaudits-5 editor">
     <div class="blob"></div>

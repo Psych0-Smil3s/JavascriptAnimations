@@ -145,6 +145,28 @@
     };
     plaudits_3_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'clap1_1x70.png';
 
+    var plaudits_3_audio = new Audio();
+    var source = document.createElement('source');
+
+    if (plaudits_3_audio.canPlayType('audio/ogg;')) {
+        source.type= 'audio/ogg';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg';
+        plaudits_3_isSoundSupported = true;
+    } else if (plaudits_3_audio.canPlayType('audio/mpeg')) {
+        source.type= 'audio/mpeg';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3';
+        plaudits_3_isSoundSupported = true;
+    } else if (plaudits_3_audio.canPlayType('audio/mp4a-latm')) {
+        source.type= 'audio/mp4a-latm';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a';
+        plaudits_3_isSoundSupported = true;
+    } else if (plaudits_3_audio.canPlayType('audio/x-wav')) {
+        source.type= 'audio/x-wav';
+        source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav';
+        plaudits_3_isSoundSupported = true;
+    }
+    plaudits_3_audio.appendChild(source);
+
     function plaudits_3_render(c) {
 
         if (plaudits_3_imagesLoaded < plaudits_3_totalImages)
@@ -242,14 +264,14 @@
                     });
                 }
 
-                var clip = plaudits_3_setIsSoundSupported(me);
+                //var clip = plaudits_3_setIsSoundSupported(me);
                 var id = Math.floor(Math.random() * new Date().getTime());
                 canvas.attr('id', id);
-                plaudits_3_draw(id,clip);
+                plaudits_3_draw(id);
 
                 if (plaudits_3_isSoundSupported) {
 
-                    var sound = clip[0];
+                    var sound = plaudits_3_audio;
                     sound.volume = 1;
 
                     sound.addEventListener('ended',function(){
@@ -283,12 +305,12 @@
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
 
-    <audio preload="auto" class="clip">
+    <!--<audio preload="auto" class="clip">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg" type="audio/ogg">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3" type="audio/mpeg">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a" type="audio/mp4a-latm">
         <source src="http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav" type="audio/x-wav">
-    </audio>
+    </audio>-->
 </div>
 <div class="plaudits-3 editor">
     <div class="blob"></div>
