@@ -283,14 +283,38 @@
             var canvas = document.createElement('canvas'),
                     ctx = canvas.getContext('2d');
 
+
             canvas.width = par.width;
             canvas.height = par.height;
 
             ctx.beginPath();
+            ctx.fillStyle = '#999';
             ctx.moveTo(75 * pixelRatio,50 * pixelRatio);
-            ctx.lineTo(50 * pixelRatio,75 * pixelRatio);
-            ctx.lineTo(50 * pixelRatio,25 * pixelRatio);
+            ctx.lineTo(100 * pixelRatio,75 * pixelRatio);
+            ctx.lineTo(100 * pixelRatio,25 * pixelRatio);
             ctx.fill();
+
+            ctx.fillRect(70 * pixelRatio, 40 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+
+            // add .5 to straddle the pixels - make drawing smoother
+            var x = 105.5 * pixelRatio;
+            var y = 50.5  * pixelRatio;
+            var radius = 10;
+            var startAngle = 1.5 * Math.PI;
+            var endAngle = 0.5 * Math.PI;
+            var counterClockwise = false;
+
+            ctx.beginPath();
+            ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#999';
+            ctx.stroke();
+
+            ctx.beginPath();
+            radius = 20;
+            x = 105.5 * pixelRatio;
+            ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+            ctx.stroke();
 
             par.scene = canvas;
         }
