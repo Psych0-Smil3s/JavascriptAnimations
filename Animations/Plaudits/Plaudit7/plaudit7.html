@@ -128,9 +128,7 @@
 	 * Preload the scene images.
 	 */
 	var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
-        lastUpdateTime = 0,
-        acDelta = 0,
-        msPerFrame = 1000 / (25 * pixelRatio), //FPS
+
 		plaudits_7_imagesLoaded = 0,
 		plaudits_7_totalImages = 4,
 		plaudits_7_frameCount = 30,
@@ -225,7 +223,7 @@
 				frame = (tick + 15) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_3_height;
 
-				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.1)), Math.floor((plaudits_7_baseY + 3) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_3, 0, pos, plaudits_7_sprite_3_width, plaudits_7_sprite_3_height, Math.floor((halfCanvas) - (reducedWidth / 2) - (reducedWidth / 1.1)), Math.floor((plaudits_7_baseY - 3) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Sad
 				reducedWidth = Math.floor(plaudits_7_sprite_4_width / 1.5),
@@ -260,12 +258,12 @@
 				ctx.drawImage(plaudits_7_sprite_1, 0, pos, plaudits_7_sprite_1_width, plaudits_7_sprite_1_height, Math.floor((halfCanvas) - (reducedWidth / 2) + reducedWidth), Math.floor((plaudits_7_baseY + 17) * pixelRatio), reducedWidth, reducedHeight);
 
                 // Front left teapot wave
-				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.2),
-				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.2),
+				reducedWidth = Math.floor(plaudits_7_sprite_2_width / 1.5),
+				reducedHeight = Math.floor(plaudits_7_sprite_2_height / 1.5),
 				frame = (tick) % plaudits_7_frameCount,
 				pos = frame * plaudits_7_sprite_2_height;
 
-				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 1.6) - (reducedWidth * 1.2)), Math.floor((plaudits_7_baseY + 17) * pixelRatio), reducedWidth, reducedHeight);
+				ctx.drawImage(plaudits_7_sprite_2, 0, pos, plaudits_7_sprite_2_width, plaudits_7_sprite_2_height, Math.floor((halfCanvas) - (reducedWidth / 1.1) - (reducedWidth * 1.2)), Math.floor((plaudits_7_baseY + 16) * pixelRatio), reducedWidth, reducedHeight);
 
                 if (!plaudits_7_isSoundPlaying && plaudits_7_isSoundSupported) {
                     var scene = plaudits_7_drawScene(this);
@@ -289,16 +287,16 @@
 
             ctx.beginPath();
             ctx.fillStyle = '#999';
-            ctx.moveTo(40 * pixelRatio,50 * pixelRatio);
-            ctx.lineTo(65 * pixelRatio,75 * pixelRatio);
-            ctx.lineTo(65 * pixelRatio,25 * pixelRatio);
+            ctx.moveTo(40 * pixelRatio,70 * pixelRatio);
+            ctx.lineTo(65 * pixelRatio,95 * pixelRatio);
+            ctx.lineTo(65 * pixelRatio,45 * pixelRatio);
             ctx.fill();
 
-            ctx.fillRect(35 * pixelRatio, 40 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+            ctx.fillRect(35 * pixelRatio, 60 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
 
             // add .5 to straddle the pixels - make drawing smoother
             var x = 70.5 * pixelRatio;
-            var y = 50.5  * pixelRatio;
+            var y = 70.5  * pixelRatio;
             var radius = 10;
             var startAngle = 1.5 * Math.PI;
             var endAngle = 0.5 * Math.PI;
@@ -327,21 +325,14 @@
             plaudits_7_render(c);
         else
         {
-            window.requestAnimFrame(
-                    function() {plaudits_7_draw(c, staticImg)
-                    });
+            setTimeout(function() {
 
-            var delta = Date.now() - lastUpdateTime;
-            if (acDelta > msPerFrame)
-            {
-                acDelta = 0;
+                window.requestAnimFrame(
+                        function() {plaudits_7_draw(c)
+                        });
+
                 plaudits_7_render(c);
-            }
-            else
-            {
-                acDelta += delta;
-            }
-            lastUpdateTime = Date.now();
+            }, 50);
         }
     }
 

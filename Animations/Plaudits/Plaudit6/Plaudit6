@@ -128,9 +128,7 @@
          * Preload the scene images.
          */
         var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
-            lastUpdateTime = 0,
-            acDelta = 0,
-            msPerFrame = 1000 / (25 * pixelRatio), //FPS
+
             plaudits_4_baseY = 20,
             plaudits_6_imagesLoaded = 0,
             plaudits_6_totalImages = 1,
@@ -197,14 +195,14 @@
                         reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
                         reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2))  - (reducedWidth)), Math.floor((plaudits_4_baseY + 20) * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2))  - (reducedWidth - (10 * pixelRatio))), Math.floor((plaudits_4_baseY + 20) * pixelRatio), reducedWidth, reducedHeight);
 
                 frame = (tick + 15) % plaudits_6_frameCount,
                         pos = frame * plaudits_6_sprite_height
                         reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
                         reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor((this.width / 2) - (plaudits_6_sprite_width / 2)), Math.floor((plaudits_4_baseY - 2)  * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor((this.width / 2) - (plaudits_6_sprite_width / 2) + (10 * pixelRatio)), Math.floor((plaudits_4_baseY - 2)  * pixelRatio), reducedWidth, reducedHeight);
 
 
                 frame = (tick) % plaudits_6_frameCount,
@@ -212,7 +210,7 @@
                         reducedWidth  = Math.floor(plaudits_6_sprite_width / 1.4),
                         reducedHeight = Math.floor(plaudits_6_sprite_height / 1.4);
 
-                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2)) + (reducedWidth)), Math.floor((plaudits_4_baseY + 20) * pixelRatio), reducedWidth, reducedHeight);
+                ctx.drawImage(plaudits_6_sprite, 0, pos, plaudits_6_sprite_width, plaudits_6_sprite_height, Math.floor(((this.width / 2) - (plaudits_6_sprite_width / 2)) + (reducedWidth + (10 * pixelRatio))), Math.floor((plaudits_4_baseY + 20) * pixelRatio), reducedWidth, reducedHeight);
 
                 ctx.restore();
 
@@ -225,21 +223,22 @@
              var canvas = document.createElement('canvas'),
                      ctx = canvas.getContext('2d');
 
+
              canvas.width = par.width;
              canvas.height = par.height;
 
              ctx.beginPath();
              ctx.fillStyle = '#999';
-             ctx.moveTo(40 * pixelRatio,50 * pixelRatio);
-             ctx.lineTo(65 * pixelRatio,75 * pixelRatio);
-             ctx.lineTo(65 * pixelRatio,25 * pixelRatio);
+             ctx.moveTo(40 * pixelRatio,70 * pixelRatio);
+             ctx.lineTo(65 * pixelRatio,95 * pixelRatio);
+             ctx.lineTo(65 * pixelRatio,45 * pixelRatio);
              ctx.fill();
 
-             ctx.fillRect(35 * pixelRatio, 40 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+             ctx.fillRect(35 * pixelRatio, 60 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
 
              // add .5 to straddle the pixels - make drawing smoother
              var x = 70.5 * pixelRatio;
-             var y = 50.5  * pixelRatio;
+             var y = 70.5  * pixelRatio;
              var radius = 10;
              var startAngle = 1.5 * Math.PI;
              var endAngle = 0.5 * Math.PI;
@@ -268,21 +267,14 @@
                 plaudits_6_render(c);
             else
             {
-                window.requestAnimFrame(
-                        function() {plaudits_6_draw(c,staticImg)
-                });
+                setTimeout(function() {
 
-                var delta = Date.now() - lastUpdateTime;
-                if (acDelta > msPerFrame)
-                {
-                    acDelta = 0;
+                    window.requestAnimFrame(
+                            function() {plaudits_6_draw(c)
+                            });
+
                     plaudits_6_render(c);
-                }
-                else
-                {
-                    acDelta += delta;
-                }
-                lastUpdateTime = Date.now();
+                }, 50);
             }
         }
 
