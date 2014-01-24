@@ -1,0 +1,169 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+    <style type="text/css">
+        /******************************
+         * The following styles are only
+         * for browser based testing.
+         ******************************/
+        .wrapper {
+            position: relative;
+            width: 600px;
+            margin: 100px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+        .wrapper .editor {
+            margin-top: 10px !important;
+        }
+        /******************************
+         * Message styles
+         ******************************/
+
+        * {
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+        }
+        .animals-owl, .animals-owl * {
+            overflow: visible;
+        }
+        .loader {
+            position: absolute;
+        }
+        .animals-owl {
+            background: #0d4d5e;
+            border-radius: inherit;
+            height: 113px;
+            position: relative;
+            border: solid 1px #999;
+            text-align: center;
+        }
+        .animals-owl .animals-owl-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+        }
+        .animals-owl-header .timestamp, .animals-owl-header .flags, .animals-owl-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #666;
+        }
+        .animals-owl-header .timestamp, .animals-owl-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+
+        .animals-owl.editor, .animals-owl.msie {
+            background: #0d4d5e url(http://media.parlingo.com/website/live/messagepacks/animals/owl.png) no-repeat;
+            height: 113px;
+        }
+
+        .animals-owl-outer
+        {
+            margin-left: 20%;
+            height: 113px;
+        }
+        .animal-owl-message-entry
+        {
+            border: none;
+            background-color:transparent;
+            background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
+            width: 100%;
+            height:100%;
+            color: #663333;
+            border-radius:5px;
+            padding: 5px;
+            margin: 0px;
+            position:relative;
+            z-index:9999;
+            text-wrap: avoid;
+            white-space: pre-wrap;
+            word-wrap : break-word;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            resize:vertical;
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .animals-owl.editor, .animals-owl.msie {
+                background: #0d4d5e url(http://media.parlingo.com/website/live/messagepacks/animals/owl.png) no-repeat;
+                background-size: 456px 113px;
+            }
+
+        }
+
+        @-moz-document url-prefix() {
+            .animals-owl.editor, .animals-owl.msie {
+                background: #0d4d5e url(http://media.parlingo.com/website/live/messagepacks/animals/owl.png) no-repeat;
+                background-size: 456px 113px;
+            }
+
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+
+    function animals_owl_loaded() {
+
+        var me = $(this).closest('.animals-owl');
+        if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+           me.removeClass('msie');
+
+           me.toggleClass('go');
+
+            /* Start the animated gif */
+            if (me.hasClass('go')) {
+
+                /* Create an <img> element and give it the animated gif as a src.  To
+                 force a reload we add a date parameter to the URL */
+                var img = document.createElement('img');
+                img.src = "http://media.parlingo.com/website/live/messagepacks/animals/goSleepRegEdit.gif?p" + new Date().getTime();
+
+                /* Once the image has loaded, set it as the background-image */
+                $(img).load(function(){
+                    me.css({backgroundImage: "url("+img.src+")"});
+                });
+
+                /* Remove the background-image */
+            } else {
+                me.css({backgroundImage: "none"});
+            }
+
+
+        }
+    }
+
+//]]>
+</script>
+<div class="animals-owl msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="animals_owl_loaded.call(this)"/>
+    <div class="animals-owl-header">
+        <span class="timestamp">test</span>
+        <span class="flags">test</span>
+        <strong class="nickname">test</strong>
+    </div>
+    <p id="message" class=""></p>
+</div>
+
+<div class="animals-owl editor">
+    <form>
+        <div class="animals-owl-outer">
+            <textarea class="animal-owl-message-entry" name="message" max-newlines="6" max-length="178"></textarea>
+        </div>
+    </form>
+</div>
+
+</div>
+</body>
+</html>
