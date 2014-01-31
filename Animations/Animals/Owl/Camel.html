@@ -28,51 +28,53 @@
             margin: 0;
             padding: 0;
         }
-        .animals-owl, .animals-owl * {
+        .animals-camel, .animals-camel * {
             overflow: visible;
         }
         .loader {
             position: absolute;
         }
-        .animals-owl {
-            background: #004555 url(http://media.parlingo.com/website/live/messagepacks/animals/owlScene1.png) no-repeat;
+        .animals-camel {
+            background: #9cddeb url(http://media.parlingo.com/website/live/messagepacks/animals/camelScene1.png) no-repeat;
             border-radius: inherit;
             height: 113px;
-            background-size: 600px 113px;
+            /*background-size: 600px 113px;*/
+            background-size: 600px 103px;
+            background-position: left bottom;
             position: relative;
             border: solid 1px #999;
             text-align: center;
         }
-        .animals-owl .animals-owl-header {
+        .animals-camel .animals-camel-header {
             width: 100%;
             position: absolute;
             z-index: 11;
             top: 0;
             left: 0;
         }
-        .animals-owl-header .timestamp, .animals-owl-header .flags, .animals-owl-header .nickname {
+        .animals-camel-header .timestamp, .animals-camel-header .flags, .animals-camel-header .nickname {
             float: left;
             padding: 2px 5px;
             color: #666;
         }
-        .animals-owl-header .timestamp, .animals-owl-header .flags {
+        .animals-camel-header .timestamp, .animals-camel-header .flags {
             float: right;
             padding-left: 10px;
         }
 
-        .animals-owl-outer
+        .animals-camel-outer
         {
             margin-left: 110px;
             margin-top: 20px;
             margin-right: 10px;
         }
 
-        .animals-owl-outer.editor
+        .animals-camel-outer.editor
         {
             margin-top: 10px;
         }
 
-        .animal-owl-message-entry
+        .animal-camel-message-entry
         {
 
             border: none;
@@ -127,11 +129,11 @@
 
         /* triangle border left */
         .triangle-border.left {
-            margin-left:30px;
+            margin-left:35px;
         }
 
         .triangle-border.left:before {
-            top: 10px;
+            top: 55px;
             bottom: auto;
             left: -25px;
             border-width: 10px 25px 10px 0;
@@ -139,30 +141,34 @@
         }
 
         .triangle-border.left:after {
-            top: 14px;
+            top: 59px;
             bottom: auto;
             left: -21px;
             border-width: 6px 18px 6px 0;
-            border-color: transparent #004555;
+            border-color: transparent #c17e3a;
         }
 
-        .animals-owl.editor, .animals-owl.msie {
-            background: #004555 url(http://media.parlingo.com/website/live/messagepacks/animals/owl.png) no-repeat;
-            background-size: 600px 113px;
+        .animals-camel.editor, .animals-camel.msie {
+            background: #9cddeb url(http://media.parlingo.com/website/live/messagepacks/animals/camel.png) no-repeat;
+            background-size: 600px 103px;
+            background-position: left bottom;
+
         }
 
         @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-            .animals-owl.editor, .animals-owl.msie {
-                background: #004555 url(http://media.parlingo.com/website/live/messagepacks/animals/owl.png) no-repeat;
-                background-size: 600px 113px;
+            .animals-camel.editor, .animals-camel.msie {
+                background: #9cddeb url(http://media.parlingo.com/website/live/messagepacks/animals/camel.png) no-repeat;
+                background-size: 600px 103px;
+                background-position: left bottom;
             }
 
         }
 
         @-moz-document url-prefix() {
-            .animals-owl.editor, .animals-owl.msie {
-                background: #004555 url(http://media.parlingo.com/website/live/messagepacks/animals/owl.png) no-repeat;
-                background-size: 600px 113px;
+            .animals-camel.editor, .animals-camel.msie {
+                background: #9cddeb url(http://media.parlingo.com/website/live/messagepacks/animals/camel.png) no-repeat;
+                background-size: 600px 103px;
+                background-position: left bottom;
             }
 
         }
@@ -172,28 +178,28 @@
 <body>
 <div class="wrapper">
 
-<div class="animals-owl msie">
-    <div class="animals-owl-header">
-        <span class="timestamp"></span>
-        <span class="flags"></span>
-        <strong class="nickname"></strong>
-    </div>
-    <div class="animals-owl-outer">
-        <div class="triangle-border left">
-            <p id="message" class="animal-owl-message-entry loader message-bubble"></p>
+    <div class="animals-camel msie">
+        <div class="animals-camel-header">
+            <span class="timestamp"></span>
+            <span class="flags"></span>
+            <strong class="nickname"></strong>
+        </div>
+        <div class="animals-camel-outer">
+            <div class="triangle-border left">
+                <p id="message" class="animal-camel-message-entry loader message-bubble"></p>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="animals-owl editor">
-    <form>
-        <div class="animals-owl-outer">
-            <p class="triangle-border left">
-                <textarea class="animal-owl-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60"></textarea>
-            </p>
-        </div>
-    </form>
-</div>
+    <div class="animals-camel editor">
+        <form>
+            <div class="animals-camel-outer">
+                <p class="triangle-border left">
+                    <textarea class="animal-camel-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60"></textarea>
+                </p>
+            </div>
+        </form>
+    </div>
 
 </div>
 </body>
@@ -208,8 +214,8 @@
 
         $(document).ready(function () {
 
-            var o = new MP.Owl();
-            o.animals_owl_loaded();
+            var c = new MP.Camel();
+            c.animals_camel_loaded();
 
         });
 
@@ -217,24 +223,24 @@
 
     (function($){
 
-        function Owl() {
+        function Camel() {
 
-           this.me = $('.loader').closest('.animals-owl');
-           this.meBubble =  $('.loader').closest('.animals-owl .animals-owl-outer');
-           this.msgPackWidth = $(this.me).width();
-           this.MSG_PACK_WIDTH_BOUND = 500;
+            this.me = $('.loader').closest('.animals-camel');
+            this.meBubble =  $('.loader').closest('.animals-camel .animals-camel-outer');
+            this.msgPackWidth = $(this.me).width();
+            this.MSG_PACK_WIDTH_BOUND = 500;
 
-           this.animals_owl_show_bubble = function() {
-               $(this.meBubble).fadeIn('fast');
-           }
+            this.animals_camel_show_bubble = function() {
+                $(this.meBubble).fadeIn('fast');
+            }
 
-           this.animals_owl_set_speechBubble_size = function() {
-               if (this.msgPackWidth > this.MSG_PACK_WIDTH_BOUND) {
-                   this.meBubble.css({width: "35%" });
-               }
-           }
+            this.animals_camel_set_speechBubble_size = function() {
+                if (this.msgPackWidth > this.MSG_PACK_WIDTH_BOUND) {
+                    this.meBubble.css({width: "35%" });
+                }
+            }
 
-            this.animals_owl_loaded = function() {
+            this.animals_camel_loaded = function() {
 
                 var self = this; // use bind() on events if jquery gets updated to 1.7
 
@@ -247,12 +253,12 @@
                     // Start the animated gif
                     if (this.me.hasClass('go')) {
 
-                        this.animals_owl_set_speechBubble_size();
+                        this.animals_camel_set_speechBubble_size();
 
                         // Create <img> element and give it the animated gif as a src.  To
                         // force a reload - add a date parameter to the URL
                         var img = document.createElement('img');
-                        img.src = "http://media.parlingo.com/website/live/messagepacks/animals/goSleepReg.gif?p" + new Date().getTime();
+                        img.src = "http://media.parlingo.com/website/live/messagepacks/animals/noOneLovesMeReg.gif?p" + new Date().getTime();
 
                         this.me.removeClass('msie');
 
@@ -260,7 +266,7 @@
                         $(img).load(function(){
                             self.me.css({backgroundImage: "url("+img.src+" )"});
                             self.me.css({backgroundRepeat: "no-repeat"});
-                            setTimeout(function() { self.animals_owl_show_bubble.call(self); }, 1000);
+                            setTimeout(function() { self.animals_camel_show_bubble.call(self); }, 2000);
                         });
 
                         // Remove the background-image
@@ -272,7 +278,7 @@
             }
         }
 
-        MP.Owl = Owl;
+        MP.Camel = Camel;
 
     }(jQuery));
 
