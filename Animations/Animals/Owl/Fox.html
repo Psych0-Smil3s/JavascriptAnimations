@@ -1,0 +1,285 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+    <style type="text/css">
+        /******************************
+         * The following styles are only
+         * for browser based testing.
+         ******************************/
+        .wrapper {
+            position: relative;
+            width: 600px;
+            margin: 100px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+        .wrapper .editor {
+            margin-top: 10px !important;
+        }
+        /******************************
+         * Message styles
+         ******************************/
+
+        * {
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+        }
+        .animals-fox, .animals-fox * {
+            overflow: visible;
+        }
+        .loader {
+            position: absolute;
+        }
+        .animals-fox {
+            background: #f6bb3b url(http://media.parlingo.com/website/live/messagepacks/animals/foxScene1.png) no-repeat;
+            border-radius: inherit;
+            height: 113px;
+            background-size: 600px 113px;
+            background-position: left bottom;
+            position: relative;
+            border: solid 1px #999;
+            text-align: center;
+        }
+        .animals-fox .animals-fox-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+        }
+        .animals-fox-header .timestamp, .animals-fox-header .flags, .animals-fox-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #666;
+        }
+        .animals-fox-header .timestamp, .animals-fox-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+
+        .animals-fox-outer
+        {
+            margin-left: 110px;
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+
+        .animals-fox-outer.editor
+        {
+            margin-top: 10px;
+        }
+
+        .animal-fox-message-entry
+        {
+
+            border: none;
+            background-color:transparent;
+            background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
+            width: 100%;
+            height:78px;
+            color: #000; /* 663333 */
+            padding: 5px;
+            margin: 0px;
+            position:relative;
+            z-index:9999;
+            text-wrap: avoid;
+            white-space: pre-wrap;
+            word-wrap : break-word;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            resize:vertical;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+        }
+
+        /* triangle border */
+        .triangle-border {
+            position:relative;
+            /*margin:1em 0 3em;*/
+            border:2px solid #fff; /* 5 */
+            color:#333;
+            background-color:transparent;
+            background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
+            -webkit-border-radius:10px;
+            -moz-border-radius:10px;
+            border-radius:10px;
+        }
+
+        .triangle-border:before {
+            content: "";
+            position: absolute;
+            border-style: solid;
+            display: block;
+            width: 0;
+        }
+        .triangle-border:after {
+            content: "";
+            position: absolute;
+            border-style: solid;
+            display: block;
+            width: 0;
+        }
+
+        /* triangle border left */
+        .triangle-border.left {
+            margin-left:35px;
+        }
+
+        .triangle-border.left:before {
+            top: 30px;
+            bottom: auto;
+            left: -25px;
+            border-width: 10px 25px 10px 0;
+            border-color: transparent #fff;
+        }
+
+        .triangle-border.left:after {
+            top: 34px;
+            bottom: auto;
+            left: -21px;
+            border-width: 6px 18px 6px 0;
+            border-color: transparent #f6bb3b;
+        }
+
+        .animals-fox.editor, .animals-fox.msie {
+            background: #f6bb3b url(http://media.parlingo.com/website/live/messagepacks/animals/fox.png) no-repeat;
+            background-size: 600px 113px;
+            background-position: left bottom;
+
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .animals-fox.editor, .animals-fox.msie {
+                background: #f6bb3b url(http://media.parlingo.com/website/live/messagepacks/animals/fox.png) no-repeat;
+                background-size: 600px 113px;
+            }
+
+        }
+
+        @-moz-document url-prefix() {
+            .animals-fox.editor, .animals-fox.msie {
+                background: #f6bb3b url(http://media.parlingo.com/website/live/messagepacks/animals/fox.png) no-repeat;
+                background-size: 600px 113px;
+            }
+
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <div class="animals-fox msie">
+        <div class="animals-fox-header">
+            <span class="timestamp"></span>
+            <span class="flags"></span>
+            <strong class="nickname"></strong>
+        </div>
+        <div class="animals-fox-outer">
+            <div class="triangle-border left">
+                <p id="message" class="animal-fox-message-entry loader message-bubble"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="animals-fox editor">
+        <form>
+            <div class="animals-fox-outer">
+                <p class="triangle-border left">
+                    <textarea class="animal-fox-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60"></textarea>
+                </p>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+
+<script type="text/javascript" defer="defer">
+    //<![CDATA[
+
+    // Namespace
+    this.MP = this.MP || {};
+
+    (function($){
+
+        $(document).ready(function () {
+
+            var f = new MP.Fox();
+            f.animals_fox_loaded();
+
+        });
+
+    }(jQuery));
+
+    (function($){
+
+        function Fox() {
+
+            this.me = $('.loader').closest('.animals-fox');
+            this.meBubble =  $('.loader').closest('.animals-fox .animals-fox-outer');
+            this.msgPackWidth = $(this.me).width();
+            this.MSG_PACK_WIDTH_BOUND = 500;
+
+            this.animals_fox_show_bubble = function() {
+                $(this.meBubble).fadeIn('fast');
+            }
+
+            this.animals_fox_set_speechBubble_size = function() {
+                if (this.msgPackWidth > this.MSG_PACK_WIDTH_BOUND) {
+                    this.meBubble.css({width: "35%" });
+                }
+            }
+
+            this.animals_fox_loaded = function() {
+
+                var self = this; // use bind() on events if jquery gets updated to 1.7
+
+                if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+
+                    $(this.meBubble).hide();
+
+                    this.me.toggleClass('go');
+
+                    // Start the animated gif
+                    if (this.me.hasClass('go')) {
+
+                        this.animals_fox_set_speechBubble_size();
+
+                        // Create <img> element and give it the animated gif as a src.  To
+                        // force a reload - add a date parameter to the URL
+                        var img = document.createElement('img');
+                        img.src = "http://media.parlingo.com/website/live/messagepacks/animals/fox.gif?p" + new Date().getTime();
+
+                        this.me.removeClass('msie');
+
+                        // Once the image has loaded, set it as the background-image
+                        $(img).load(function(){
+                            self.me.css({backgroundImage: "url("+img.src+" )"});
+                            self.me.css({backgroundRepeat: "no-repeat"});
+                            setTimeout(function() { self.animals_fox_show_bubble.call(self); }, 2000);
+                        });
+
+                        // Remove the background-image
+                    } else {
+                        this.me.css({backgroundImage: "none"});
+                    }
+                }
+
+            }
+        }
+
+        MP.Fox = Fox;
+
+    }(jQuery));
+
+    //]]>
+</script>
+
+</html>
