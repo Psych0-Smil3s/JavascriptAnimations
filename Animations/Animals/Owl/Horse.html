@@ -54,7 +54,7 @@
         .animals-horse-header .timestamp, .animals-horse-header .flags, .animals-horse-header .nickname {
             float: left;
             padding: 2px 5px;
-            color: #666;
+            color: #dfa33b;
         }
         .animals-horse-header .timestamp, .animals-horse-header .flags {
             float: right;
@@ -66,6 +66,44 @@
             margin-left: 110px;
             margin-top: 20px;
             margin-right: 10px;
+        }
+
+        .animals-horse-outer.fade
+        {
+            -webkit-animation: fadein 3s; /* Safari and Chrome */
+            -moz-animation: fadein 3s; /* Firefox */
+            -ms-animation: fadein 3s; /* Internet Explorer */
+            -o-animation: fadein 3s; /* Opera */
+            animation: fadein 3s;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* Firefox */
+        @-moz-keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* Safari and Chrome */
+        @-webkit-keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* Internet Explorer */
+        @-ms-keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* Opera */
+        @-o-keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
         }
 
         .animals-horse-outer.editor
@@ -181,7 +219,7 @@
             <span class="flags"></span>
             <strong class="nickname"></strong>
         </div>
-        <div class="animals-horse-outer">
+        <div class="animals-horse-outer fade">
             <div class="triangle-border left">
                 <p id="message" class="animal-horse-message-entry loader message-bubble"></p>
             </div>
@@ -190,7 +228,7 @@
 
     <div class="animals-horse editor">
         <form>
-            <div class="animals-horse-outer">
+            <div class="animals-horse-outer fade">
                 <p class="triangle-border left">
                     <textarea class="animal-horse-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60"></textarea>
                 </p>
@@ -244,6 +282,7 @@
                 if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
 
                     $(this.meBubble).hide();
+                    $(this.meBubble).removeClass('fade');
 
                     this.me.toggleClass('go');
 
