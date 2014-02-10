@@ -114,7 +114,8 @@
             background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
             width: 100%;
             height:78px;
-            color: #000; /* 663333 */
+            color: #9e0003; /* 663333 */
+            font-weight:bold;
             padding: 5px;
             margin: 0px;
             position:relative;
@@ -132,10 +133,11 @@
         }
 
         /* triangle border */
-        .triangle-border {
+        .animal-rooster-triangle-border {
             position:relative;
             /*margin:1em 0 3em;*/
             border:2px solid #fff; /* 5 */
+            height:78px;
             color:#333;
             background-color:transparent;
             background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
@@ -144,14 +146,14 @@
             border-radius:10px;
         }
 
-        .triangle-border:before {
+        .animal-rooster-triangle-border:before {
             content: "";
             position: absolute;
             border-style: solid;
             display: block;
             width: 0;
         }
-        .triangle-border:after {
+        .animal-rooster-triangle-border:after {
             content: "";
             position: absolute;
             border-style: solid;
@@ -160,11 +162,11 @@
         }
 
         /* triangle border left */
-        .triangle-border.left {
+        .animal-rooster-triangle-border.left {
             margin-left:30px;
         }
 
-        .triangle-border.left:before {
+        .animal-rooster-triangle-border.left:before {
             top: 10px;
             bottom: auto;
             left: -25px;
@@ -172,7 +174,7 @@
             border-color: transparent #fff;
         }
 
-        .triangle-border.left:after {
+        .animal-rooster-triangle-border.left:after {
             top: 14px;
             bottom: auto;
             left: -21px;
@@ -215,7 +217,7 @@
             <strong class="nickname"></strong>
         </div>
         <div class="animals-rooster-outer fade">
-            <div class="triangle-border left">
+            <div class="animal-rooster-triangle-border left">
                 <p id="message" class="animal-rooster-message-entry loader message-bubble"></p>
             </div>
         </div>
@@ -224,7 +226,7 @@
     <div class="animals-rooster editor">
         <form>
             <div class="animals-rooster-outer fade">
-                <p class="triangle-border left">
+                <p class="animal-rooster-triangle-border left">
                     <textarea class="animal-rooster-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60"></textarea>
                 </p>
             </div>

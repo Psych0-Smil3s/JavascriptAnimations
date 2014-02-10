@@ -120,7 +120,8 @@
             background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
             width: 100%;
             height:78px;
-            color: #000; /* 663333 */
+            color: #9e0003; /* 663333 */
+            font-weight:bold;
             padding: 5px;
             margin: 0px;
             position:relative;
@@ -138,10 +139,11 @@
         }
 
         /* triangle border */
-        .triangle-border {
+        .animal-camel-triangle-border {
             position:relative;
             /*margin:1em 0 3em;*/
             border:2px solid #fff; /* 5 */
+            height:78px;
             color:#333;
             background-color:transparent;
             background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
@@ -150,14 +152,14 @@
             border-radius:10px;
         }
 
-        .triangle-border:before {
+        .animal-camel-triangle-border:before {
             content: "";
             position: absolute;
             border-style: solid;
             display: block;
             width: 0;
         }
-        .triangle-border:after {
+        .animal-camel-triangle-border:after {
             content: "";
             position: absolute;
             border-style: solid;
@@ -166,11 +168,11 @@
         }
 
         /* triangle border left */
-        .triangle-border.left {
+        .animal-camel-triangle-border.left {
             margin-left:35px;
         }
 
-        .triangle-border.left:before {
+        .animal-camel-triangle-border.left:before {
             top: 55px;
             bottom: auto;
             left: -25px;
@@ -178,7 +180,7 @@
             border-color: transparent #fff;
         }
 
-        .triangle-border.left:after {
+        .animal-camel-triangle-border.left:after {
             top: 59px;
             bottom: auto;
             left: -21px;
@@ -223,7 +225,7 @@
             <strong class="nickname"></strong>
         </div>
         <div class="animals-camel-outer fade">
-            <div class="triangle-border left">
+            <div class="animal-camel-triangle-border left">
                 <p id="message" class="animal-camel-message-entry loader message-bubble"></p>
             </div>
         </div>
@@ -232,7 +234,7 @@
     <div class="animals-camel editor">
         <form>
             <div class="animals-camel-outer fade">
-                <p class="triangle-border left">
+                <p class="animal-camel-triangle-border left">
                     <textarea class="animal-camel-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60"></textarea>
                 </p>
             </div>
