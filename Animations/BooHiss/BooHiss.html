@@ -1,0 +1,264 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+    <style type="text/css">
+        /******************************
+         * The following styles are only
+         * for browser based testing.
+         ******************************/
+        .wrapper {
+            position: relative;
+            width: 600px;
+            margin: 100px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+        .wrapper .editor {
+            margin-top: 10px !important;
+        }
+        /******************************
+         * Message styles
+         ******************************/
+        * {
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+        }
+        .boo-hiss, .boo-hiss * {
+            overflow: visible;
+        }
+        .loader {
+            position: absolute;
+        }
+        .boo-hiss {
+            border-radius: inherit;
+            height: 113px;
+            position: relative;
+            background: #fff;
+            border: solid 1px #999;
+            text-align: center;
+        }
+        .boo-hiss .boo-hiss-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+        }
+        .boo-hiss-header .timestamp, .boo-hiss-header .flags, .boo-hiss-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #666;
+        }
+        .boo-hiss-header .timestamp, .boo-hiss-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+        .boo-hiss-header canvas {
+            z-index: 2;
+            position: relative;
+        }
+        .boo-hiss.msie canvas {
+            display: none;
+        }
+        .boo-hiss.editor, .boo-hiss.msie {
+            background: #fff;
+        }
+        .boo-hiss.editor .blob, .boo-hiss.msie .blob {
+            margin: 0 auto;
+            width: 106px;
+            height: 90px;
+            margin-top: 10px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/clap1.png) center center no-repeat;
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .boo-hiss.editor, .boo-hiss.msie {
+                background: #fff;
+                background-size: 456px 113px;
+            }
+            .boo-hiss.editor .blob, .boo-hiss.msie .blob {
+                margin: 0 auto;
+                margin-top: 10px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png)  no-repeat;
+                background-size: 106px 90px;
+            }
+        }
+
+        @-moz-document url-prefix() {
+            .boo-hiss.editor, .boo-hiss.msie {
+                background: #fff /*url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x*/;
+                background-size: 456px 113px;
+            }
+            .boo-hiss.editor .blob, .boo-hiss.msie .blob {
+                margin: 0 auto;
+                margin-top: 10px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png)  no-repeat;
+                background-size: 106px 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+
+this.BH = this.BH || {};
+
+(function($) {
+
+    "use strict";
+
+    function Preloader(o) {
+
+        var assets = o || new Object();
+        
+        var images = assets.images;
+        var audios = assets.audios;
+
+        var boo_hiss_imagesLoaded, boo_hiss_totalImages, boo_hiss_isSoundPlaying,
+            boo_hiss_isImagesLoaded,  boo_hiss_isAudioLoaded, poller;
+
+        this.boo_hiss_preloaderComplete = false;
+        this.boo_hiss_isSoundPlaying = false;
+
+        this.load = function() {
+            if (images.length == 0) return;
+
+            boo_hiss_isImagesLoaded = false;
+            boo_hiss_isAudioLoaded = false;
+
+            fireImages();
+            fireAudio();
+
+            poller = setInterval(poll, 50);
+
+        }
+
+        function poll() {
+            if (boo_hiss_isImagesLoaded && boo_hiss_isAudioLoaded) {
+                clearInterval(poller);
+                this.boo_hiss_preloaderComplete = true;
+            }
+        }
+
+        function fireImages() {
+            boo_hiss_totalImages = images.length;
+            boo_hiss_imagesLoaded = 0;
+            for (var i = 0; i < boo_hiss_totalImages; i++) {
+                preloadImg(images[i].containerId, images[i].imgUrl, images[i].imageId);
+            }
+        }
+
+        function preloadImg(containerId, imgUrl, imageId) {
+            var i = new Image();
+            i.id = imageId;
+            i.onload = function() {
+                ++boo_hiss_imagesLoaded;
+                if (boo_hiss_imagesLoaded == boo_hiss_totalImages)
+                    boo_hiss_isImagesLoaded = true;
+            };
+            i.src = imgUrl;
+        }
+
+        function fireAudio() {
+            var audio = new Audio();
+            for (var i = 0; i < audios.length; i++) {
+                var source = document.createElement('source');
+                for (var j = 0; j < audios[i].audio.length; j++) {
+                    if (preLoadAudio(audio, source, audios[i].audio[j].audioSrc, audios[i].audio[j].audioType)) {
+                        break;
+                    }
+                }
+                audio.appendChild(source);
+            }
+            audio.preload = "auto";
+            audio.volume = 1;
+            audio.addEventListener('ended', function(){
+                audio.pause();
+                audio.currentTime = 0;
+                this.boo_hiss_isSoundPlaying = false;
+            });
+            audio.addEventListener('canplaythrough', function(){
+                boo_hiss_isAudioLoaded = true;
+            });
+        }
+
+        function preLoadAudio(audio, source, audioSrc, audioType) {
+            var supported = false;
+            if (audioType == "ogg" && audio.canPlayType('audio/ogg')) {
+                source.type= 'audio/ogg';
+                source.src= audioSrc;
+                supported = true;
+            } else if (audioType == "mp3" && audio.canPlayType('audio/mpeg')) {
+                source.type= 'audio/mpeg';
+                source.src= audioSrc;
+                supported = true;
+            } else if (audioType == "m4a" && audio.canPlayType('audio/mp4a-latm')) {
+                source.type= 'audio/mp4a-latm';
+                source.src= audioSrc;
+                supported = true;
+            } else if (audioType == "wav" && audio.canPlayType('audio/x-wav')) {
+                source.type= 'audio/x-wav';
+                source.src= audioSrc;
+                supported = true;
+            }
+            return supported;
+        }
+    }
+
+    BH.Preloader = Preloader;
+
+})(jQuery);
+
+
+(function() {
+
+   "use strict";
+
+    var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
+    var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'clap1_1x70.png';
+
+    $(document).ready(function() {
+
+        var Preloader = new BH.Preloader({
+                                               images:[
+                                                            {containerId:"boo-hiss", imgUrl:imgSrc, imageId:"BooHissImg"}
+                                               ],
+                                               audios:[
+                                                            {audio: [
+                                                                           {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg", audioType:"ogg"},
+                                                                           {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3", audioType:"mp3"},
+                                                                           {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a", audioType:"m4a"},
+                                                                           {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav", audioType:"wav"}
+                                                                    ]
+                                                            }
+                                               ]
+                                        });
+        Preloader.load();
+
+    });
+})();
+
+//]]>
+</script>
+<div class="boo-hiss msie">
+    <div class="boo-hiss-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname">test</strong>
+    </div>
+    <div class="blob"></div>
+    <canvas class="canvas"></canvas>
+</div>
+<div class="boo-hiss editor">
+    <div class="blob"></div>
+</div>
+
+</div>
+</body>
+</html>
