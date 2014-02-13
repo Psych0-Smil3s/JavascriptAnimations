@@ -104,28 +104,59 @@
 </head>
 <body>
 <div class="wrapper">
+<div class="boo-hiss msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader"/>
+    <div class="boo-hiss-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname">test</strong>
+    </div>
+    <div class="blob"></div>
+    <canvas class="canvas"></canvas>
+</div>
+
+<div class="boo-hiss editor">
+    <div class="blob"></div>
+</div>
+
+
+
+
 <script type="text/javascript" defer="defer">
 //<![CDATA[
 
 this.BH = this.BH || {};
 
+/*
+ * Preloader - Image and Audio
+ */
 (function($) {
 
     "use strict";
 
     function Preloader(o) {
 
+        // Private members
+        var self = this;
+
         var assets = o || new Object();
-        
+
         var images = assets.images;
         var audios = assets.audios;
 
-        var boo_hiss_imagesLoaded, boo_hiss_totalImages, boo_hiss_isSoundPlaying,
-            boo_hiss_isImagesLoaded,  boo_hiss_isAudioLoaded, poller;
+        var me = $('.loader').closest('.boo-hiss');
 
+        var boo_hiss_imagesLoaded, boo_hiss_totalImages,
+                boo_hiss_isImagesLoaded, boo_hiss_isAudioLoaded, poller;
+
+        // Public members
         this.boo_hiss_preloaderComplete = false;
         this.boo_hiss_isSoundPlaying = false;
 
+        this.publicImages = new Array();
+        this.publicAudios = new Array();
+
+        // Driver - on complete sets preLoaderComplete
         this.load = function() {
             if (images.length == 0) return;
 
@@ -139,32 +170,39 @@ this.BH = this.BH || {};
 
         }
 
+        // Private functions
         function poll() {
             if (boo_hiss_isImagesLoaded && boo_hiss_isAudioLoaded) {
                 clearInterval(poller);
-                this.boo_hiss_preloaderComplete = true;
+                self.boo_hiss_preloaderComplete = true;
             }
         }
 
+        // Image loader
         function fireImages() {
             boo_hiss_totalImages = images.length;
             boo_hiss_imagesLoaded = 0;
             for (var i = 0; i < boo_hiss_totalImages; i++) {
-                preloadImg(images[i].containerId, images[i].imgUrl, images[i].imageId);
+                preloadImg(images[i].imgUrl, images[i].imageId, images[i].frameCount);
             }
         }
 
-        function preloadImg(containerId, imgUrl, imageId) {
+        function preloadImg(imgUrl, imageId, frameCount) {
             var i = new Image();
             i.id = imageId;
             i.onload = function() {
                 ++boo_hiss_imagesLoaded;
+                i.sprite_width = i.width;
+                i.sprite_height = Math.floor(i.height / frameCount);
+                self.publicImages.push(i);
                 if (boo_hiss_imagesLoaded == boo_hiss_totalImages)
                     boo_hiss_isImagesLoaded = true;
             };
             i.src = imgUrl;
+            i.frame_count = frameCount;
         }
 
+        // Audio loader with  event handlers
         function fireAudio() {
             var audio = new Audio();
             for (var i = 0; i < audios.length; i++) {
@@ -181,11 +219,19 @@ this.BH = this.BH || {};
             audio.addEventListener('ended', function(){
                 audio.pause();
                 audio.currentTime = 0;
-                this.boo_hiss_isSoundPlaying = false;
+                self.boo_hiss_isSoundPlaying = false;
             });
             audio.addEventListener('canplaythrough', function(){
                 boo_hiss_isAudioLoaded = true;
             });
+            me.click(function(e) {
+                e.preventDefault();
+                if (!self.boo_hiss_isSoundPlaying) {
+                    audio.play();
+                    self.boo_hiss_isSoundPlaying = true;
+                }
+            });
+            self.publicAudios.push(audio);
         }
 
         function preLoadAudio(audio, source, audioSrc, audioType) {
@@ -213,12 +259,173 @@ this.BH = this.BH || {};
 
     BH.Preloader = Preloader;
 
-})(jQuery);
+}(jQuery));
+
+
+/**
+ * Provide a cross-browser/fall back
+ * solution for the requestAnimationFrame.
+ */
+window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            window.oRequestAnimationFrame      ||
+            window.msRequestAnimationFrame     ||
+            function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+            };
+})();
+
+
+(function($) {
+
+    "use strict";
+
+    function BooHiss(o) {
+
+        var me = $('.loader').closest('.boo-hiss');
+
+        var preloader = o.preloader || new Object(), pixelRatio = o.pixelRatio || 1;
+
+        var lastUpdateTime = 0, acDelta = 0, msPerFrame = 50;
+
+        this.load = function() {
+            if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+                me.removeClass('msie');
+                me.data('tick', 0);
+                var canvas = me.find('.canvas'),
+                        width = me.width(),
+                        height = me.height();
+                canvas.css({
+                    width : width,
+                    height : height
+                });
+                if (pixelRatio) {
+                    canvas.attr({
+                        'width' : width * pixelRatio,
+                        'height' : height * pixelRatio
+                    });
+                }
+                var id = Math.floor(Math.random() * new Date().getTime());
+                canvas.attr('id', id);
+                boo_hiss_draw(id);
+            }
+        }
+
+        function boo_hiss_draw(c) {
+
+            /* var delta = Date.now() - lastUpdateTime;
+             if (acDelta > msPerFrame)
+             {
+             acDelta = 0;
+             boo_hiss_render(c);
+             }
+             else
+             {
+             acDelta += delta;
+             }
+             lastUpdateTime = Date.now();
+
+             window.requestAnimFrame(
+             function() {boo_hiss_draw(c)
+             });*/
+
+            setTimeout(function() {
+
+                window.requestAnimFrame(
+                        function() {boo_hiss_draw(c)
+                        });
+
+                boo_hiss_render(c);
+
+            }, 50);
+
+        }
+
+        function boo_hiss_render(c) {
+
+            if (!preloader.boo_hiss_preloaderComplete)
+                return;
+
+            var can = $('canvas#' + c);
+            can.each(function() {
+                var tick = $(this).parent().data('tick'),
+                        ctx = this.getContext('2d');
+
+                ctx.clearRect(0, 0, this.width, this.height);
+                ctx.save();
+
+                if (!preloader.boo_hiss_isSoundPlaying) {
+                    var scene = boo_hiss_drawScene(this);
+                    ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+                }
+
+                var imageAsset = preloader.publicImages[0];
+
+                var frame = tick % imageAsset.frame_count,
+                        pos = frame * imageAsset.sprite_height;
+
+                ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height, Math.floor((this.width / 2) - (imageAsset.sprite_width / 2)), Math.floor((this.height / 2) - (imageAsset.sprite_height / 2)), imageAsset.sprite_width, imageAsset.sprite_height);
+
+                ctx.restore();
+
+                $(this).parent().data('tick', tick+1);
+            });
+
+        }
+
+        function boo_hiss_drawScene(par) {
+            if (!par.scene) {
+                var canvas = document.createElement('canvas'),
+                        ctx = canvas.getContext('2d');
+
+                canvas.width = par.width;
+                canvas.height = par.height;
+
+                ctx.beginPath();
+                ctx.fillStyle = '#999';
+                ctx.moveTo(40 * pixelRatio,70 * pixelRatio);
+                ctx.lineTo(65 * pixelRatio,95 * pixelRatio);
+                ctx.lineTo(65 * pixelRatio,45 * pixelRatio);
+                ctx.fill();
+
+                ctx.fillRect(35 * pixelRatio, 60 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+
+                // add .5 to straddle the pixels - make drawing smoother
+                var x = 70.5 * pixelRatio;
+                var y = 70.5  * pixelRatio;
+                var radius = 10;
+                var startAngle = 1.5 * Math.PI;
+                var endAngle = 0.5 * Math.PI;
+                var counterClockwise = false;
+
+                ctx.beginPath();
+                ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#999';
+                ctx.stroke();
+
+                ctx.beginPath();
+                radius = 20;
+                x = 70.5 * pixelRatio;
+                ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+                ctx.stroke();
+
+                par.scene = canvas;
+            }
+            return par.scene;
+        }
+    }
+
+    BH.BooHiss = BooHiss;
+
+}(jQuery));
 
 
 (function() {
 
-   "use strict";
+    "use strict";
 
     var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
     var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'clap1_1x70.png';
@@ -226,27 +433,34 @@ this.BH = this.BH || {};
     $(document).ready(function() {
 
         var Preloader = new BH.Preloader({
-                                               images:[
-                                                            {containerId:"boo-hiss", imgUrl:imgSrc, imageId:"BooHissImg"}
-                                               ],
-                                               audios:[
-                                                            {audio: [
-                                                                           {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg", audioType:"ogg"},
-                                                                           {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3", audioType:"mp3"},
-                                                                           {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a", audioType:"m4a"},
-                                                                           {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav", audioType:"wav"}
-                                                                    ]
-                                                            }
-                                               ]
-                                        });
+            images:[
+                {containerId:"boo-hiss", imgUrl:imgSrc, imageId:"BooHissImg", frameCount:70}
+            ],
+            audios:[
+                {audio: [
+                    {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg", audioType:"ogg"},
+                    {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3", audioType:"mp3"},
+                    {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a", audioType:"m4a"},
+                    {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav", audioType:"wav"}
+                ]
+                }
+            ]
+        });
         Preloader.load();
 
+        var BooHiss = new BH.BooHiss({pixelRatio:pixelRatio, preloader:Preloader});
+        BooHiss.load();
     });
-})();
+
+}());
 
 //]]>
 </script>
+
+
+
 <div class="boo-hiss msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader"/>
     <div class="boo-hiss-header">
         <span class="timestamp"></span>
         <span class="flags"></span>
@@ -255,9 +469,345 @@ this.BH = this.BH || {};
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
 </div>
+
 <div class="boo-hiss editor">
     <div class="blob"></div>
 </div>
+
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+
+this.BH = this.BH || {};
+
+/*
+ * Preloader - Image and Audio
+ */
+(function($) {
+
+    "use strict";
+
+    function Preloader(o) {
+
+        // Private members
+        var self = this;
+
+        var assets = o || new Object();
+
+        var images = assets.images;
+        var audios = assets.audios;
+
+        var me = $('.loader').closest('.boo-hiss');
+
+        var boo_hiss_imagesLoaded, boo_hiss_totalImages,
+                boo_hiss_isImagesLoaded, boo_hiss_isAudioLoaded, poller;
+
+        // Public members
+        this.boo_hiss_preloaderComplete = false;
+        this.boo_hiss_isSoundPlaying = false;
+
+        this.publicImages = new Array();
+        this.publicAudios = new Array();
+
+        // Driver - on complete sets preLoaderComplete
+        this.load = function() {
+            if (images.length == 0) return;
+
+            boo_hiss_isImagesLoaded = false;
+            boo_hiss_isAudioLoaded = false;
+
+            fireImages();
+            fireAudio();
+
+            poller = setInterval(poll, 50);
+
+        }
+
+        // Private functions
+        function poll() {
+            if (boo_hiss_isImagesLoaded && boo_hiss_isAudioLoaded) {
+                clearInterval(poller);
+                self.boo_hiss_preloaderComplete = true;
+            }
+        }
+
+        // Image loader
+        function fireImages() {
+            boo_hiss_totalImages = images.length;
+            boo_hiss_imagesLoaded = 0;
+            for (var i = 0; i < boo_hiss_totalImages; i++) {
+                preloadImg(images[i].imgUrl, images[i].imageId, images[i].frameCount);
+            }
+        }
+
+        function preloadImg(imgUrl, imageId, frameCount) {
+            var i = new Image();
+            i.id = imageId;
+            i.onload = function() {
+                ++boo_hiss_imagesLoaded;
+                i.sprite_width = i.width;
+                i.sprite_height = Math.floor(i.height / frameCount);
+                self.publicImages.push(i);
+                if (boo_hiss_imagesLoaded == boo_hiss_totalImages)
+                    boo_hiss_isImagesLoaded = true;
+            };
+            i.src = imgUrl;
+            i.frame_count = frameCount;
+        }
+
+        // Audio loader with  event handlers
+        function fireAudio() {
+            var audio = new Audio();
+            for (var i = 0; i < audios.length; i++) {
+                var source = document.createElement('source');
+                for (var j = 0; j < audios[i].audio.length; j++) {
+                    if (preLoadAudio(audio, source, audios[i].audio[j].audioSrc, audios[i].audio[j].audioType)) {
+                        break;
+                    }
+                }
+                audio.appendChild(source);
+            }
+            audio.preload = "auto";
+            audio.volume = 1;
+            audio.addEventListener('ended', function(){
+                audio.pause();
+                audio.currentTime = 0;
+                self.boo_hiss_isSoundPlaying = false;
+            });
+            audio.addEventListener('canplaythrough', function(){
+                boo_hiss_isAudioLoaded = true;
+            });
+            me.click(function(e) {
+                e.preventDefault();
+                if (!self.boo_hiss_isSoundPlaying) {
+                    audio.play();
+                    self.boo_hiss_isSoundPlaying = true;
+                }
+            });
+            self.publicAudios.push(audio);
+        }
+
+        function preLoadAudio(audio, source, audioSrc, audioType) {
+            var supported = false;
+            if (audioType == "ogg" && audio.canPlayType('audio/ogg')) {
+                source.type= 'audio/ogg';
+                source.src= audioSrc;
+                supported = true;
+            } else if (audioType == "mp3" && audio.canPlayType('audio/mpeg')) {
+                source.type= 'audio/mpeg';
+                source.src= audioSrc;
+                supported = true;
+            } else if (audioType == "m4a" && audio.canPlayType('audio/mp4a-latm')) {
+                source.type= 'audio/mp4a-latm';
+                source.src= audioSrc;
+                supported = true;
+            } else if (audioType == "wav" && audio.canPlayType('audio/x-wav')) {
+                source.type= 'audio/x-wav';
+                source.src= audioSrc;
+                supported = true;
+            }
+            return supported;
+        }
+    }
+
+    BH.Preloader = Preloader;
+
+}(jQuery));
+
+
+/**
+ * Provide a cross-browser/fall back
+ * solution for the requestAnimationFrame.
+ */
+window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            window.oRequestAnimationFrame      ||
+            window.msRequestAnimationFrame     ||
+            function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+            };
+})();
+
+
+(function($) {
+
+    "use strict";
+
+    function BooHiss(o) {
+
+        var me = $('.loader').closest('.boo-hiss');
+
+        var preloader = o.preloader || new Object(), pixelRatio = o.pixelRatio || 1;
+
+        var lastUpdateTime = 0, acDelta = 0, msPerFrame = 50;
+
+        this.load = function() {
+            if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+                me.removeClass('msie');
+                me.data('tick', 0);
+                var canvas = me.find('.canvas'),
+                        width = me.width(),
+                        height = me.height();
+                canvas.css({
+                    width : width,
+                    height : height
+                });
+                if (pixelRatio) {
+                    canvas.attr({
+                        'width' : width * pixelRatio,
+                        'height' : height * pixelRatio
+                    });
+                }
+                var id = Math.floor(Math.random() * new Date().getTime());
+                canvas.attr('id', id);
+                boo_hiss_draw(id);
+            }
+        }
+
+        function boo_hiss_draw(c) {
+
+            /* var delta = Date.now() - lastUpdateTime;
+             if (acDelta > msPerFrame)
+             {
+             acDelta = 0;
+             boo_hiss_render(c);
+             }
+             else
+             {
+             acDelta += delta;
+             }
+             lastUpdateTime = Date.now();
+
+             window.requestAnimFrame(
+             function() {boo_hiss_draw(c)
+             });*/
+
+            setTimeout(function() {
+
+                window.requestAnimFrame(
+                        function() {boo_hiss_draw(c)
+                        });
+
+                boo_hiss_render(c);
+
+            }, 50);
+
+        }
+
+        function boo_hiss_render(c) {
+
+            if (!preloader.boo_hiss_preloaderComplete)
+                return;
+
+            var can = $('canvas#' + c);
+            can.each(function() {
+                var tick = $(this).parent().data('tick'),
+                        ctx = this.getContext('2d');
+
+                ctx.clearRect(0, 0, this.width, this.height);
+                ctx.save();
+
+                if (!preloader.boo_hiss_isSoundPlaying) {
+                    var scene = boo_hiss_drawScene(this);
+                    ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+                }
+
+                var imageAsset = preloader.publicImages[0];
+
+                var frame = tick % imageAsset.frame_count,
+                        pos = frame * imageAsset.sprite_height;
+
+                ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height, Math.floor((this.width / 2) - (imageAsset.sprite_width / 2)), Math.floor((this.height / 2) - (imageAsset.sprite_height / 2)), imageAsset.sprite_width, imageAsset.sprite_height);
+
+                ctx.restore();
+
+                $(this).parent().data('tick', tick+1);
+            });
+
+        }
+
+        function boo_hiss_drawScene(par) {
+            if (!par.scene) {
+                var canvas = document.createElement('canvas'),
+                        ctx = canvas.getContext('2d');
+
+                canvas.width = par.width;
+                canvas.height = par.height;
+
+                ctx.beginPath();
+                ctx.fillStyle = '#999';
+                ctx.moveTo(40 * pixelRatio,70 * pixelRatio);
+                ctx.lineTo(65 * pixelRatio,95 * pixelRatio);
+                ctx.lineTo(65 * pixelRatio,45 * pixelRatio);
+                ctx.fill();
+
+                ctx.fillRect(35 * pixelRatio, 60 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+
+                // add .5 to straddle the pixels - make drawing smoother
+                var x = 70.5 * pixelRatio;
+                var y = 70.5  * pixelRatio;
+                var radius = 10;
+                var startAngle = 1.5 * Math.PI;
+                var endAngle = 0.5 * Math.PI;
+                var counterClockwise = false;
+
+                ctx.beginPath();
+                ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#999';
+                ctx.stroke();
+
+                ctx.beginPath();
+                radius = 20;
+                x = 70.5 * pixelRatio;
+                ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+                ctx.stroke();
+
+                par.scene = canvas;
+            }
+            return par.scene;
+        }
+    }
+
+    BH.BooHiss = BooHiss;
+
+}(jQuery));
+
+
+(function() {
+
+    "use strict";
+
+    var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
+    var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'clap1_1x70.png';
+
+    $(document).ready(function() {
+
+        var Preloader = new BH.Preloader({
+            images:[
+                {containerId:"boo-hiss", imgUrl:imgSrc, imageId:"BooHissImg", frameCount:70}
+            ],
+            audios:[
+                {audio: [
+                    {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg", audioType:"ogg"},
+                    {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3", audioType:"mp3"},
+                    {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a", audioType:"m4a"},
+                    {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav", audioType:"wav"}
+                ]
+                }
+            ]
+        });
+        Preloader.load();
+
+        var BooHiss = new BH.BooHiss({pixelRatio:pixelRatio, preloader:Preloader});
+        BooHiss.load();
+    });
+
+}());
+
+//]]>
+</script>
 
 </div>
 </body>
