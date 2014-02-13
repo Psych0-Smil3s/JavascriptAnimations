@@ -329,6 +329,233 @@
     <div class="blob"></div>
 </div>
 
+
+
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+/**
+ * Provide a cross-browser/fall back
+ * solution for the requestAnimationFrame.
+ */
+window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            window.oRequestAnimationFrame      ||
+            window.msRequestAnimationFrame     ||
+            function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+            };
+})();
+
+/**
+ * Preload the scene images.
+ */
+var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
+
+        plaudits_3_imagesLoaded = 0,
+        plaudits_3_totalImages = 1,
+        plaudits_3_frameCount = 70,
+
+        plaudits_3_isSoundSupported = false,
+        plaudits_3_isSoundPlaying = false,
+
+        plaudits_3_sprite = new Image(),
+        plaudits_3_sprite_width,
+        plaudits_3_sprite_height;
+
+plaudits_3_sprite.onload = function() {
+    plaudits_3_imagesLoaded++;
+    plaudits_3_sprite_width = this.width;
+    plaudits_3_sprite_height = Math.floor(this.height / plaudits_3_frameCount);
+};
+plaudits_3_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'clap1_1x70.png';
+
+var plaudits_3_audio = new Audio();
+var source = document.createElement('source');
+
+if (plaudits_3_audio.canPlayType('audio/ogg;')) {
+    source.type= 'audio/ogg';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg';
+    plaudits_3_isSoundSupported = true;
+} else if (plaudits_3_audio.canPlayType('audio/mpeg')) {
+    source.type= 'audio/mpeg';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3';
+    plaudits_3_isSoundSupported = true;
+} else if (plaudits_3_audio.canPlayType('audio/mp4a-latm')) {
+    source.type= 'audio/mp4a-latm';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a';
+    plaudits_3_isSoundSupported = true;
+} else if (plaudits_3_audio.canPlayType('audio/x-wav')) {
+    source.type= 'audio/x-wav';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav';
+    plaudits_3_isSoundSupported = true;
+}
+plaudits_3_audio.appendChild(source);
+
+function plaudits_3_render(c) {
+
+    if (plaudits_3_imagesLoaded < plaudits_3_totalImages)
+        return;
+
+    var can = $('canvas#' + c);
+    can.each(function() {
+        var tick = $(this).parent().data('tick'),
+                ctx = this.getContext('2d');
+
+        ctx.clearRect(0, 0, this.width, this.height);
+        ctx.save();
+
+        if (!plaudits_3_isSoundPlaying && plaudits_3_isSoundSupported) {
+            var scene = plaudits_3_drawScene(this);
+            ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+        }
+
+        var frame = tick % plaudits_3_frameCount,
+                pos = frame * plaudits_3_sprite_height;
+
+        ctx.drawImage(plaudits_3_sprite, 0, pos, plaudits_3_sprite_width, plaudits_3_sprite_height, Math.floor((this.width / 2) - (plaudits_3_sprite_width / 2)), Math.floor((this.height / 2) - (plaudits_3_sprite_height / 2)), plaudits_3_sprite_width, plaudits_3_sprite_height);
+
+        ctx.restore();
+
+        $(this).parent().data('tick', tick+1);
+    });
+}
+
+function plaudits_3_drawScene(par) {
+    if (!par.scene) {
+        var canvas = document.createElement('canvas'),
+                ctx = canvas.getContext('2d');
+
+
+        canvas.width = par.width;
+        canvas.height = par.height;
+
+        ctx.beginPath();
+        ctx.fillStyle = '#999';
+        ctx.moveTo(40 * pixelRatio,70 * pixelRatio);
+        ctx.lineTo(65 * pixelRatio,95 * pixelRatio);
+        ctx.lineTo(65 * pixelRatio,45 * pixelRatio);
+        ctx.fill();
+
+        ctx.fillRect(35 * pixelRatio, 60 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+
+        // add .5 to straddle the pixels - make drawing smoother
+        var x = 70.5 * pixelRatio;
+        var y = 70.5  * pixelRatio;
+        var radius = 10;
+        var startAngle = 1.5 * Math.PI;
+        var endAngle = 0.5 * Math.PI;
+        var counterClockwise = false;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#999';
+        ctx.stroke();
+
+        ctx.beginPath();
+        radius = 20;
+        x = 70.5 * pixelRatio;
+        ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+        ctx.stroke();
+
+        par.scene = canvas;
+    }
+    return par.scene;
+}
+
+function plaudits_3_draw(c) {
+    setTimeout(function() {
+
+        window.requestAnimFrame(
+                function() {plaudits_3_draw(c)
+                });
+
+        plaudits_3_render(c);
+
+    }, 50);
+}
+
+function plaudits_3_setIsSoundSupported(me) {
+
+    var clip = me.find('.clip');
+
+    clip.find('source').each(function() {
+        // !! converts value to a boolean and ensures a boolean type.
+        if (!!(this.parentNode.canPlayType && this.parentNode.canPlayType($(this).attr('type')).replace(/no/, ''))) {
+            plaudits_3_isSoundSupported = true;
+            return false;
+        }
+    });
+    return clip;
+}
+
+function plaudits_3_loaded(preloaded) {
+    var me = $(this).closest('.plaudits-3');
+    if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+        me.removeClass('msie');
+        setTimeout(function() {
+            me.data('tick', 0);
+            var canvas = me.find('.canvas'),
+                    width = me.width(),
+                    height = me.height();
+            canvas.css({
+                width : width,
+                height : height
+            });
+            if (pixelRatio) {
+                canvas.attr({
+                    'width' : width * pixelRatio,
+                    'height' : height * pixelRatio
+                });
+            }
+
+            //var clip = plaudits_3_setIsSoundSupported(me);
+            var id = Math.floor(Math.random() * new Date().getTime());
+            canvas.attr('id', id);
+            plaudits_3_draw(id);
+
+            if (plaudits_3_isSoundSupported) {
+
+                var sound = plaudits_3_audio;
+                sound.volume = 1;
+
+                sound.addEventListener('ended',function(){
+                    sound.pause();
+                    sound.currentTime = 0;
+                    plaudits_3_isSoundPlaying = false;
+                });
+
+                me.click(function(e) {
+                    e.preventDefault();
+
+                    if (!plaudits_3_isSoundPlaying) {
+                        sound.play();
+                        plaudits_3_isSoundPlaying = true;
+                    }
+                });
+            }
+
+        }, 200);
+    }
+}
+//]]>
+</script>
+<div class="plaudits-3 msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="plaudits_3_loaded.call(this)"/>
+    <div class="plaudits-3-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname">test</strong>
+    </div>
+    <div class="blob"></div>
+    <canvas class="canvas"></canvas>
+</div>
+<div class="plaudits-3 editor">
+    <div class="blob"></div>
+</div>
+
 </div>
 </body>
 </html>
