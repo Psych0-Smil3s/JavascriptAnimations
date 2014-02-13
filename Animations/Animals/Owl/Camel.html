@@ -218,6 +218,193 @@
 <body>
 <div class="wrapper">
 
+    <script type="text/javascript" defer="defer">
+        //<![CDATA[
+
+        // Namespace
+        this.MP = this.MP || {};
+
+        (function($){
+
+            $(document).ready(function () {
+
+                var c = new MP.Camel();
+                c.animals_camel_loaded();
+
+            });
+
+        }(jQuery));
+
+        (function($){
+
+            function Camel() {
+
+                this.me = $('.loader').closest('.animals-camel');
+                this.meBubble =  $('.loader').closest('.animals-camel .animals-camel-outer');
+                this.msgPackWidth = $(this.me).width();
+                this.MSG_PACK_WIDTH_BOUND = 500;
+
+                this.animals_camel_show_bubble = function() {
+                    $(this.meBubble).fadeIn('fast');
+                }
+
+                this.animals_camel_set_speechBubble_size = function() {
+                    if (this.msgPackWidth > this.MSG_PACK_WIDTH_BOUND) {
+                        this.meBubble.css({width: "35%" });
+                    }
+                }
+
+                this.animals_camel_loaded = function() {
+
+                    var self = this; // use bind() on events if jquery gets updated to 1.7
+
+                    if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+
+                        $(this.meBubble).hide();
+                        $(this.meBubble).removeClass('fade');
+
+                        this.me.toggleClass('go');
+
+                        // Start the animated gif
+                        if (this.me.hasClass('go')) {
+
+                            this.animals_camel_set_speechBubble_size();
+
+                            // Create <img> element and give it the animated gif as a src.  To
+                            // force a reload - add a date parameter to the URL
+                            var img = document.createElement('img');
+                            img.src = "http://media.parlingo.com/website/live/messagepacks/animals/noOneLovesMeReg.gif?p" + new Date().getTime();
+
+                            this.me.removeClass('msie');
+
+                            // Once the image has loaded, set it as the background-image
+                            $(img).load(function(){
+                                self.me.css({backgroundImage: "url("+img.src+" )"});
+                                self.me.css({backgroundRepeat: "no-repeat"});
+                                setTimeout(function() { self.animals_camel_show_bubble.call(self); }, 2000);
+                            });
+
+                            // Remove the background-image
+                        } else {
+                            this.me.css({backgroundImage: "none"});
+                        }
+                    }
+
+                }
+            }
+
+            MP.Camel = Camel;
+
+        }(jQuery));
+
+        //]]>
+    </script>
+
+    <div class="animals-camel msie">
+        <div class="animals-camel-header">
+            <span class="timestamp"></span>
+            <span class="flags"></span>
+            <strong class="nickname"></strong>
+        </div>
+        <div class="animals-camel-outer fade">
+            <div class="animal-camel-triangle-border left">
+                <p id="message" class="animal-camel-message-entry loader message-bubble"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="animals-camel editor">
+        <form>
+            <div class="animals-camel-outer fade">
+                <p class="animal-camel-triangle-border left">
+                    <textarea class="animal-camel-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60"></textarea>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript" defer="defer">
+        //<![CDATA[
+
+        // Namespace
+        this.MP = this.MP || {};
+
+        (function($){
+
+            $(document).ready(function () {
+
+                var c = new MP.Camel();
+                c.animals_camel_loaded();
+
+            });
+
+        }(jQuery));
+
+        (function($){
+
+            function Camel() {
+
+                this.me = $('.loader').closest('.animals-camel');
+                this.meBubble =  $('.loader').closest('.animals-camel .animals-camel-outer');
+                this.msgPackWidth = $(this.me).width();
+                this.MSG_PACK_WIDTH_BOUND = 500;
+
+                this.animals_camel_show_bubble = function() {
+                    $(this.meBubble).fadeIn('fast');
+                }
+
+                this.animals_camel_set_speechBubble_size = function() {
+                    if (this.msgPackWidth > this.MSG_PACK_WIDTH_BOUND) {
+                        this.meBubble.css({width: "35%" });
+                    }
+                }
+
+                this.animals_camel_loaded = function() {
+
+                    var self = this; // use bind() on events if jquery gets updated to 1.7
+
+                    if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+
+                        $(this.meBubble).hide();
+                        $(this.meBubble).removeClass('fade');
+
+                        this.me.toggleClass('go');
+
+                        // Start the animated gif
+                        if (this.me.hasClass('go')) {
+
+                            this.animals_camel_set_speechBubble_size();
+
+                            // Create <img> element and give it the animated gif as a src.  To
+                            // force a reload - add a date parameter to the URL
+                            var img = document.createElement('img');
+                            img.src = "http://media.parlingo.com/website/live/messagepacks/animals/noOneLovesMeReg.gif?p" + new Date().getTime();
+
+                            this.me.removeClass('msie');
+
+                            // Once the image has loaded, set it as the background-image
+                            $(img).load(function(){
+                                self.me.css({backgroundImage: "url("+img.src+" )"});
+                                self.me.css({backgroundRepeat: "no-repeat"});
+                                setTimeout(function() { self.animals_camel_show_bubble.call(self); }, 2000);
+                            });
+
+                            // Remove the background-image
+                        } else {
+                            this.me.css({backgroundImage: "none"});
+                        }
+                    }
+
+                }
+            }
+
+            MP.Camel = Camel;
+
+        }(jQuery));
+
+        //]]>
+    </script>
+
     <div class="animals-camel msie">
         <div class="animals-camel-header">
             <span class="timestamp"></span>
@@ -244,86 +431,5 @@
 </div>
 </body>
 
-<script type="text/javascript" defer="defer">
-    //<![CDATA[
-
-    // Namespace
-    this.MP = this.MP || {};
-
-    (function($){
-
-        $(document).ready(function () {
-
-            var c = new MP.Camel();
-            c.animals_camel_loaded();
-
-        });
-
-    }(jQuery));
-
-    (function($){
-
-        function Camel() {
-
-            this.me = $('.loader').closest('.animals-camel');
-            this.meBubble =  $('.loader').closest('.animals-camel .animals-camel-outer');
-            this.msgPackWidth = $(this.me).width();
-            this.MSG_PACK_WIDTH_BOUND = 500;
-
-            this.animals_camel_show_bubble = function() {
-                $(this.meBubble).fadeIn('fast');
-            }
-
-            this.animals_camel_set_speechBubble_size = function() {
-                if (this.msgPackWidth > this.MSG_PACK_WIDTH_BOUND) {
-                    this.meBubble.css({width: "35%" });
-                }
-            }
-
-            this.animals_camel_loaded = function() {
-
-                var self = this; // use bind() on events if jquery gets updated to 1.7
-
-                if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
-
-                    $(this.meBubble).hide();
-                    $(this.meBubble).removeClass('fade');
-
-                    this.me.toggleClass('go');
-
-                    // Start the animated gif
-                    if (this.me.hasClass('go')) {
-
-                        this.animals_camel_set_speechBubble_size();
-
-                        // Create <img> element and give it the animated gif as a src.  To
-                        // force a reload - add a date parameter to the URL
-                        var img = document.createElement('img');
-                        img.src = "http://media.parlingo.com/website/live/messagepacks/animals/noOneLovesMeReg.gif?p" + new Date().getTime();
-
-                        this.me.removeClass('msie');
-
-                        // Once the image has loaded, set it as the background-image
-                        $(img).load(function(){
-                            self.me.css({backgroundImage: "url("+img.src+" )"});
-                            self.me.css({backgroundRepeat: "no-repeat"});
-                            setTimeout(function() { self.animals_camel_show_bubble.call(self); }, 2000);
-                        });
-
-                        // Remove the background-image
-                    } else {
-                        this.me.css({backgroundImage: "none"});
-                    }
-                }
-
-            }
-        }
-
-        MP.Camel = Camel;
-
-    }(jQuery));
-
-    //]]>
-</script>
 
 </html>
