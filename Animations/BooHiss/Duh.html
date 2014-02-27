@@ -3,7 +3,6 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
     <style type="text/css">
         /******************************
          * The following styles are only
@@ -27,13 +26,13 @@
             margin: 0;
             padding: 0;
         }
-        .boo-hiss, .boo-hiss * {
+        .boo-hiss-duh, .boo-hiss-duh * {
             overflow: visible;
         }
         .loader {
             position: absolute;
         }
-        .boo-hiss {
+        .boo-hiss-duh {
             border-radius: inherit;
             height: 113px;
             position: relative;
@@ -41,63 +40,63 @@
             border: solid 1px #999;
             text-align: center;
         }
-        .boo-hiss .boo-hiss-header {
+        .boo-hiss-duh .boo-hiss-duh-header {
             width: 100%;
             position: absolute;
             z-index: 11;
             top: 0;
             left: 0;
         }
-        .boo-hiss-header .timestamp, .boo-hiss-header .flags, .boo-hiss-header .nickname {
+        .boo-hiss-duh-header .timestamp, .boo-hiss-duh-header .flags, .boo-hiss-duh-header .nickname {
             float: left;
             padding: 2px 5px;
             color: #666;
         }
-        .boo-hiss-header .timestamp, .boo-hiss-header .flags {
+        .boo-hiss-duh-header .timestamp, .boo-hiss-duh-header .flags {
             float: right;
             padding-left: 10px;
         }
-        .boo-hiss-header canvas {
+        .boo-hiss-duh-header canvas {
             z-index: 2;
             position: relative;
         }
-        .boo-hiss.msie canvas {
+        .boo-hiss-duh.msie canvas {
             display: none;
         }
-        .boo-hiss.editor, .boo-hiss.msie {
+        .boo-hiss-duh.editor, .boo-hiss-duh.msie {
             background: #fff;
         }
-        .boo-hiss.editor .blob, .boo-hiss.msie .blob {
+        .boo-hiss-duh.editor .blob, .boo-hiss-duh.msie .blob {
             margin: 0 auto;
-            width: 106px;
-            height: 90px;
             margin-top: 10px;
-            background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/clap1.png) center center no-repeat;
+            width: 100px;
+            height: 98px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/duhSingle.png) center center no-repeat;
         }
 
         @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-            .boo-hiss.editor, .boo-hiss.msie {
+            .boo-hiss-duh.editor, .boo-hiss-duh.msie {
                 background: #fff;
                 background-size: 456px 113px;
             }
-            .boo-hiss.editor .blob, .boo-hiss.msie .blob {
+            .boo-hiss-duh.editor .blob, .boo-hiss-duh.msie .blob {
                 margin: 0 auto;
                 margin-top: 10px;
-                background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png)  no-repeat;
-                background-size: 106px 90px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingle.png)  no-repeat;
+                background-size: 100px 98px;
             }
         }
 
         @-moz-document url-prefix() {
-            .boo-hiss.editor, .boo-hiss.msie {
-                background: #fff /*url(http://media.parlingo.com/website/live/messagepacks/plaudits/scene.png) repeat-x*/;
+            .boo-hiss-duh.editor, .boo-hiss-duh.msie {
+                background: #fff;
                 background-size: 456px 113px;
             }
-            .boo-hiss.editor .blob, .boo-hiss.msie .blob {
+            .boo-hiss-duh.editor .blob, .boo-hiss-duh.msie .blob {
                 margin: 0 auto;
                 margin-top: 10px;
-                background: url(http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1.png)  no-repeat;
-                background-size: 106px 90px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingle.png)  no-repeat;
+                background-size: 100px 98px;
             }
         }
     </style>
@@ -128,7 +127,7 @@ this.BH = this.BH || {};
         var audios = assets.audios;
 
         var boo_hiss_imagesLoaded, boo_hiss_totalImages,
-            boo_hiss_isImagesLoaded, boo_hiss_isAudioLoaded, poller;
+                boo_hiss_isImagesLoaded, boo_hiss_isAudioLoaded, poller;
 
         // Public members
         this.boo_hiss_preloaderComplete = false;
@@ -251,11 +250,14 @@ window.requestAnimFrame = (function(){
 
     function BooHiss(o) {
 
-        var me = $(o.img).closest('.boo-hiss');
+        var me = $(o.img).closest('.boo-hiss-duh');
 
         var preloader = o.preloader || new Object(), pixelRatio = o.pixelRatio || 1;
 
-        var stageAudio = preloader.publicAudios[0];
+        var stageAudio = preloader.publicAudios[0],
+            imageAsset = preloader.publicImages[0],
+            tick = 0,
+            canvasMidX, canvasMidY;
 
         var lastUpdateTime = 0, acDelta = 0, msPerFrame = 30;
 
@@ -277,9 +279,12 @@ window.requestAnimFrame = (function(){
                     });
                 }
 
+                canvasMidX = (canvas[0].width / 2) - (imageAsset.sprite_width / 2);
+                canvasMidY = (canvas[0].height / 2) - (imageAsset.sprite_height / 2)
+
                 setEventListners();
 
-                var id = Math.floor(Math.random() * new Date().getTime());
+                var id = (Math.random() * new Date().getTime()) | 0;
                 canvas.attr('id', id);
                 boo_hiss_draw(id);
             }
@@ -311,27 +316,29 @@ window.requestAnimFrame = (function(){
 
             var can = $('canvas#' + c);
             can.each(function() {
-                var tick = $(this).parent().data('tick'),
-                        ctx = this.getContext('2d');
+
+                var ctx = this.getContext('2d');
 
                 ctx.clearRect(0, 0, this.width, this.height);
                 ctx.save();
 
                 if (!preloader.boo_hiss_isSoundPlaying) {
                     var scene = boo_hiss_drawScene(this);
-                    ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+                    ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, (this.width / 2) | 0, (this.height / 2) | 0);
                 }
-
-                var imageAsset = preloader.publicImages[0];
 
                 var frame = tick % imageAsset.frame_count,
                     pos = frame *  imageAsset.sprite_height;
 
-                ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height, Math.floor((this.width / 2) - (imageAsset.sprite_width / 2)), Math.floor((this.height / 2) - (imageAsset.sprite_height / 2)), imageAsset.sprite_width , imageAsset.sprite_height);
+                ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height,
+                              (canvasMidX + (9 * pixelRatio)) | 0,
+                              (canvasMidY - (6 * pixelRatio)) | 0,
+                              imageAsset.sprite_width ,
+                              imageAsset.sprite_height);
 
                 ctx.restore();
 
-                $(this).parent().data('tick', tick+1);
+                tick++;
             });
 
         }
@@ -409,11 +416,11 @@ window.requestAnimFrame = (function(){
             "use strict";
 
             var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
-            var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/boohiss/' + (pixelRatio === 1 ? 'bum2.png' : 'X2/bum.png'); // img2.png || X2/img.ong
+            var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/boohiss/' + (pixelRatio === 1 ? 'duh2.png' : 'X2/duh.png'); // img2.png || X2/img.png
 
             var Preloader = new BH.Preloader({
                 images:[
-                    {containerId:"boo-hiss", imgUrl:imgSrc, imageId:"BooHissImg", frameCount:100}
+                    {containerId:"boo-hiss-duh", imgUrl:imgSrc, imageId:"BooHissImg", frameCount:90}
                 ],
                 audios:[
                     {audio: [
@@ -447,9 +454,9 @@ window.requestAnimFrame = (function(){
 //]]>
 </script>
 
-<div class="boo-hiss msie">
+<div class="boo-hiss-duh msie">
     <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="new BH.Loader().load(this)"/>
-    <div class="boo-hiss-header">
+    <div class="boo-hiss-duh-header">
         <span class="timestamp"></span>
         <span class="flags"></span>
         <strong class="nickname">test</strong>
@@ -458,7 +465,7 @@ window.requestAnimFrame = (function(){
     <canvas class="canvas"></canvas>
 </div>
 
-<div class="boo-hiss editor">
+<div class="boo-hiss-duh editor">
     <div class="blob"></div>
 </div>
 
