@@ -255,15 +255,23 @@ window.requestAnimFrame = (function(){
         var preloader = o.preloader || new Object(), pixelRatio = o.pixelRatio || 1;
 
         var stageAudio = preloader.publicAudios[0],
-                imageAsset = preloader.publicImages[0],
-                imageAssetTwo = preloader.publicImages[1],
-                imageAssetThree = preloader.publicImages[2],
-                imageAssetFour = preloader.publicImages[3],
-                imageAssetFive = preloader.publicImages[4],
+                imageAsset ,
+                imageAssetTwo ,
+                imageAssetThree ,
+                imageAssetFour ,
+                imageAssetFive,
                 tick = 0,
                 canvasMidX, canvasMidY;
 
         var lastUpdateTime = 0, acDelta = 0, msPerFrame = 30;
+
+        $.each(preloader.publicImages, function(i) {
+            if (this.id === "BooHissImgOne") imageAsset = preloader.publicImages[i];
+            if (this.id === "BooHissImgFive") imageAssetTwo = preloader.publicImages[i];
+            if (this.id === "BooHissImgTwo") imageAssetThree = preloader.publicImages[i];
+            if (this.id === "BooHissImgFour") imageAssetFour = preloader.publicImages[i];
+            if (this.id === "BooHissImgThree") imageAssetFive = preloader.publicImages[i];
+        });
 
         this.load = function() {
             if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
@@ -479,10 +487,10 @@ window.requestAnimFrame = (function(){
                 ],
                 audios:[
                     {audio: [
-                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.ogg", audioType:"ogg"},
-                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.mp3", audioType:"mp3"},
-                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.m4a", audioType:"m4a"},
-                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.wav", audioType:"wav"}
+                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/boohiss/audio/bum.ogg", audioType:"ogg"},
+                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/boohiss/audio/bum.mp3", audioType:"mp3"},
+                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/boohiss/audio/bum.m4a", audioType:"m4a"},
+                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/boohiss/audio/bum.wav", audioType:"wav"}
                     ]
                     }
                 ]

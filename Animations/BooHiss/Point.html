@@ -255,11 +255,17 @@ window.requestAnimFrame = (function(){
         var preloader = o.preloader || new Object(), pixelRatio = o.pixelRatio || 1;
 
         var stageAudio = preloader.publicAudios[0],
-                imageAsset = preloader.publicImages[0],
-                imageAssetTwo = preloader.publicImages[1],
-                imageAssetThree = preloader.publicImages[2],
-                tick = 0,
-                canvasMidX, canvasMidY;
+            imageAsset,
+            imageAssetTwo,
+            imageAssetThree,
+            tick = 0,
+            canvasMidX, canvasMidY;
+
+        $.each(preloader.publicImages, function(i) {
+            if (this.id === "BooHissImg1") imageAsset = preloader.publicImages[i];
+            if (this.id === "BooHissImg2") imageAssetTwo = preloader.publicImages[i];
+            if (this.id === "BooHissImg3") imageAssetThree = preloader.publicImages[i];
+        });
 
         var lastUpdateTime = 0, acDelta = 0, msPerFrame = 30;
 
@@ -450,10 +456,10 @@ window.requestAnimFrame = (function(){
                 ],
                 audios:[
                     {audio: [
-                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.ogg", audioType:"ogg"},
-                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.mp3", audioType:"mp3"},
-                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.m4a", audioType:"m4a"},
-                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit5Audio.wav", audioType:"wav"}
+                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/boohiss/audio/point.ogg", audioType:"ogg"},
+                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/boohiss/audio/point.mp3", audioType:"mp3"},
+                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/boohiss/audio/point.m4a", audioType:"m4a"},
+                        {audioSrc:"http://media.parlingo.com/website/live/messagepacks/boohiss/audio/point.wav", audioType:"wav"}
                     ]
                     }
                 ]
