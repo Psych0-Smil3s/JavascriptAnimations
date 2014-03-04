@@ -173,7 +173,7 @@ this.BH = this.BH || {};
             i.onload = function() {
                 ++boo_hiss_imagesLoaded;
                 i.sprite_width = i.width;
-                i.sprite_height = Math.round(i.height / frameCount);
+                i.sprite_height = (i.height / frameCount);
                 self.publicImages.push(i);
                 if (boo_hiss_imagesLoaded == boo_hiss_totalImages)
                     boo_hiss_isImagesLoaded = true;
@@ -327,8 +327,8 @@ window.requestAnimFrame = (function(){
                     ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, (this.width / 2) | 0, (this.height / 2) | 0);
                 }
 
-                var frame = tick % imageAsset.frame_count,
-                        pos = frame *  imageAsset.sprite_height;
+                var frame = tick % (imageAsset.frame_count - 1),
+                        pos = Math.ceil(frame *  imageAsset.sprite_height);
 
                 ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height,
                         (canvasMidX + (1 * pixelRatio)) | 0,

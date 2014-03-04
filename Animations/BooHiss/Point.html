@@ -173,7 +173,7 @@ this.BH = this.BH || {};
             i.onload = function() {
                 ++boo_hiss_imagesLoaded;
                 i.sprite_width = i.width;
-                i.sprite_height = Math.round(i.height / frameCount);
+                i.sprite_height = (i.height / frameCount);
                 self.publicImages.push(i);
                 if (boo_hiss_imagesLoaded == boo_hiss_totalImages)
                     boo_hiss_isImagesLoaded = true;
@@ -336,8 +336,8 @@ window.requestAnimFrame = (function(){
                     ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, (this.width / 2) | 0, (this.height / 2) | 0);
                 }
 
-                var frame = tick % imageAssetTwo.frame_count,
-                    pos = frame *  imageAssetTwo.sprite_height;
+                var frame = tick % (imageAssetTwo.frame_count - 1),
+                        pos = Math.ceil(frame *  imageAssetTwo.sprite_height);
 
                 ctx.drawImage(imageAssetTwo, 0, pos, imageAssetTwo.sprite_width, imageAssetTwo.sprite_height,
                         (canvasMidX + (60 * pixelRatio)) | 0,
@@ -346,8 +346,8 @@ window.requestAnimFrame = (function(){
                         (imageAssetTwo.sprite_height / 1.3) | 0);
 
 
-                var frame = tick % imageAssetThree.frame_count,
-                    pos = frame *  imageAssetThree.sprite_height;
+                var frame = tick % (imageAssetThree.frame_count - 1),
+                        pos = Math.ceil(frame *  imageAssetThree.sprite_height);
 
                 ctx.drawImage(imageAssetThree, 0, pos, imageAssetThree.sprite_width, imageAssetThree.sprite_height,
                         (canvasMidX - (40 * pixelRatio)) | 0,
@@ -355,8 +355,8 @@ window.requestAnimFrame = (function(){
                         (imageAssetThree.sprite_width / 1.3) | 0,
                         (imageAssetThree.sprite_height / 1.3) | 0);
 
-                var frame = tick % imageAsset.frame_count,
-                        pos = frame *  imageAsset.sprite_height;
+                var frame = tick % (imageAsset.frame_count - 1),
+                        pos = Math.ceil(frame *  imageAsset.sprite_height);
 
                 ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height,
                         (canvasMidX + (5 * pixelRatio)) | 0,
