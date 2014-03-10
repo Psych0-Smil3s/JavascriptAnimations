@@ -1,0 +1,287 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <style type="text/css">
+        /******************************
+         * The following styles are only
+         * for browser based testing.
+         ******************************/
+        .wrapper {
+            position: relative;
+            width: 600px;
+            margin: 100px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+        .wrapper .editor {
+            margin-top: 10px !important;
+        }
+        /******************************
+         * Message styles
+         ******************************/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .sad-dhab, .sad-dhab * {
+            overflow: visible;
+        }
+        .loader {
+            position: absolute;
+        }
+        .sad-dhab {
+            border-radius: inherit;
+            height: 113px;
+            position: relative;
+            background: #fff;
+            border: solid 1px #999;
+            text-align: center;
+        }
+        .sad-dhab .sad-dhab-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+        }
+        .sad-dhab-header .timestamp, .sad-dhab-header .flags, .sad-dhab-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #666;
+        }
+        .sad-dhab-header .timestamp, .sad-dhab-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+        .sad-dhab-header canvas {
+            z-index: 2;
+            position: relative;
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+
+this.SD = this.SD || {};
+
+/*
+ * Preloader - Image
+ */
+(function($) {
+
+    "use strict";
+
+    function Preloader(o) {
+
+        // Private members
+        var self = this,
+                assets,
+                images,
+                sad_dhab_imagesLoaded,
+                sad_dhab_totalImages;
+
+        // Public members
+        this.publicImages;
+        this.sad_dhab_IsAllImagesLoaded;
+
+        // Constructor
+        this.load = function() {
+
+            this.publicImages = new Array(),
+                    this.sad_dhab_IsAllImagesLoaded = false;
+
+            assets =  o || new Object(),
+                    images = assets.images,
+                    sad_dhab_totalImages = images.length;
+            sad_dhab_imagesLoaded = 0;
+
+            if (sad_dhab_totalImages === 0) return;
+            fireImages();
+        }
+
+        // Private functions
+        function fireImages() {
+            for (var i = 0; i < sad_dhab_totalImages; i++) {
+                preloadImg(images[i].imgUrl, images[i].imageId, images[i].frameCount);
+            }
+        }
+
+        function preloadImg(imgUrl, imageId, frameCount) {
+            var i = new Image();
+            i.id = imageId;
+            i.onload = function() {
+                ++sad_dhab_imagesLoaded;
+                i.sprite_width = i.width;
+                i.sprite_height = i.height / frameCount;
+                self.publicImages.push(i);
+                if (sad_dhab_imagesLoaded === sad_dhab_totalImages)
+                    self.sad_dhab_IsAllImagesLoaded = true;
+            };
+            i.src = imgUrl;
+            i.frame_count = frameCount;
+        }
+    }
+
+    SD.Preloader = Preloader;
+
+}(jQuery));
+
+
+(function() {
+
+    "use strict";
+
+    function TumbleWeed(o) {
+
+        var preloader,
+                can, ctx, ball,
+                x, y, xVec, yVec,
+                direc, interval,
+                rot = 0,
+                gravity = 1,
+                left = 0,
+                right = 580, // width - half of ball
+                bottom = 93, // height - half of ball
+                centerOffset = -20; // pixel offset from the upper-left corner of the ball image to the center of the ball
+
+        this.load = function() {
+            preloader = o.preloader || new Object();
+            $.each(preloader.publicImages, function(i) {
+                if (this.id === "Tumbleweed") ball = preloader.publicImages[i];
+            });
+            //can = document.createElement('canvas'),
+            can = $('.sad-dhab').find('.canvas');
+
+            can.each(function() {
+
+                ctx = this.getContext('2d');
+                can.width = 600, // hard coded for test
+                can.height = 113;
+
+                ctx.strokeStyle = "black";
+
+                // initialize position, speed, spin direction
+                x = 250;
+                y = 40;
+                xVec = 5.5;
+                yVec = 0;
+                direc = 1;
+                // draw lines for the ball to bounce off of
+                ctx.moveTo(0, bottom + 20);
+                ctx.lineTo(600, bottom + 20);
+                ctx.lineTo(600, 0);
+                ctx.stroke();
+                // set animation to repeat every 40 ms
+
+                interval = setInterval(animate, 80);
+                // change to
+                /*window.requestAnimFrame(
+                 function() {animate();
+                 });*/
+
+            });
+
+
+        }
+
+        function animate() {
+            model();
+            // clear canvas except for lines at edge
+            ctx.clearRect(0, 0, can.width - 1 , can.height - 1);
+            draw();
+        }
+
+        function model() {
+            rot += .1 * direc;
+            x += xVec;
+            yVec += gravity;
+            y += yVec;
+            bounceIf();
+        }
+
+        function bounceIf() {
+            if (y >= bottom) {
+                y = bottom;
+                yVec = -1 * yVec - gravity
+            }
+            if (x >= right || x <= left) {
+                xVec *= -1;
+                direc *= -1;
+            }
+        }
+
+        function draw() {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rot);
+            ctx.drawImage(ball, centerOffset,centerOffset);
+            ctx.restore();
+        }
+    }
+
+    SD.TumbleWeed = TumbleWeed;
+
+}());
+
+(function() {
+
+    var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
+    var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/boohiss/' + (pixelRatio === 1 ? 'funnyface2.png' : 'X2/funnyface.png');
+    var imgSrcTwo = 'http://media.parlingo.com/website/live/messagepacks/sad_dhab/' + (pixelRatio === 1 ? 'tumbleweed.png' : 'X2/tumbleweed.png');
+
+    window.console.log(imgSrcTwo);
+
+    var Preloader = new SD.Preloader({
+        images:[
+            {containerId:"sad-dhab", imgUrl:imgSrc, imageId:"SadDhabImg", frameCount:80},
+            {containerId:"sad-dhab-Foreground", imgUrl:imgSrcTwo, imageId:"Tumbleweed", frameCount:1}
+        ]
+    });
+    Preloader.load();
+
+    function Loader() {
+
+        this.load = function(img) {
+
+            "use strict";
+
+            var poller = setInterval(poll, 50);
+
+            function poll() {
+
+                if (Preloader.sad_dhab_IsAllImagesLoaded === true) {
+                    clearInterval(poller);
+                    var TumbleWeed = new SD.TumbleWeed({preloader:Preloader});
+                    TumbleWeed.load();
+                }
+            }
+        };
+    }
+
+    SD.Loader = Loader;
+
+}());
+
+//]]>
+</script>
+
+<div class="sad-dhab msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="new SD.Loader().load(this)"/>
+    <div class="sad-dhab-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname">test</strong>
+    </div>
+    <div class="blob"></div>
+    <canvas class="canvas"></canvas>
+</div>
+
+</div>
+</body>
+</html>
