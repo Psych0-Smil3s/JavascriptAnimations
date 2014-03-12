@@ -31,13 +31,40 @@
         .loader {
             position: absolute;
         }
+
+        /* Star Parralax */
+        @-webkit-keyframes STAR-MOVE {
+            from {
+
+            }
+            to {
+
+            }
+        }
+
         .sad-dhab {
             border-radius: inherit;
             height: 113px;
             position: relative;
-            background: #c1f0ff;
             border: solid 1px #999;
             text-align: center;
+            background-image: -webkit-gradient(
+                linear,
+                left top,
+                left bottom,
+                color-stop(0, #E68683),
+                color-stop(1, #BBC282)
+            );
+            background-image: -o-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+            background-image: -moz-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+            background-image: -webkit-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+            background-image: -ms-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+            background-image: linear-gradient(to bottom, #E68683 0%, #BBC282 100%);
+
+            -webkit-animation-name: STAR-MOVE;
+            -webkit-animation-duration: 3000s;
+            -webkit-animation-timing-function: linear;
+            -webkit-animation-iteration-count: infinite;
         }
         .sad-dhab .sad-dhab-header {
             width: 100%;
@@ -63,7 +90,18 @@
             display: none;
         }
         .sad-dhab.editor, .sad-dhab.msie {
-            background: #c1f0ff;
+            background-image: -webkit-gradient(
+                linear,
+                left top,
+                left bottom,
+                color-stop(0, #E68683),
+                color-stop(1, #BBC282)
+            );
+            background-image: -o-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+            background-image: -moz-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+            background-image: -webkit-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+            background-image: -ms-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+            background-image: linear-gradient(to bottom, #E68683 0%, #BBC282 100%);
         }
         .sad-dhab.editor .blob, .sad-dhab.msie .blob {
             margin: 0 auto;
@@ -75,8 +113,19 @@
 
         @media only screen and (-webkit-min-device-pixel-ratio: 2) {
             .sad-dhab.editor, .sad-dhab.msie {
-                background: #c1f0ff;
-                background-size: 456px 113px;
+                background-image: -webkit-gradient(
+                    linear,
+                    left top,
+                    left bottom,
+                    color-stop(0, #E68683),
+                    color-stop(1, #BBC282)
+                );
+                background-image: -o-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+                background-image: -moz-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+                background-image: -webkit-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+                background-image: -ms-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+                background-image: linear-gradient(to bottom, #E68683 0%, #BBC282 100%);
+
             }
             .sad-dhab.editor .blob, .sad-dhab.msie .blob {
                 margin: 0 auto;
@@ -88,8 +137,18 @@
 
         @-moz-document url-prefix() {
             .sad-dhab.editor, .sad-dhab.msie {
-                background: #c1f0ff;
-                background-size: 456px 113px;
+                background-image: -webkit-gradient(
+                    linear,
+                    left top,
+                    left bottom,
+                    color-stop(0, #E68683),
+                    color-stop(1, #BBC282)
+                );
+                background-image: -o-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+                background-image: -moz-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+                background-image: -webkit-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+                background-image: -ms-linear-gradient(bottom, #E68683 0%, #BBC282 100%);
+                background-image: linear-gradient(to bottom, #E68683 0%, #BBC282 100%);
             }
             .sad-dhab.editor .blob, .sad-dhab.msie .blob {
                 margin: 0 auto;
@@ -202,7 +261,8 @@ window.requestAnimFrame = (function(){
             tick = 0,
             lastUpdateTime = 0,
             acDelta = 0,
-            msPerFrame = 30;
+            msPerFrame = 30,
+            tumbleweedConsts = {};
 
         this.load = function() {
 
@@ -210,7 +270,8 @@ window.requestAnimFrame = (function(){
 
             me = $(o.img).closest('.sad-dhab'),
             preloader = o.preloader || new Object(),
-            pixelRatio = o.pixelRatio || 1,
+            pixelRatio = o.pixelRatio || 1;
+
             $.each(preloader.publicImages, function(i) {
                 if (this.id === "SadDhabImg") imageAsset = preloader.publicImages[i];
             });
@@ -230,6 +291,36 @@ window.requestAnimFrame = (function(){
 
             canvasMidX = (canvas[0].width / 2) - (imageAsset.sprite_width / 2);
             canvasMidY = (canvas[0].height / 2) - (imageAsset.sprite_height / 2);
+
+            if (o.weeds)
+            {
+                tumbleweedConsts = {
+                    ball:{}, // tumbleweed img
+                    left:20 * pixelRatio, // offset by half the weed
+                    right:580 * pixelRatio, // width - half of weed
+                    bottom:93 * pixelRatio, // height - half of weed
+                    centerOffset:-20 * pixelRatio, // pixel offset from the upper-left corner of the weed image to the center of the weed
+                    can:{}, // tumbleweed canvas
+                    weeds:[] // collection of tumbleweeds
+                };
+
+                $.each(preloader.publicImages, function(i) {
+                    if (this.id === "Tumbleweed") tumbleweedConsts.ball = preloader.publicImages[i];
+                });
+
+                for (var i = 0; i < o.weeds.length; i++) {
+                    tumbleweedConsts.weeds.push(o.weeds[i]);
+                }
+
+                tumbleweedConsts.can = document.createElement('canvas');
+                tumbleweedConsts.can.width = width;
+                tumbleweedConsts.can.height = height;
+                $(tumbleweedConsts.can).attr({
+                    'width' : width * pixelRatio,
+                    'height' : height * pixelRatio
+                });
+            }
+
             sad_dhab_draw(canvas);
         }
 
@@ -273,6 +364,12 @@ window.requestAnimFrame = (function(){
                         imageAsset.sprite_width ,
                         (imageAsset.sprite_height / 1.1) | 0);
 
+                if (o.weeds)
+                {
+                    sad_dhab_drawTumbleWeeds();
+                    ctx.drawImage(tumbleweedConsts.can, 0, 0, this.width, this.height);
+                }
+
                 ctx.restore();
                 tick++;
             });
@@ -287,12 +384,49 @@ window.requestAnimFrame = (function(){
                 canvas.height = par.height;
 
                 // base
-                ctx.fillStyle = '#ffcc66';
+                ctx.fillStyle = '#cc9966';
                 ctx.fillRect(0, 90 * pixelRatio, par.width, 90 * pixelRatio);
 
                 par.scene = canvas;
             }
             return par.scene;
+        }
+
+        function sad_dhab_drawTumbleWeeds() {
+            var ctx = tumbleweedConsts.can.getContext('2d');
+
+            ctx.clearRect(0, 0, tumbleweedConsts.can.width, tumbleweedConsts.can.height);
+            for (var i = 0; i < tumbleweedConsts.weeds.length; i++) {
+                model(tumbleweedConsts.weeds[i]);
+                draw(tumbleweedConsts.weeds[i]);
+            }
+
+            function model(o) {
+                o.rot += o.rotSpeed * o.direc;
+                o.x += o.xVec;
+                o.yVec += o.gravity;
+                o.y += o.yVec;
+                bounceIf(o);
+            }
+
+            function bounceIf(o) {
+                if (o.y >= tumbleweedConsts.bottom) {
+                    o.y = tumbleweedConsts.bottom;
+                    o.yVec = -1 * o.yVec - o.gravity;
+                }
+                if (o.x >= tumbleweedConsts.right || o.x <= tumbleweedConsts.left) {
+                    o.xVec *= -1;
+                    o.direc *= -1;
+                }
+            }
+
+            function draw(o) {
+                ctx.save();
+                ctx.translate(o.x, o.y);
+                ctx.rotate(o.rot);
+                ctx.drawImage(tumbleweedConsts.ball, tumbleweedConsts.centerOffset, tumbleweedConsts.centerOffset);
+                ctx.restore();
+            }
         }
     }
 
@@ -301,102 +435,24 @@ window.requestAnimFrame = (function(){
 }(jQuery));
 
 
-(function() {
+(function(){
 
     "use strict";
 
-    function TumbleWeed(o) {
-
-        var preloader,
-            can, ctx, ball,
-            x, y, xVec, yVec,
-            direc, interval,
-            rot = 0,
-            gravity = 1,
-            left = 75,
-            right = 580, // width - half of ball
-            bottom = 93, // height - half of ball
-            centerOffset = -20; // pixel offset from the upper-left corner of the ball image to the center of the ball
-
-        this.load = function() {
-            preloader = o.preloader || new Object();
-            $.each(preloader.publicImages, function(i) {
-                if (this.id === "Tumbleweed") ball = preloader.publicImages[i];
-            });
-            //can = document.createElement('canvas'),
-            can = $('.sad-dhab').find('.canvas');
-
-            can.each(function() {
-
-            ctx = this.getContext('2d');
-            can.width = 600, // hard coded for test
-            can.height = 113;
-
-            ctx.strokeStyle = "black";
-
-                draw();
-
-
-            // initialize position, speed, spin direction
-            x = 50;
-            y = 50;
-            xVec = 5.5;
-            yVec = 0;
-            direc = 1;
-            // draw lines for the ball to bounce off of
-            ctx.moveTo(0, bottom + 20);
-            ctx.lineTo(600, bottom + 20);
-            ctx.lineTo(600, 0);
-            ctx.stroke();
-            // set animation to repeat every 40 ms
-
-            //interval = setInterval(animate, 40);
-
-            });
-
-            /*window.requestAnimFrame(
-                    function() {animate();
-            });*/
-        }
-
-        function animate() {
-            model();
-            // clear canvas except for lines at edge
-            ctx.clearRect(0, 0, can.width - 1 , can.height - 1);
-            draw();
-        }
-
-        function model() {
-            rot += .1 * direc;
-            x += xVec;
-            yVec += gravity;
-            y += yVec;
-            bounceIf();
-        }
-
-        function bounceIf() {
-            if (y >= bottom) {
-                y = bottom;
-                yVec = -1 * yVec - gravity
-            }
-            if (x >= right || x <= left) {
-                xVec *= -1;
-                direc *= -1;
-            }
-        }
-
-        function draw() {
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.rotate(rot);
-            ctx.drawImage(ball, centerOffset,centerOffset);
-            ctx.restore();
-        }
+    function Weed(o) {
+        this.rot = o.rot || 0;
+        this.gravity = o.gravity || 1;
+        this.x = o.x || 0;
+        this.y = o.y || 0;
+        this.xVec = o.xVec || 0;
+        this.yVec = o.yVec || 0;
+        this.direc = o.direc || 1;
+        this.rotSpeed = o.rotSpeed || 0.2;
     }
 
-    SD.TumbleWeed = TumbleWeed;
+    SD.Weed = Weed;
 
-}());
+})();
 
 (function() {
 
@@ -426,11 +482,37 @@ window.requestAnimFrame = (function(){
 
                 if (Preloader.sad_dhab_IsAllImagesLoaded === true) {
                     clearInterval(poller);
-                    //var SadDhab = new SD.SadDhab({img:img, preloader:Preloader, pixelRatio:pixelRatio});
-                    //SadDhab.load();
-                    var TumbleWeed = new SD.TumbleWeed({preloader:Preloader});
-                    TumbleWeed.load();
+                    var weedsArray = createWeeds();
+                    var SadDhab = new SD.SadDhab({img:img, preloader:Preloader, pixelRatio:pixelRatio, weeds:weedsArray});
+                    SadDhab.load();
                 }
+            }
+
+            function createWeeds() {
+                var weed1 = new SD.Weed({
+                    rot: 0,
+                    gravity: 0.5,
+                    x: 20 * pixelRatio,
+                    y: 90 * pixelRatio,
+                    xVec: 2 * pixelRatio,
+                    yVec: 0,
+                    direc: 1,
+                    rotSpeed: 0.2
+                });
+
+                var weed2 = new SD.Weed({
+                    rot: 0,
+                    gravity: 0.5,
+                    x: 570 * pixelRatio,
+                    y: 90 * pixelRatio,
+                    xVec: 1.5 * pixelRatio,
+                    yVec: 0,
+                    direc: 1,
+                    rotSpeed: 0.1
+                });
+
+                var weedsArray = [weed1, weed2];
+                return weedsArray;
             }
         };
     }
@@ -447,7 +529,7 @@ window.requestAnimFrame = (function(){
     <div class="sad-dhab-header">
         <span class="timestamp"></span>
         <span class="flags"></span>
-        <strong class="nickname">test</strong>
+        <strong class="nickname"></strong>
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>
