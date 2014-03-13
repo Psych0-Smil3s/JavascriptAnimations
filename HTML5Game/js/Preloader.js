@@ -15,8 +15,8 @@ this.Game = this.Game || {};
 
         var queue = new createjs.LoadQueue(false);
 
-        var PreloaderView = new Game.PreloaderView({imageURL:"http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1_1x70.png",
-                                                    imageID:"BooHissImg"}, queue);
+        var PreloaderView = new Game.PreloaderView({imageURL:"img/palringo_p_50px.png",
+                                                    imageID:"PalringoLogo"}, queue);
 
         queue.addEventListener("complete", handleComplete);
         queue.addEventListener("progress", PreloaderView.handleProgress);
@@ -60,9 +60,6 @@ this.Game = this.Game || {};
                     audio.currentTime = 0;
                 });
             }
-            $('.canvas.preload').animate({opacity:0}, 500, function() {
-                $(this).removeClass('preload');
-            });
             PreloaderView.explode();
             callback();
         }
@@ -82,17 +79,37 @@ this.Game = this.Game || {};
     function PreloaderView(o, preload) {
 
         var canvas = document.getElementById("canvas"),
-            stage = new createjs.Stage(canvas);
+            stage = new createjs.Stage(canvas),
 
-        var loadProgressLabel = new createjs.Text("Loading...","18px Verdana","black");
+
+
+        stageContainer = new createjs.Container();
+        window.addEventListener('resize', resize, false);
+        function resize() {
+            var widthRatio = canvas.width / $('#wrapper').width();
+            var heightRatio = canvas.height / $('#wrapper').height();
+            var scaleRatio = Math.max(widthRatio / heightRatio);
+            stageContainer.scaleX = stageContainer.scaleY = scaleRatio;
+            stage.update();
+        }
+
+
+
+        var loadingImage = new createjs.Bitmap(o.imageURL);
+            loadingImage.x = canvas.width/2 - 25 ;
+            loadingImage.y = canvas.height/2 - 65;
+            loadingImage.alpha = 0.0;
+            stage.addChild(loadingImage);
+
+        var loadProgressLabel = new createjs.Text("Loading...","14px Verdana","black");
             loadProgressLabel.lineWidth = 200;
             loadProgressLabel.textAlign = "center";
             loadProgressLabel.x = canvas.width/2;
-            loadProgressLabel.y = canvas.height/2 - 50;
+            loadProgressLabel.y = canvas.height/2 + 20;
             stage.addChild(loadProgressLabel);
 
         var loadingBarContainer = new createjs.Container();
-        var loadingBarHeight = 20,
+        var loadingBarHeight = 10,
             loadingBarWidth = 300,
             LoadingBarColor = createjs.Graphics.getRGB(0,0,0);
 
@@ -108,14 +125,40 @@ this.Game = this.Game || {};
         loadingBarContainer.y = Math.round(canvas.height/2 - loadingBarHeight/2);
         stage.addChild(loadingBarContainer);
 
+
+        //stageContainer.addChild(loadingBarContainer);
+        stageContainer.addChild(loadProgressLabel);
+        stageContainer.addChild(loadingImage);
+        stage.addChild(stageContainer);
+
+
+
         this.handleProgress = function() {
 
             loadingBar.scaleX = preload.progress * loadingBarWidth;
+            loadingImage.alpha = preload.progress;
             stage.update();
         }
 
         this.explode = function() {
-            stage.clear();
+
+            createjs.Tween.get(loadProgressLabel).to({x:canvas.width + 50},1000,createjs.Ease.circOut);
+            createjs.Tween.get(loadingBarContainer).to({x:-loadingBarWidth - 50},1000,createjs.Ease.circOut);
+            createjs.Tween.get(loadingImage).wait(100)
+                .to({scaleX:1.2,scaleY:1.2},1000,createjs.Ease.bounceOut)
+                .call(clearStage);
+            createjs.Ticker.setFPS(50);
+            createjs.Ticker.addEventListener("tick", stage);
+
+            function clearStage() {
+
+                createjs.Tween.get(loadingImage).to({alpha:0, visible:false},300);
+                $('.canvas.preload').animate({opacity:0}, 1000, function() {
+                    $(this).removeClass('preload');
+                });
+                stage.clear();
+                createjs.Ticker.removeEventListener("tick", stage);
+            }
         }
     }
 

@@ -5,8 +5,8 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<div class="wrapper">
-    <canvas id="canvas" class="canvas preload" height="500" width="500"></canvas>
+<div id="wrapper">
+    <canvas id="canvas" class="canvas preload"></canvas>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -31,6 +31,9 @@
                 var startGame = function() {
 
                 }
+
+                $('#canvas').attr("width", $('#wrapper').width());
+                $('#canvas').attr("height", $('#wrapper').height());
 
                 var Preloader = new Game.Preloader({
                     images:[
