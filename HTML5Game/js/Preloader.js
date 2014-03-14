@@ -15,8 +15,8 @@ this.Game = this.Game || {};
 
         var queue = new createjs.LoadQueue(false);
 
-        var PreloaderView = new Game.PreloaderView({imageURL:"http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1_1x70.png",
-                                                    imageID:"BooHissImg"}, queue);
+        var PreloaderView = new Game.PreloaderView({imageURL:"",
+                                                    imageID:"PreloaderImg"}, queue);
 
         queue.addEventListener("complete", handleComplete);
         queue.addEventListener("progress", PreloaderView.handleProgress);
