@@ -5,9 +5,8 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<div id="wrapper">
-    <canvas id="canvas" class="canvas preload"></canvas>
-</div>
+
+<canvas id="canvas" width="500" height="500" class="canvas preload"></canvas>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="js/easeljs-0.7.1.min.js"></script>
@@ -31,9 +30,6 @@
                 var startGame = function() {
 
                 }
-
-                $('#canvas').attr("width", $('#wrapper').width());
-                $('#canvas').attr("height", $('#wrapper').height());
 
                 var Preloader = new Game.Preloader({
                     images:[
