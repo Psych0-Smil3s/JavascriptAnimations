@@ -14,11 +14,13 @@ this.Game = this.Game || {};
             canvas,
             stage,
             world,
+            scale,
             hero,
             heroImg,
             platformImg,
             w,
             h,
+            scale,
             keyDown = false,
             collideables = [];
 
@@ -32,15 +34,14 @@ this.Game = this.Game || {};
             world = new createjs.Container();
             stage.addChild(world);
 
-            w = canvas.width;
-            h = canvas.height;
+            setCanvas();
 
             $.each(globalAssets, function(i) {
                 if (this.id === "Hero") heroImg = globalAssets[i];
                 if (this.id === "Platform") platformImg = globalAssets[i];
             });
 
-            hero = new Game.Hero(self,heroImg,canvas);
+            hero = new Game.Hero(self,heroImg,canvas,scale);
             reset();
 
             setUpListerners();
@@ -49,26 +50,36 @@ this.Game = this.Game || {};
             createjs.Ticker.addEventListener("tick", handleTick);
         }
 
+        function setCanvas() {
+            w = utils.getWidth();
+            h = utils.getHeight();
+
+            canvas.width = w;
+            canvas.height = h;
+
+            scale = Math.min(w/BaseWidth,h/BaseHeight);
+        }
+
         function reset() {
             collideables = [];
             self.lastPlatform = null;
             world.removeAllChildren();
             world.x = world.y = 0;
 
-            hero.x = 50;
-            hero.y = h/2 - 50;
+            hero.x = 50 * scale;
+            hero.y = h/2 - 50 * scale;
+            hero.scaleX = hero.scaleY = scale;
             hero.reset();
             world.addChild(hero);
 
             // add a platform for the hero to collide with
-            addPlatform(50 - platformImg.width/2, h/2);
+            addPlatform(50 * scale - platformImg.width/2, h/2);
 
-            var c, l = w / platformImg.width * 1.5, atX=0, atY = h/1.25;
+            var c, l = w / (platformImg.width * 1.5 * scale), atX=0, atY = h/1.25;
 
             for ( c = 1; c < l; c++ ) {
-                var atX = (c-.5) * platformImg.width*2 + (Math.random()*platformImg.width-platformImg.width/2);
-                window.console.log(atX);
-                var atY = atY + Math.random() * 300 - 150;
+                var atX = (c-.5) * platformImg.width*2*scale + (Math.random()*platformImg.width-platformImg.width/2)*scale;
+                var atY = atY + (Math.random() * 300 - 150) * scale;
                 addPlatform(atX,atY);
             }
         }
@@ -84,8 +95,8 @@ this.Game = this.Game || {};
             // screenWidth * 0.3 and screenHeight * 0.3(to both ends)
             // we will reposition the "world-container", so our hero
             // is allways visible
-            if ( hero.x > w*.4 ) {
-                world.x = -hero.x + w*.4;
+            if ( hero.x > w*.3 ) {
+                world.x = -hero.x + w*.3;
             }
             if ( hero.y > h*.5 ) {
                 world.y = -hero.y + h*.5;
@@ -110,6 +121,7 @@ this.Game = this.Game || {};
             var platform = new createjs.Bitmap(platformImg);
             platform.x = x;
             platform.y = y;
+            platform.scaleX = platform.scaleY = scale;
             platform.snapToPixel = true;
 
             world.addChild(platform);
@@ -118,8 +130,8 @@ this.Game = this.Game || {};
         }
 
         function movePlatformToEnd(platform) {
-            platform.x = self.lastPlatform.x + platform.image.width*2 + Math.random()*platform.image.width*2 - platform.image.width;
-            platform.y = self.lastPlatform.y + Math.random() * 300 - 150;
+            platform.x = self.lastPlatform.x + platform.image.width*2*scale + (Math.random()*platform.image.width*2 - platform.image.width) * scale;
+            platform.y = self.lastPlatform.y + (Math.random() * 300 - 150) * scale;
             self.lastPlatform = platform;
         }
 
@@ -149,6 +161,13 @@ this.Game = this.Game || {};
                 document.onmousedown = handleKeyDown;
                 document.onmouseup = handleKeyUp;
             }
+
+            window.addEventListener('resize', function() { onResize() }, false);
+        }
+
+        function onResize() {
+            setCanvas();
+            reset();
         }
     }
 

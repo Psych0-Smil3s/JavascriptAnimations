@@ -13,13 +13,13 @@ this.Game = this.Game || {};
          * Calculated the boundaries of an object.
          *
          */
-        this.getBounds = function(obj) {
+        this.getBounds = function(obj, rounded) {
             var bounds={x:Infinity,y:Infinity,width:0,height:0};
 
             if ( obj instanceof createjs.Container ) {
-                var children = obj.children, l=children.length, cbounds, c;
+                var children = object.children, l=children.length, cbounds, c;
                 for ( c = 0; c < l; c++ ) {
-                    cbounds = utils.getBounds(children[c]);
+                    cbounds = getBounds(children[c]);
                     if ( cbounds.x < bounds.x ) bounds.x = cbounds.x;
                     if ( cbounds.y < bounds.y ) bounds.y = cbounds.y;
                     if ( cbounds.width > bounds.width ) bounds.width = cbounds.width;
@@ -30,7 +30,7 @@ this.Game = this.Game || {};
                 if ( obj instanceof createjs.Bitmap ) {
                     gp = obj.localToGlobal(0,0);
                     imgr = {width:obj.image.width,height:obj.image.height};
-                } else if ( obj instanceof createjs.spriteSheet ) {
+                } else if ( obj instanceof createjs.SpriteSheet ) {
                     gp = obj.localToGlobal(0,0);
                     imgr = obj.spriteSheet._frames[obj.currentFrame];
                 } else {
@@ -51,7 +51,12 @@ this.Game = this.Game || {};
                     bounds.y = gp.y - bounds.height;
                 }
             }
-
+            if ( rounded ) {
+                bounds.x = (bounds.x + (bounds.x > 0 ? .5 : -.5)) | 0;
+                bounds.y = (bounds.y + (bounds.y > 0 ? .5 : -.5)) | 0;
+                bounds.width = (bounds.width + (bounds.width > 0 ? .5 : -.5)) | 0;
+                bounds.height = (bounds.height + (bounds.height > 0 ? .5 : -.5)) | 0;
+            }
             return bounds;
         }
 
@@ -94,7 +99,7 @@ this.Game = this.Game || {};
                 oppositeDirection = direction == 'x' ? 'y' : 'x',
                 oppositeMeasure = direction == 'x' ? 'height' : 'width',
 
-                bounds = utils.getBounds(obj),
+                bounds = utils.getBounds(obj, true),
                 cbounds,
                 collision = null,
                 cc = 0;
@@ -103,7 +108,7 @@ this.Game = this.Game || {};
             // bounding-rectangle and then check for an intersection
             // of the hero's future position's bounding-rectangle
             while ( !collision && cc < collideables.length ) {
-                cbounds = utils.getBounds(collideables[cc]);
+                cbounds = utils.getBounds(collideables[cc],true);
                 if ( collideables[cc].isVisible ) {
                     collision = utils.calculateIntersection(bounds, cbounds, moveBy.x, moveBy.y);
                 }
@@ -134,6 +139,32 @@ this.Game = this.Game || {};
             }
 
             return collision;
+        }
+
+        /*
+         * Get viewport width.
+         */
+        this.getWidth = function() {
+            if( typeof( window.innerWidth ) == 'number' ) {
+                return window.innerWidth / 2;
+            } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+                return document.documentElement.clientWidth / 2;
+            } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+                return document.body.clientWidth / 2;
+            }
+        }
+
+        /*
+         * Get viewport height.
+         */
+        this.getHeight = function() {
+            if( typeof( window.innerWidth ) == 'number' ) {
+                return window.innerHeight / 2;
+            } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+                return document.documentElement.clientHeight / 2;
+            } else if( document.body && ( document.body.clientHeight || document.body.clientHeight ) ) {
+                return document.body.clientHeight / 2;
+            }
         }
     }
 

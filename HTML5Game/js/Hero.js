@@ -7,9 +7,10 @@ this.Game = this.Game || {};
 
     "use strict";
 
-        function Hero(play,image,canvas) {
+        function Hero(play,image,canvas,scale) {
             this.play = play;
             this.canvas = canvas;
+            this.scale = scale;
             this.initialize(image);
         }
 
@@ -25,13 +26,13 @@ this.Game = this.Game || {};
             this.snapToPixel = true;
         };
         Hero.prototype.reset = function() {
-            this.velocity = {x:10,y:25};
+            this.velocity = {x:10*this.scale,y:25*this.scale};
             this.onGround = true;
             this.doubleJump = true;
         };
 
         Hero.prototype.tick = function () {
-            this.velocity.y += 1;
+            this.velocity.y += 1 * this.scale;
 
             // preparing the variables
             var moveBy = {x:0, y:this.velocity.y},
@@ -68,7 +69,7 @@ this.Game = this.Game || {};
             // if the hero is "on the ground"
             // let him jump, physically correct!
             if ( this.onGround ) {
-                this.velocity.y = -17;
+                this.velocity.y = -17 * this.scale;
                 this.onGround = false;
                 this.doubleJump = true;
                 // we want the hero to be able to
@@ -76,7 +77,7 @@ this.Game = this.Game || {};
                 // air - after that, he has to wait
                 // to lang somewhere on the ground
             } else if ( this.doubleJump ) {
-                this.velocity.y = -17;
+                this.velocity.y = -17 * this.scale;
                 this.doubleJump = false;
             }
         }

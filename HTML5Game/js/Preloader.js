@@ -84,8 +84,11 @@ this.Game = this.Game || {};
             stage = new createjs.Stage(canvas),
             stageContainer = new createjs.Container();
 
+            canvas.width = utils.getWidth();
+            canvas.height = utils.getHeight();
+
         var loadingImage = new createjs.Bitmap(o.imageURL);
-            loadingImage.x = canvas.width/2 - 25 ;
+            loadingImage.x = canvas.width/2 - 25;
             loadingImage.y = canvas.height/2 - 65;
             loadingImage.alpha = 0.0;
 
@@ -116,9 +119,6 @@ this.Game = this.Game || {};
         stageContainer.addChild(loadingImage);
         stage.addChild(stageContainer);
 
-        //window.addEventListener('resize', function() { onResize(true) }, false);
-        //onResize(true);
-
         this.handleProgress = function() {
 
             loadingBar.scaleX = preload.progress * loadingBarWidth;
@@ -148,41 +148,6 @@ this.Game = this.Game || {};
                 createjs.Ticker.removeEventListener("tick", stage);
                 $('.canvas').animate({opacity:1}, 500);
             }
-        }
-
-        function onResize(keepAspectRatio) {
-            // browser viewport size
-            var w = window.innerWidth;
-            var h = window.innerHeight;
-
-            // stage dimensions
-            var ow = canvas.width; // your stage width
-            var oh = canvas.height; // your stage height
-
-            if (keepAspectRatio)
-            {
-                // keep aspect ratio
-                var scale = Math.min(w / ow, h / oh);
-                stage.scaleX = scale;
-                stage.scaleY = scale;
-
-                // adjust canvas size
-                stage.canvas.width = ow * scale;
-                stage.canvas.height = oh * scale;
-            }
-            else
-            {
-                // scale to exact fit
-                stage.scaleX = w / ow;
-                stage.scaleY = h / oh;
-
-                // adjust canvas size
-                stage.canvas.width = ow * stage.scaleX;
-                stage.canvas.height = oh * stage.scaleY;
-            }
-
-            // update the stage
-            stage.update()
         }
     }
 

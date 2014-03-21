@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<canvas id="canvas" width="500" height="500" class="canvas preload"></canvas>
+<canvas id="canvas" class="canvas preload"></canvas>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="js/easeljs-0.7.1.min.js"></script>
@@ -22,6 +22,8 @@
 
     this.Game = this.Game || {};
     this.globalAssets = [];
+    this.BaseWidth = 500; //used to calc a scale
+    this.BaseHeight = 500;
 
     (function() {
 
