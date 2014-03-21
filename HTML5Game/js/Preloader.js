@@ -17,7 +17,6 @@ this.Game = this.Game || {};
 
         var PreloaderView = new Game.PreloaderView({imageURL:"img/palringo_p_50px.png",
                                                     imageID:"PalringoLogo"}, queue);
-        //PreloaderView.onResize(true);
 
         queue.addEventListener("complete", handleComplete);
         queue.addEventListener("progress", PreloaderView.handleProgress);
@@ -32,7 +31,7 @@ this.Game = this.Game || {};
 
         function preloadImages() {
             for (var i = 0, len = images.length; i < len; i++) {
-                queue.loadFile({id: images[i].imageID, src: images[i].imageURL, frameCount: images[i].frameCount || 1, type:createjs.LoadQueue.IMAGE});
+                queue.loadFile({id: images[i].imageID, src: images[i].imageURL, type:createjs.LoadQueue.IMAGE});
             }
         }
 
@@ -46,7 +45,9 @@ this.Game = this.Game || {};
             for (var i = 0, len = images.length; i < len; i++) {
                 var image = queue.getResult(images[i].imageID);
                 image.sprite_width = image.width;
-                image.sprite_height = image.height / image.frameCount;
+                image.sprite_height = image.height;
+                image.id = images[i].imageID;
+                image.src = images[i].imageURL;
                 globalAssets.push(image);
             }
 
@@ -61,8 +62,7 @@ this.Game = this.Game || {};
                     audio.currentTime = 0;
                 });
             }
-            PreloaderView.explode();
-            callback();
+            PreloaderView.explode(callback);
         }
     }
 
@@ -83,8 +83,6 @@ this.Game = this.Game || {};
             self = this,
             stage = new createjs.Stage(canvas),
             stageContainer = new createjs.Container();
-
-        window.addEventListener('resize', function() { self.onResize(true) }, false);
 
         var loadingImage = new createjs.Bitmap(o.imageURL);
             loadingImage.x = canvas.width/2 - 25 ;
@@ -118,6 +116,9 @@ this.Game = this.Game || {};
         stageContainer.addChild(loadingImage);
         stage.addChild(stageContainer);
 
+        //window.addEventListener('resize', function() { onResize(true) }, false);
+        //onResize(true);
+
         this.handleProgress = function() {
 
             loadingBar.scaleX = preload.progress * loadingBarWidth;
@@ -125,7 +126,7 @@ this.Game = this.Game || {};
             stage.update();
         }
 
-        this.explode = function() {
+        this.explode = function(callback) {
 
             createjs.Tween.get(loadProgressLabel).to({x:canvas.width + 50},1000,createjs.Ease.circOut);
             createjs.Tween.get(loadingBarContainer).to({x:-loadingBarWidth - 50},1000,createjs.Ease.circOut);
@@ -138,22 +139,25 @@ this.Game = this.Game || {};
             function clearStage() {
 
                 createjs.Tween.get(loadingImage).to({alpha:0, visible:false},300);
-                $('.canvas.preload').animate({opacity:0}, 1000, function() {
+                $('.canvas.preload').animate({opacity:0}, 500, function() {
                     $(this).removeClass('preload');
+                    stage.removeAllChildren();
+                    stage.update();
+                    callback();
                 });
-                stage.clear();
                 createjs.Ticker.removeEventListener("tick", stage);
+                $('.canvas').animate({opacity:1}, 500);
             }
         }
 
-        this.onResize = function(keepAspectRatio) {
+        function onResize(keepAspectRatio) {
             // browser viewport size
             var w = window.innerWidth;
             var h = window.innerHeight;
 
             // stage dimensions
-            var ow = 500; // your stage width
-            var oh = 500; // your stage height
+            var ow = canvas.width; // your stage width
+            var oh = canvas.height; // your stage height
 
             if (keepAspectRatio)
             {
