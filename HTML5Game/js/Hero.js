@@ -14,75 +14,54 @@ this.Game = this.Game || {};
         }
 
         Hero.prototype = new createjs.Bitmap();
+
         Hero.prototype.Bitmap_initialize = Hero.prototype.initialize;
 
         Hero.prototype.initialize = function (image) {
-            this.velocity = {x:0,y:25};
-            this.onGround = false;
-            this.doubleJump = false;
+            this.reset();
 
             this.Bitmap_initialize(image);
             this.name = 'Hero';
             this.snapToPixel = true;
-        }
+        };
+        Hero.prototype.reset = function() {
+            this.velocity = {x:10,y:25};
+            this.onGround = true;
+            this.doubleJump = true;
+        };
 
         Hero.prototype.tick = function () {
             this.velocity.y += 1;
 
             // preparing the variables
-            var c = 0,
-                cc = 0,
-                addY = this.velocity.y,
-                bounds = utils.getBounds(this),
-                cbounds,
+            var moveBy = {x:0, y:this.velocity.y},
                 collision = null,
                 collideables = this.play.getCollideables();
 
-            cc=0;
-            // for each collideable object we will calculate the
-            // bounding-rectangle and then check for an intersection
-            // of the hero's future position's bounding-rectangle
-            while ( !collision && cc < collideables.length ) {
-                cbounds = utils.getBounds(collideables[cc]);
-                if ( collideables[cc].isVisible ) {
-                    collision = utils.calculateIntersection(bounds, cbounds, 0, addY);
-                }
+            collision = utils.calculateCollision(this, 'y', collideables, moveBy);
+            // moveBy is now handled by 'calculateCollision'
+            // and can also be 0 - therefore we won't have to worry
+            this.y += moveBy.y;
 
-                if ( !collision && collideables[cc].isVisible ) {
-                    // if there was NO collision detected, but somehow
-                    // the hero got onto the "other side" of an object (high velocity e.g.),
-                    // then we will detect this here, and adjust the velocity according to
-                    // it to prevent the Hero from "ghosting" through objects
-                    // try messing with the 'this.velocity = {x:0,y:25};'
-                    // -> it should still collide even with very high values
-                    if ( ( bounds.y < cbounds.y && bounds.y + addY > cbounds.y )
-                        || ( bounds.y > cbounds.y && bounds.y + addY < cbounds.y ) ) {
-                        addY = cbounds.y - bounds.y;
-                    } else {
-                        cc++;
-                    }
-                }
-            }
-
-            // if no collision was to be found, just
-            //  move the hero to it's new position
             if ( !collision ) {
-                this.y += addY;
                 if ( this.onGround ) {
                     this.onGround = false;
                     this.doubleJump = true;
                 }
-                // else move the hero as far as possible
-                // and then make it stop and tell the
-                // game, that the hero is now "an the ground"
             } else {
-                this.y += addY - collision.height;
-                if ( addY > 0 ) {
+                // the hero can only be 'onGround'
+                // when he's hitting floor and not
+                // some ceiling
+                if ( moveBy.y > 0 ) {
                     this.onGround = true;
                     this.doubleJump = false;
                 }
                 this.velocity.y = 0;
             }
+
+            moveBy = {x:this.velocity.x, y:0};
+            collision = utils.calculateCollision(this, 'x', collideables, moveBy);
+            this.x += moveBy.x;
         }
 
         Hero.prototype.jump = function() {
@@ -100,12 +79,6 @@ this.Game = this.Game || {};
                 this.velocity.y = -17;
                 this.doubleJump = false;
             }
-        }
-
-        Hero.prototype.reset = function() {
-            this.x = this.canvas.width/2;
-            this.y = this.canvas.height/1.25;
-            this.velocity.y = -15;
         }
 
     Game.Hero = Hero;

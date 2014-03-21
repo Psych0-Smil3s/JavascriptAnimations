@@ -56,7 +56,7 @@ this.Game = this.Game || {};
         }
 
         /*
-         * Calculated the boundaries of an object.
+         * Calculate the boundaries of an object.
          */
         this.calculateIntersection = function(rect1, rect2, x, y)
         {
@@ -83,29 +83,57 @@ this.Game = this.Game || {};
         }
 
         /*
-         * Width of viewport.
+         * Calculate object collision.
          */
-        this.getWidth = function() {
-            if( typeof( window.innerWidth ) == 'number' ) {
-                return window.innerWidth;
-            } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-                return document.documentElement.clientWidth;
-            } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-                return document.body.clientWidth;
+        this.calculateCollision = function(obj, direction, collideables, moveBy) {
+            moveBy = moveBy || {x:0,y:0};
+            if ( direction != 'x' && direction != 'y' ) {
+                direction = 'x';
             }
-        }
+            var measure = direction == 'x' ? 'width' : 'height',
+                oppositeDirection = direction == 'x' ? 'y' : 'x',
+                oppositeMeasure = direction == 'x' ? 'height' : 'width',
 
-        /*
-         * Height of viewport.
-         */
-        this.getHeight = function() {
-            if( typeof( window.innerWidth ) == 'number' ) {
-                return window.innerHeight;
-            } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-                return document.documentElement.clientHeight;
-            } else if( document.body && ( document.body.clientHeight || document.body.clientHeight ) ) {
-                return document.body.clientHeight;
+                bounds = utils.getBounds(obj),
+                cbounds,
+                collision = null,
+                cc = 0;
+
+            // for each collideable object we will calculate the
+            // bounding-rectangle and then check for an intersection
+            // of the hero's future position's bounding-rectangle
+            while ( !collision && cc < collideables.length ) {
+                cbounds = utils.getBounds(collideables[cc]);
+                if ( collideables[cc].isVisible ) {
+                    collision = utils.calculateIntersection(bounds, cbounds, moveBy.x, moveBy.y);
+                }
+
+                if ( !collision && collideables[cc].isVisible ) {
+                    // if there was NO collision detected, but somehow
+                    // the hero got onto the "other side" of an object (high velocity e.g.),
+                    // then we will detect this here, and adjust the velocity according to
+                    // it to prevent the Hero from "ghosting" through objects
+                    // try messing with the 'this.velocity = {x:0,y:125};'
+                    // -> it should still collide even with very high values
+                    var wentThroughForwards  = ( bounds[direction] < cbounds[direction] && bounds[direction] + moveBy[direction] > cbounds[direction] ),
+                        wentThroughBackwards = ( bounds[direction] > cbounds[direction] && bounds[direction] + moveBy[direction] < cbounds[direction] ),
+                        withinOppositeBounds = !(bounds[oppositeDirection]+bounds[oppositeMeasure] < cbounds[oppositeDirection])
+                            && !(bounds[oppositeDirection] > cbounds[oppositeDirection]+cbounds[oppositeMeasure]);
+
+                    if ( (wentThroughForwards || wentThroughBackwards) && withinOppositeBounds ) {
+                        moveBy[direction] = cbounds[direction] - bounds[direction];
+                    } else {
+                        cc++;
+                    }
+                }
             }
+
+            if ( collision ) {
+                var sign = Math.abs(moveBy[direction]) / moveBy[direction];
+                moveBy[direction] -= collision[measure] * sign;
+            }
+
+            return collision;
         }
     }
 
