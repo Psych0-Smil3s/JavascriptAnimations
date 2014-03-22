@@ -20,6 +20,8 @@ this.Game = this.Game || {};
             platformImg,
             flyImg,
             fly,
+            palringoImg,
+            palringo,
             w,
             h,
             scale,
@@ -47,6 +49,7 @@ this.Game = this.Game || {};
                 if (this.id === "Hero") heroImg = globalAssets[i];
                 if (this.id === "Platform") platformImg = globalAssets[i];
                 if (this.id === "Fly") flyImg = globalAssets[i];
+                if (this.id === "PalringoSprite") palringoImg = globalAssets[i];
             });
 
             hero = new Game.Hero(self,heroImg,canvas,scale);
