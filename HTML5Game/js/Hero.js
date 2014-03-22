@@ -14,17 +14,33 @@ this.Game = this.Game || {};
             this.initialize(image);
         }
 
-        Hero.prototype = new createjs.Bitmap();
+        Hero.prototype = new createjs.Sprite();
 
-        Hero.prototype.Bitmap_initialize = Hero.prototype.initialize;
+        Hero.prototype.Sprite_initialize = Hero.prototype.initialize;
 
         Hero.prototype.initialize = function (image) {
             this.reset();
+			
+			var localSpriteSheet = new createjs.SpriteSheet({
+				images: [image],
+				frames: { width: 30, height: 30.8 }, // 30.875 - 30.9 messes up
+				animations: {
+					spin: [0, 7]
+				}
+			});
 
-            this.Bitmap_initialize(image);
+			this.Sprite_initialize(localSpriteSheet);
+
+			// start playing the first sequence:
+			this.gotoAndPlay("spin");     //animate
+
+			// starting directly at the first frame of the walk_h sequence
+			this.currentFrame = 0;
+
             this.name = 'Hero';
             this.snapToPixel = true;
         };
+		
         Hero.prototype.reset = function() {
             this.velocity = {x:10*this.scale,y:25*this.scale};
             this.onGround = true;

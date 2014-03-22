@@ -30,9 +30,10 @@ this.Game = this.Game || {};
                 if ( obj instanceof createjs.Bitmap ) {
                     gp = obj.localToGlobal(0,0);
                     imgr = {width:obj.image.width,height:obj.image.height};
-                } else if ( obj instanceof createjs.SpriteSheet ) {
+                } else if ( obj instanceof createjs.Sprite ) {
                     gp = obj.localToGlobal(0,0);
-                    imgr = obj.spriteSheet._frames[obj.currentFrame];
+                    var frameInfo = obj.spriteSheet._frames[obj.currentFrame];
+					imgr = {width:frameInfo.rect.width,height:frameInfo.rect.height};
                 } else {
                     return bounds;
                 }
