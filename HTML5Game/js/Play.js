@@ -31,15 +31,20 @@ this.Game = this.Game || {};
             verticalGrid = 6,
             keyDown = false,
             collideables = [],
+            parallaxObjects = [],
             spriteSheets = [],
-            parallaxObjects = [];
+			gameStateEnum = { INIT: 0, PLAY: 1, PAUSE: 2, FINISHED: 4 },
+			currentState;
 
         self.lastPlatform = null;
 
         this.getCollideables = function() { return collideables; };
 
         this.init = function() {
-            canvas = document.getElementById("canvas"),
+            
+			currentState = gameStateEnum.INIT;
+			
+			canvas = document.getElementById("canvas"),
             stage = new createjs.Stage(canvas);
             world = new createjs.Container();
 
@@ -138,10 +143,67 @@ this.Game = this.Game || {};
 
         function handleTick() {
             ticks++;
-            hero.tick();
+			switch (currentState) {
+				case gameStateEnum.INIT:
+					setup();
+					break;
+				case gameStateEnum.PLAY:
+					play();
+					break;
+				case gameStateEnum.PAUSE:
+					// don't need to do anything, just keep ticking
+					break;
+				case gameStateEnum.FINISHED:
+					finished();
+					break;
+			}
+            stage.update();
+        }
+		
+		var counter = null;
+		var timerCount = null;
+		function setup() {
+			if (counter == null) {
+				var count = 3;
+				counter = setInterval(function() {
+				
+					world.removeChild(timerCount);
+					if (count <= 0) {
+						clearInterval(counter);
+						counter = null;
+						currentState = gameStateEnum.PLAY;
+						return;
+					}
+
+					timerCount = new createjs.Text(count,"100px Verdana","white");
+					timerCount.lineWidth = 200;
+					timerCount.textAlign = "center";
+					timerCount.x = (canvas.width/2);
+					timerCount.y = (canvas.height/2) * scale;
+					timerCount.scaleX = timerCount.scaleY = scale;
+					world.addChild(timerCount);
+					
+					count = count - 1;			
+				}, 500); // change count every 500
+			}
+		}
+				
+		function finished() {
+			// 1. stop the ticker
+			// 2. show button 'start again' and button to tweet score
+			// 3. in event handler for 'start again' - change currentState to INIT - then start the ticker
+			
+			// at the mo, go straight to INIT
+			currentState = gameStateEnum.INIT;
+		}
+		
+		function play() {
+		
+			hero.tick();
 
             if ( hero.y > h*3 ) {
                 reset();
+				currentState = gameStateEnum.FINISHED;
             }
 
             // movement of the fly
@@ -176,10 +238,8 @@ this.Game = this.Game || {};
             for ( c = 0; c < parallaxObjects.length; c++ ) {
                 p = parallaxObjects[c];
                 p.x = ((world.x * p.speedFactor - p.offsetX) % p.range) + p.range;
-            }
-
-            stage.update();
-        }
+            }		
+		}
 
         function addPlatform(x,y) {
             x = Math.round(x);
@@ -212,6 +272,22 @@ this.Game = this.Game || {};
         function handleKeyUp() {
             keyDown = false;
         }
+		
+		function handleDoubleClick() {
+			// cannot pause a game that is not playing or already paused
+			if (currentState != gameStateEnum.PLAY && currentState != gameStateEnum.PAUSE) {
+				return;
+			}
+			// if paused, lets resume game play
+			if (currentState == gameStateEnum.PAUSE) {
+				currentState = gameStateEnum.PLAY;
+				createjs.Ticker.setPaused(false);
+				return;
+			}
+			// otherwise, lets pause game
+			currentState = gameStateEnum.PAUSE;
+			createjs.Ticker.setPaused(true);
+		}
 
         function setUpListerners() {
             if ('ontouchstart' in document.documentElement) {
@@ -227,6 +303,9 @@ this.Game = this.Game || {};
                 document.onkeyup = handleKeyUp;
                 document.onmousedown = handleKeyDown;
                 document.onmouseup = handleKeyUp;
+				
+				// pause / resume on dbl click
+				document.ondblclick = handleDoubleClick;
             }
 
             window.addEventListener('resize', function() { onResize() }, false);
