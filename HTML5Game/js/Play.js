@@ -52,7 +52,7 @@ this.Game = this.Game || {};
 
             $.each(globalAssets, function(i) {
                 if (this.id === "Hero") heroImg = globalAssets[i];
-                if (this.id === "Platform") platformImg = globalAssets[i];
+                if (this.id === "PlatformPalringo") platformImg = globalAssets[i];
                 if (this.id === "Fly") flyImg = globalAssets[i];
                 if (this.id === "PalringoSprite") palringoImg = globalAssets[i];
             });
@@ -175,14 +175,16 @@ this.Game = this.Game || {};
 						return;
 					}
 
-					timerCount = new createjs.Text(count,"100px Verdana","white");
+					timerCount = new createjs.Text(count,"100px Impact","white");
 					timerCount.lineWidth = 200;
 					timerCount.textAlign = "center";
 					timerCount.x = (w/2);
 					timerCount.y = (h/2) - (100 * scale);
 					timerCount.scaleX = timerCount.scaleY = scale;
 					world.addChild(timerCount);
-					
+
+                    createjs.Tween.get(timerCount).to({scaleX:1.3 * scale,scaleY:1.3 * scale},200,createjs.Ease.linear).to({alpha:0}, 200);
+
 					count = count - 1;			
 				}, 500); // change count every 500
 			}
