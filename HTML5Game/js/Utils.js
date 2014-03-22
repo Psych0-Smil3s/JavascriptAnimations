@@ -65,12 +65,10 @@ this.Game = this.Game || {};
          */
         this.calculateIntersection = function(rect1, rect2, x, y)
         {
-            // prevent x|y from being null||undefined
+
             x = x || 0; y = y || 0;
 
-            // first we have to calculate the
-            // center of each rectangle and half of
-            // width and height
+            // calculate the center of each rectangle and half of width and height
             var dx, dy, r1={}, r2={};
             r1.cx = rect1.x+x+(r1.hw = (rect1.width /2));
             r1.cy = rect1.y+y+(r1.hh = (rect1.height/2));
@@ -88,7 +86,7 @@ this.Game = this.Game || {};
         }
 
         /*
-         * Calculate object collision.
+         * Calculate object collision (Generic rectangle collision)
          */
         this.calculateCollision = function(obj, direction, collideables, moveBy) {
             moveBy = moveBy || {x:0,y:0};
@@ -104,9 +102,6 @@ this.Game = this.Game || {};
                 collision = null,
                 cc = 0;
 
-            // for each collideable object we will calculate the
-            // bounding-rectangle and then check for an intersection
-            // of the hero's future position's bounding-rectangle
             while ( !collision && cc < collideables.length ) {
                 cbounds = utils.getBounds(collideables[cc],true);
                 if ( collideables[cc].isVisible ) {
@@ -114,12 +109,7 @@ this.Game = this.Game || {};
                 }
 
                 if ( !collision && collideables[cc].isVisible ) {
-                    // if there was NO collision detected, but somehow
-                    // the hero got onto the "other side" of an object (high velocity e.g.),
-                    // then we will detect this here, and adjust the velocity according to
-                    // it to prevent the Hero from "ghosting" through objects
-                    // try messing with the 'this.velocity = {x:0,y:125};'
-                    // -> it should still collide even with very high values
+
                     var wentThroughForwards  = ( bounds[direction] < cbounds[direction] && bounds[direction] + moveBy[direction] > cbounds[direction] ),
                         wentThroughBackwards = ( bounds[direction] > cbounds[direction] && bounds[direction] + moveBy[direction] < cbounds[direction] ),
                         withinOppositeBounds = !(bounds[oppositeDirection]+bounds[oppositeMeasure] < cbounds[oppositeDirection])

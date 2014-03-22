@@ -22,8 +22,8 @@
 
     this.Game = this.Game || {};
     this.globalAssets = [];
-    this.BaseWidth = 500; //used to calc a scale
-    this.BaseHeight = 500;
+    this.BaseWidth = 500;  //used to calc a consistent scale
+    this.BaseHeight = 500; //used to calc a consistent scale
 
     (function() {
 
@@ -41,7 +41,8 @@
                 var Preloader = new Game.Preloader({
                     images:[
                         {imageURL:"img/hero.png", imageID:"Hero"},
-                        {imageURL:"img/platform.png", imageID:"Platform"}
+                        {imageURL:"img/platform.png", imageID:"Platform"},
+                        {imageURL:"img/fly.png", imageID:"Fly"}
                     ],
                     audios:[
                         {audioID:"boo-hiss-audio",
@@ -60,11 +61,10 @@
 
     }());
 
+    // load util functions driver
     var utils = new Game.Utils();
     var palringo = new Game.Loader();
     palringo.load();
-
-    //http://indiegamr.com/retro-style-plattform-runner-game-for-mobile-with-easeljs-part-1/
 
 </script>
 </body>

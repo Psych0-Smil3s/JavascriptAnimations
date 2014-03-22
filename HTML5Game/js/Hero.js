@@ -34,14 +34,12 @@ this.Game = this.Game || {};
         Hero.prototype.tick = function () {
             this.velocity.y += 1 * this.scale;
 
-            // preparing the variables
             var moveBy = {x:0, y:this.velocity.y},
                 collision = null,
                 collideables = this.play.getCollideables();
 
             collision = utils.calculateCollision(this, 'y', collideables, moveBy);
-            // moveBy is now handled by 'calculateCollision'
-            // and can also be 0 - therefore we won't have to worry
+
             this.y += moveBy.y;
 
             if ( !collision ) {
@@ -51,8 +49,7 @@ this.Game = this.Game || {};
                 }
             } else {
                 // the hero can only be 'onGround'
-                // when he's hitting floor and not
-                // some ceiling
+                // when he's hitting floor
                 if ( moveBy.y > 0 ) {
                     this.onGround = true;
                     this.doubleJump = false;
@@ -66,16 +63,12 @@ this.Game = this.Game || {};
         }
 
         Hero.prototype.jump = function() {
-            // if the hero is "on the ground"
-            // let him jump, physically correct!
+            // let hero jump if on ground
             if ( this.onGround ) {
                 this.velocity.y = -17 * this.scale;
                 this.onGround = false;
                 this.doubleJump = true;
-                // we want the hero to be able to
-                // jump once more when he is in the
-                // air - after that, he has to wait
-                // to lang somewhere on the ground
+                // let hero doublejump if in air
             } else if ( this.doubleJump ) {
                 this.velocity.y = -17 * this.scale;
                 this.doubleJump = false;

@@ -18,6 +18,8 @@ this.Game = this.Game || {};
             hero,
             heroImg,
             platformImg,
+            flyImg,
+            fly,
             w,
             h,
             scale,
@@ -27,6 +29,7 @@ this.Game = this.Game || {};
             verticalGrid = 6,
             keyDown = false,
             collideables = [],
+            spriteSheets = [],
             parallaxObjects = [];
 
         self.lastPlatform = null;
@@ -43,6 +46,7 @@ this.Game = this.Game || {};
             $.each(globalAssets, function(i) {
                 if (this.id === "Hero") heroImg = globalAssets[i];
                 if (this.id === "Platform") platformImg = globalAssets[i];
+                if (this.id === "Fly") flyImg = globalAssets[i];
             });
 
             hero = new Game.Hero(self,heroImg,canvas,scale);
@@ -52,6 +56,26 @@ this.Game = this.Game || {};
 
             createjs.Ticker.setFPS(50);
             createjs.Ticker.addEventListener("tick", handleTick);
+        }
+
+        function initSpriteSheets() {
+            var flyData = {
+                images: [flyImg],
+                frames: {
+                    height: 6 * scale,
+                    width: 16 * scale,
+                    regX: 8 * scale,
+                    regY: 3 * scale,
+                    count: 2
+                },
+                animations: {
+                    fly: {
+                        frames:[0, 1],
+                        frequency: 1
+                    }
+                }
+            }
+            spriteSheets[flyImg] = new createjs.SpriteSheet(flyData);
         }
 
         function setCanvas() {
@@ -67,6 +91,7 @@ this.Game = this.Game || {};
         function reset() {
             collideables = [];
             self.lastPlatform = null;
+            initSpriteSheets();
 
             stage.removeChild(background);
             background = createBgGrid(horizontalGrid,verticalGrid);
@@ -90,6 +115,10 @@ this.Game = this.Game || {};
             hero.reset();
             world.addChild(hero);
 
+            fly = new createjs.Sprite(spriteSheets[flyImg]);
+            fly.gotoAndPlay('fly');
+            world.addChild(fly);
+
             // add a platform for the hero to collide with
             addPlatform(50 * scale - platformImg.width/2, h/2);
 
@@ -111,10 +140,15 @@ this.Game = this.Game || {};
             if ( hero.y > h*3 ) {
                 reset();
             }
-            // if the hero "leaves" it's bounds of
-            // screenWidth * 0.3 and screenHeight * 0.3(to both ends)
-            // we will reposition the "world-container", so our hero
-            // is allways visible
+
+            // movement of the fly
+            fly.offsetX = ( Math.cos(ticks/10) * 10) * scale;
+            fly.offsetY = ( Math.sin(ticks/ 7) *  5) * scale;
+            // smoothly follow the hero by 10% of the distance every frame
+            fly.x = fly.x + (hero.x - fly.x) * .1 + fly.offsetX;
+            fly.y = fly.y + (hero.y - fly.y) * .1 + fly.offsetY;
+
+            // keep hero visible
             if ( hero.x > w*.3 ) {
                 world.x = -hero.x + w*.3;
             }
@@ -131,9 +165,11 @@ this.Game = this.Game || {};
                 }
             }
 
-            background.x = (world.x * .45) % (w/horizontalGrid); // horizontal
-            background.y = (world.y * .45) % (h/verticalGrid);   // vertical
+            // move background grid
+            background.x = (world.x * .45) % (w/horizontalGrid);
+            background.y = (world.y * .45) % (h/verticalGrid);
 
+            // move background lines
             for ( c = 0; c < parallaxObjects.length; c++ ) {
                 p = parallaxObjects[c];
                 p.x = ((world.x * p.speedFactor - p.offsetX) % p.range) + p.range;
@@ -201,18 +237,15 @@ this.Game = this.Game || {};
         function createBgGrid(numX, numY) {
             var grid = new createjs.Container();
             grid.snapToPixel = true;
-            // calculating the distance between
-            // the grid-lines
+            // calculating the distance between the grid-lines
             var gw = w/numX;
             var gh = h/numY;
-            // drawing the vertical line
+
             var verticalLine = new createjs.Graphics();
             verticalLine.beginFill("rgba(2, 132, 130,0.5)");
             verticalLine.drawRect(0,0,gw * 0.02,gh*(numY+2));
             var vs;
-            // placing the vertical lines:
-            // we're placing 1 more than requested
-            // to have seamless scrolling later
+
             for ( var c = -1; c < numX+1; c++) {
                 vs = new createjs.Shape(verticalLine);
                 vs.snapToPixel = true;
@@ -220,14 +253,12 @@ this.Game = this.Game || {};
                 vs.y = -gh;
                 grid.addChild(vs);
             }
-            // drawing a horizontal line
+
             var horizontalLine = new createjs.Graphics();
             horizontalLine.beginFill("rgba(2, 132, 130,0.5)");
             horizontalLine.drawRect(0,0,gw*(numX+1),gh * 0.02);
             var hs;
-            // placing the horizontal lines:
-            // we're placing 1 more than requested
-            // to have seamless scrolling later
+
             for ( c = -1; c < numY+1; c++ ) {
                 hs = new createjs.Shape(horizontalLine);
                 hs.snapToPixel = true;
@@ -235,8 +266,6 @@ this.Game = this.Game || {};
                 hs.y = c * gh;
                 grid.addChild(hs);
             }
-
-            // return the grid-object
             return grid;
         }
 
@@ -244,7 +273,6 @@ this.Game = this.Game || {};
 
             width = Math.max(Math.round(width * scale),1);
 
-            // drawing the line
             var vl = new createjs.Graphics();
             vl.beginFill(createjs.Graphics.getRGB(255,255,255));
             vl.drawRect(0,0,width,h);
@@ -252,15 +280,12 @@ this.Game = this.Game || {};
             var lineShape = new createjs.Shape(vl);
             lineShape.snapToPixel = true;
             // the thinner the line, the less alpha
-            // to make it look like it's further away
             lineShape.alpha = width * .15;
             // if it's further away, make it move slower
             lineShape.speedFactor = 0.3 + lineShape.alpha * 0.3 + Math.random() * 0.2;
-            // the range defines when the line will be
-            // moved back to the end of the screen
+            // the line will be moved back to the end of the screen
             lineShape.range = w + Math.random() * w * .3;
-            // every line needs an offset, so they
-            // don't start off at the same position
+            // offset lines so they're all different
             lineShape.offsetX = Math.random() * w;
 
             return lineShape;
