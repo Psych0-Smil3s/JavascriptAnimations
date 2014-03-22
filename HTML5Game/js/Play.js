@@ -22,10 +22,12 @@ this.Game = this.Game || {};
             h,
             scale,
             background,
+            background2,
             horizontalGrid = 8,
             verticalGrid = 6,
             keyDown = false,
-            collideables = [];
+            collideables = [],
+            parallaxObjects = [];
 
         self.lastPlatform = null;
 
@@ -69,6 +71,15 @@ this.Game = this.Game || {};
             stage.removeChild(background);
             background = createBgGrid(horizontalGrid,verticalGrid);
             stage.addChild(background);
+
+            stage.removeChild(background2);
+            background2 = new createjs.Container();
+            stage.addChild(background2);
+            for ( var c = 0; c < 4; c++) {
+                var line = createPixelLine((Math.random()*3+1)|0);
+                background2.addChild(line);
+                parallaxObjects.push(line);
+            }
 
             world.removeAllChildren();
             world.x = world.y = 0;
@@ -122,6 +133,11 @@ this.Game = this.Game || {};
 
             background.x = (world.x * .45) % (w/horizontalGrid); // horizontal
             background.y = (world.y * .45) % (h/verticalGrid);   // vertical
+
+            for ( c = 0; c < parallaxObjects.length; c++ ) {
+                p = parallaxObjects[c];
+                p.x = ((world.x * p.speedFactor - p.offsetX) % p.range) + p.range;
+            }
 
             stage.update();
         }
@@ -191,7 +207,7 @@ this.Game = this.Game || {};
             var gh = h/numY;
             // drawing the vertical line
             var verticalLine = new createjs.Graphics();
-            verticalLine.beginFill(createjs.Graphics.getRGB(2, 132, 130));
+            verticalLine.beginFill("rgba(2, 132, 130,0.5)");
             verticalLine.drawRect(0,0,gw * 0.02,gh*(numY+2));
             var vs;
             // placing the vertical lines:
@@ -206,7 +222,7 @@ this.Game = this.Game || {};
             }
             // drawing a horizontal line
             var horizontalLine = new createjs.Graphics();
-            horizontalLine.beginFill(createjs.Graphics.getRGB(2, 132, 130));
+            horizontalLine.beginFill("rgba(2, 132, 130,0.5)");
             horizontalLine.drawRect(0,0,gw*(numX+1),gh * 0.02);
             var hs;
             // placing the horizontal lines:
@@ -222,6 +238,32 @@ this.Game = this.Game || {};
 
             // return the grid-object
             return grid;
+        }
+
+        function createPixelLine(width) {
+
+            width = Math.max(Math.round(width * scale),1);
+
+            // drawing the line
+            var vl = new createjs.Graphics();
+            vl.beginFill(createjs.Graphics.getRGB(255,255,255));
+            vl.drawRect(0,0,width,h);
+
+            var lineShape = new createjs.Shape(vl);
+            lineShape.snapToPixel = true;
+            // the thinner the line, the less alpha
+            // to make it look like it's further away
+            lineShape.alpha = width * .15;
+            // if it's further away, make it move slower
+            lineShape.speedFactor = 0.3 + lineShape.alpha * 0.3 + Math.random() * 0.2;
+            // the range defines when the line will be
+            // moved back to the end of the screen
+            lineShape.range = w + Math.random() * w * .3;
+            // every line needs an offset, so they
+            // don't start off at the same position
+            lineShape.offsetX = Math.random() * w;
+
+            return lineShape;
         }
     }
 
