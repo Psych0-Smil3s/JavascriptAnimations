@@ -178,8 +178,8 @@ this.Game = this.Game || {};
 					timerCount = new createjs.Text(count,"100px Verdana","white");
 					timerCount.lineWidth = 200;
 					timerCount.textAlign = "center";
-					timerCount.x = (canvas.width/2);
-					timerCount.y = (canvas.height/2) * scale;
+					timerCount.x = (w/2);
+					timerCount.y = (h/2) - (100 * scale);
 					timerCount.scaleX = timerCount.scaleY = scale;
 					world.addChild(timerCount);
 					
