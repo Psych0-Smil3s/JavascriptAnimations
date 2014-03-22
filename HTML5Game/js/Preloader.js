@@ -87,27 +87,31 @@ this.Game = this.Game || {};
             canvas.width = utils.getWidth();
             canvas.height = utils.getHeight();
 
+        var scale = Math.min(canvas.width/BaseWidth,canvas.height/BaseHeight);
+
         var loadingImage = new createjs.Bitmap(o.imageURL);
-            loadingImage.x = canvas.width/2 - 25;
-            loadingImage.y = canvas.height/2 - 65;
+            loadingImage.x = canvas.width/2  - (25 * scale) ;
+            loadingImage.y = canvas.height/2 - (65 * scale) ;
             loadingImage.alpha = 0.0;
+            loadingImage.scaleX = loadingImage.scaleY = scale;
 
         var loadProgressLabel = new createjs.Text("Loading...","14px Verdana","black");
             loadProgressLabel.lineWidth = 200;
             loadProgressLabel.textAlign = "center";
             loadProgressLabel.x = canvas.width/2;
-            loadProgressLabel.y = canvas.height/2 + 20;
+            loadProgressLabel.y = canvas.height/2 + (20 * scale);
+            loadProgressLabel.scaleX = loadProgressLabel.scaleY = scale;
 
         var loadingBarContainer = new createjs.Container();
-        var loadingBarHeight = 10,
-            loadingBarWidth = 300,
+        var loadingBarHeight = 10 * scale,
+            loadingBarWidth = 300 * scale,
             LoadingBarColor = createjs.Graphics.getRGB(0,0,0);
 
         var loadingBar = new createjs.Shape();
             loadingBar.graphics.beginFill(LoadingBarColor).drawRect(0, 0, 1, loadingBarHeight).endFill();
 
         var frame = new createjs.Shape(),
-            padding = 3;
+            padding = 5 * scale;
             frame.graphics.setStrokeStyle(1).beginStroke(LoadingBarColor).drawRect(-padding/2, -padding/2, loadingBarWidth+padding, loadingBarHeight+padding);
 
         loadingBarContainer.addChild(loadingBar, frame);
@@ -128,10 +132,10 @@ this.Game = this.Game || {};
 
         this.explode = function(callback) {
 
-            createjs.Tween.get(loadProgressLabel).to({x:canvas.width + 50},1000,createjs.Ease.circOut);
-            createjs.Tween.get(loadingBarContainer).to({x:-loadingBarWidth - 50},1000,createjs.Ease.circOut);
+            createjs.Tween.get(loadProgressLabel).to({x:canvas.width + 50 * scale},1000,createjs.Ease.circOut);
+            createjs.Tween.get(loadingBarContainer).to({x:-loadingBarWidth - 50 * scale},1000,createjs.Ease.circOut);
             createjs.Tween.get(loadingImage).wait(100)
-                .to({scaleX:1.2,scaleY:1.2},1000,createjs.Ease.bounceOut)
+                .to({scaleX:1.2 * scale,scaleY:1.2 * scale},1000,createjs.Ease.bounceOut)
                 .call(clearStage);
             createjs.Ticker.setFPS(50);
             createjs.Ticker.addEventListener("tick", stage);
