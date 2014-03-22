@@ -21,6 +21,9 @@ this.Game = this.Game || {};
             w,
             h,
             scale,
+            background,
+            horizontalGrid = 8,
+            verticalGrid = 6,
             keyDown = false,
             collideables = [];
 
@@ -32,7 +35,6 @@ this.Game = this.Game || {};
             canvas = document.getElementById("canvas"),
             stage = new createjs.Stage(canvas);
             world = new createjs.Container();
-            stage.addChild(world);
 
             setCanvas();
 
@@ -42,8 +44,8 @@ this.Game = this.Game || {};
             });
 
             hero = new Game.Hero(self,heroImg,canvas,scale);
-            reset();
 
+            reset();
             setUpListerners();
 
             createjs.Ticker.setFPS(50);
@@ -63,6 +65,11 @@ this.Game = this.Game || {};
         function reset() {
             collideables = [];
             self.lastPlatform = null;
+
+            stage.removeChild(background);
+            background = createBgGrid(horizontalGrid,verticalGrid);
+            stage.addChild(background);
+
             world.removeAllChildren();
             world.x = world.y = 0;
 
@@ -82,6 +89,8 @@ this.Game = this.Game || {};
                 var atY = atY + (Math.random() * 300 - 150) * scale;
                 addPlatform(atX,atY);
             }
+
+            stage.addChild(world);
         }
 
         function handleTick() {
@@ -110,6 +119,9 @@ this.Game = this.Game || {};
                     movePlatformToEnd(p);
                 }
             }
+
+            background.x = (world.x * .45) % (w/horizontalGrid); // horizontal
+            background.y = (world.y * .45) % (h/verticalGrid);   // vertical
 
             stage.update();
         }
@@ -168,6 +180,48 @@ this.Game = this.Game || {};
         function onResize() {
             setCanvas();
             reset();
+        }
+
+        function createBgGrid(numX, numY) {
+            var grid = new createjs.Container();
+            grid.snapToPixel = true;
+            // calculating the distance between
+            // the grid-lines
+            var gw = w/numX;
+            var gh = h/numY;
+            // drawing the vertical line
+            var verticalLine = new createjs.Graphics();
+            verticalLine.beginFill(createjs.Graphics.getRGB(2, 132, 130));
+            verticalLine.drawRect(0,0,gw * 0.02,gh*(numY+2));
+            var vs;
+            // placing the vertical lines:
+            // we're placing 1 more than requested
+            // to have seamless scrolling later
+            for ( var c = -1; c < numX+1; c++) {
+                vs = new createjs.Shape(verticalLine);
+                vs.snapToPixel = true;
+                vs.x = c * gw;
+                vs.y = -gh;
+                grid.addChild(vs);
+            }
+            // drawing a horizontal line
+            var horizontalLine = new createjs.Graphics();
+            horizontalLine.beginFill(createjs.Graphics.getRGB(2, 132, 130));
+            horizontalLine.drawRect(0,0,gw*(numX+1),gh * 0.02);
+            var hs;
+            // placing the horizontal lines:
+            // we're placing 1 more than requested
+            // to have seamless scrolling later
+            for ( c = -1; c < numY+1; c++ ) {
+                hs = new createjs.Shape(horizontalLine);
+                hs.snapToPixel = true;
+                hs.x = 0;
+                hs.y = c * gh;
+                grid.addChild(hs);
+            }
+
+            // return the grid-object
+            return grid;
         }
     }
 
