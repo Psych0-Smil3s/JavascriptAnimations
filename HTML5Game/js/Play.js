@@ -35,7 +35,10 @@ this.Game = this.Game || {};
             spriteSheets = [],
 			gameStateEnum = { INIT: 0, PLAY: 1, PAUSE: 2, FINISHED: 4 },
 			score,
-			currentState;
+			currentState, // current game state
+			counter = null,
+			timerCount = null,
+			displayScore = null; // displayed on finish
 
         self.lastPlatform = null;
 
@@ -165,8 +168,6 @@ this.Game = this.Game || {};
             stage.update();
         }
 		
-		var counter = null;
-		var timerCount = null;
 		function setup() {
 			if (counter == null) {
 				var count = 3;
@@ -194,16 +195,27 @@ this.Game = this.Game || {};
 				}, 500); // change count every 500
 			}
 		}
-				
-		function finished() {
-			// 1. stop the ticker
-			// 2. show button 'start again' and button to tweet score - use score.Total
-			// 3. in event handler for 'start again' - change currentState to INIT - then start the ticker
-
 			
-			// at the mo, go straight to INIT
-			score.Total = 0;
-			currentState = gameStateEnum.INIT;
+		
+		function finished() {
+			// TODO button to tweet score - use score.Total
+			// ticker is still going, recreating this value in case user minimises screen and we need to use new scale value
+			// note: in event handler for click - change currentState to INIT, set score to 0, remove score
+			
+			stage.removeChild(displayScore);
+			
+			// display 1 less than the Total, as this will have been incremented but not yet displayed! (unless 0);
+			var scoreToDisplay = score.Total > 0 ? score.Total - 1 : 0;
+			
+			displayScore = new createjs.Text(scoreToDisplay,"100px Impact","black");
+			displayScore.lineWidth = 200;
+			displayScore.textAlign = "center";
+			displayScore.outline = 8;
+			displayScore.x = w/2 * scale
+			displayScore.y = h/2 * scale;
+			displayScore.scaleX = displayScore.scaleY = scale;
+
+			stage.addChild(displayScore);
 		}
 		
 		function play() {
@@ -274,10 +286,17 @@ this.Game = this.Game || {};
         }
 
         function handleKeyDown() {
-            if ( !keyDown ) {
-                keyDown = true;
-                hero.jump();
-            }
+            // if finished, a click represents starting a new game
+			if (currentState == gameStateEnum.FINISHED) {
+				currentState = gameStateEnum.INIT;
+				score.Total = 0;
+				stage.removeChild(displayScore);
+			} else { // for all other game states
+				if ( !keyDown ) {
+					keyDown = true;
+					hero.jump();
+				}
+			}
         }
 
         function handleKeyUp() {
