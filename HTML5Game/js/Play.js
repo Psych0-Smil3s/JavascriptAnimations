@@ -117,6 +117,8 @@ this.Game = this.Game || {};
                 parallaxObjects.push(line);
             }
 
+            score.scale = scale;
+
             world.removeAllChildren();
             world.x = world.y = 0;
 
@@ -197,6 +199,7 @@ this.Game = this.Game || {};
 			// 1. stop the ticker
 			// 2. show button 'start again' and button to tweet score - use score.Total
 			// 3. in event handler for 'start again' - change currentState to INIT - then start the ticker
+
 			
 			// at the mo, go straight to INIT
 			score.Total = 0;
