@@ -28,7 +28,7 @@ this.Game = this.Game || {};
 					timerCount = new createjs.Text(self.Total,"100px Impact","black");
 					timerCount.lineWidth = 200;
 					timerCount.textAlign = "center";
-                    timerCount.outline = 8;
+                    timerCount.outline = 10 * self.scale;
 					timerCount.x = w - (100 * self.scale);
 					timerCount.y = self.scale;
 					timerCount.scaleX = timerCount.scaleY = self.scale;
@@ -41,31 +41,31 @@ this.Game = this.Game || {};
 
                     if (self.Total !== 0 && self.Total % 5 === 0){
                         createjs.Tween.get(timerCount)
-                            .to({scaleX:0.2,scaleY:0.2})
+                            .to({scaleX:0.2 * self.scale,scaleY:0.2 * self.scale})
                             .to({rotation: 360 }, 300, createjs.Ease.linear)
-                            .to({scaleX:1.2,scaleY:1.2}, 300, createjs.Ease.backOut)
+                            .to({scaleX:1.2 * self.scale,scaleY:1.2 * self.scale}, 300, createjs.Ease.backOut)
                             .to({alpha:0}, 100);
                         t2.color = "red";
                         createjs.Tween.get(t2)
-                            .to({scaleX:0.2,scaleY:0.2})
+                            .to({scaleX:0.2 * self.scale,scaleY:0.2 * self.scale})
                             .to({rotation: 360 }, 300, createjs.Ease.linear)
-                            .to({scaleX:1.2,scaleY:1.2}, 300, createjs.Ease.backOut)
+                            .to({scaleX:1.2 * self.scale,scaleY:1.2 * self.scale}, 300, createjs.Ease.backOut)
                             .to({alpha:0}, 300);
                     }
 				    else {
                     createjs.Tween.get(timerCount)
-                        .to({scaleX:1,scaleY:1})
+                        .to({scaleX:1 * self.scale,scaleY:1 * self.scale})
                         .wait(100)
-                        .to({scaleX:0.8,scaleY:0.8},100,createjs.Ease.linear)
+                        .to({scaleX:0.8 * self.scale,scaleY:0.8 * self.scale},100,createjs.Ease.linear)
                         .wait(100)
-                        .to({scaleX:1,scaleY:1},100,createjs.Ease.linear)
+                        .to({scaleX:1 * self.scale,scaleY:1 * self.scale},100,createjs.Ease.linear)
                         .to({alpha:0}, 200);
                     createjs.Tween.get(t2)
-                        .to({scaleX:1,scaleY:1})
+                        .to({scaleX:1 * self.scale,scaleY:1 * self.scale})
                         .wait(100)
-                        .to({scaleX:0.8,scaleY:0.8},100,createjs.Ease.linear)
+                        .to({scaleX:0.8 * self.scale,scaleY:0.8 * self.scale},100,createjs.Ease.linear)
                         .wait(100)
-                        .to({scaleX:1,scaleY:1},100,createjs.Ease.linear)
+                        .to({scaleX:1 * self.scale,scaleY:1 * self.scale},100,createjs.Ease.linear)
                         .to({alpha:0}, 400);
                     }
 
