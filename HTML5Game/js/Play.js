@@ -34,6 +34,7 @@ this.Game = this.Game || {};
             parallaxObjects = [],
             spriteSheets = [],
 			gameStateEnum = { INIT: 0, PLAY: 1, PAUSE: 2, FINISHED: 4 },
+			score,
 			currentState;
 
         self.lastPlatform = null;
@@ -58,6 +59,8 @@ this.Game = this.Game || {};
             });
 
             hero = new Game.Hero(self,heroImg,canvas,scale);
+			score = new Game.Score(scale,stage);
+			score.Total = 0;
 
             reset();
             setUpListerners();
@@ -192,19 +195,22 @@ this.Game = this.Game || {};
 				
 		function finished() {
 			// 1. stop the ticker
-			// 2. show button 'start again' and button to tweet score
+			// 2. show button 'start again' and button to tweet score - use score.Total
 			// 3. in event handler for 'start again' - change currentState to INIT - then start the ticker
 			
 			// at the mo, go straight to INIT
+			score.Total = 0;
 			currentState = gameStateEnum.INIT;
 		}
 		
 		function play() {
 		
+			score.StartTimer(); // will only initialise once (this is handled within this method)
 			hero.tick();
 
             if ( hero.y > h*3 ) {
                 reset();
+				score.KillTimer();
 				currentState = gameStateEnum.FINISHED;
             }
 
@@ -284,11 +290,13 @@ this.Game = this.Game || {};
 			if (currentState == gameStateEnum.PAUSE) {
 				currentState = gameStateEnum.PLAY;
 				createjs.Ticker.setPaused(false);
+				score.StartTimer();
 				return;
 			}
 			// otherwise, lets pause game
 			currentState = gameStateEnum.PAUSE;
 			createjs.Ticker.setPaused(true);
+			score.KillTimer();
 		}
 
         function setUpListerners() {
