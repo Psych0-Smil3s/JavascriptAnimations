@@ -38,7 +38,9 @@ this.Game = this.Game || {};
 			currentState, // current game state
 			counter = null,
 			timerCount = null,
-			displayScore = null; // displayed on finish
+			displayScore = null, // displayed on finish
+            d2 = null, // displayed on finish
+            displayText = null; // displayed on finish
 
         self.lastPlatform = null;
 
@@ -120,6 +122,9 @@ this.Game = this.Game || {};
                 parallaxObjects.push(line);
             }
 
+            if (dis)
+            showFinishDisplay();
+
             score.scale = scale;
 
             world.removeAllChildren();
@@ -195,27 +200,51 @@ this.Game = this.Game || {};
 				}, 500); // change count every 500
 			}
 		}
-			
-		
+
+        function showFinishDisplay() {
+            if (displayScore == null) {
+
+                stage.removeChild(displayScore);
+                stage.removeChild(d2);
+                stage.removeChild(displayText);
+
+                // display 1 less than the Total, as this will have been incremented but not yet displayed! (unless 0);
+                var scoreToDisplay = score.Total > 0 ? score.Total - 1 : 0;
+
+                displayText = new createjs.Text("Seconds!","50px Impact","black");
+                displayText.lineWidth = 200;
+                displayText.textAlign = "center";
+                displayText.x = w/2;
+                displayText.y = h/2;
+                displayText.scaleX = displayText.scaleY = scale;
+
+                createjs.Tween.get(displayText,{loop:true}).to({scaleX:1.3 * scale,scaleY:1.3 * scale},200,createjs.Ease.linear);
+
+                displayScore = new createjs.Text(scoreToDisplay,"100px Impact","black");
+                displayScore.lineWidth = 200;
+                displayScore.textAlign = "center";
+                displayScore.outline = 8 * scale;
+                displayScore.x = w/2;
+                displayScore.y = h/2 - (100 * scale);
+                displayScore.scaleX = displayScore.scaleY = scale;
+
+                d2 = displayScore.clone();
+                d2.outline = false;
+                d2.color = "white";
+
+                stage.addChild(displayScore);
+                stage.addChild(d2);
+                stage.addChild(displayText);
+            }
+        }
+
+
 		function finished() {
 			// TODO button to tweet score - use score.Total
 			// ticker is still going, recreating this value in case user minimises screen and we need to use new scale value
 			// note: in event handler for click - change currentState to INIT, set score to 0, remove score
-			
-			stage.removeChild(displayScore);
-			
-			// display 1 less than the Total, as this will have been incremented but not yet displayed! (unless 0);
-			var scoreToDisplay = score.Total > 0 ? score.Total - 1 : 0;
-			
-			displayScore = new createjs.Text(scoreToDisplay,"100px Impact","black");
-			displayScore.lineWidth = 200;
-			displayScore.textAlign = "center";
-			displayScore.outline = 8;
-			displayScore.x = w/2 * scale
-			displayScore.y = h/2 * scale;
-			displayScore.scaleX = displayScore.scaleY = scale;
 
-			stage.addChild(displayScore);
+            showFinishDisplay();
 		}
 		
 		function play() {
@@ -291,6 +320,9 @@ this.Game = this.Game || {};
 				currentState = gameStateEnum.INIT;
 				score.Total = 0;
 				stage.removeChild(displayScore);
+                stage.removeChild(d2);
+                stage.removeChild(displayText);
+                displayScore == null;
 			} else { // for all other game states
 				if ( !keyDown ) {
 					keyDown = true;
