@@ -11,6 +11,9 @@ this.Game = this.Game || {};
 	
 		var timerCount = null,
 			counter = null,
+			displayScore = null,
+			displayText = null,
+			d2 = null,
 			self = this;
 
 		this.Total = 0; // this will remember score when timer is killed (resets when timer is re-started)
@@ -77,6 +80,62 @@ this.Game = this.Game || {};
 		this.KillTimer = function() {
 			clearInterval(counter);
 			counter = null;
+		}
+		
+		this.IsScoreVisible = function() {
+			return displayScore != null;
+		}
+		
+		this.ClearScore = function() {
+			container.removeChild(displayScore);
+			container.removeChild(d2);
+			container.removeChild(displayText);
+			displayScore = null;
+		}
+		
+		this.SetFinishDisplay = function() {
+			// display 1 less than the Total, as this will have been incremented but not yet displayed! (unless 0);
+			var scoreToDisplay = this.Total > 0 ? this.Total - 1 : 0;
+
+			var w = utils.getWidth();
+			var h = utils.getHeight();
+			
+			displayText = new createjs.Text("Seconds!","50px Impact","black");
+			displayText.lineWidth = 200;
+			displayText.textAlign = "center";
+			displayText.x = w/2;
+			displayText.y = h/2;
+			displayText.scaleX = displayText.scaleY = this.scale;
+
+            createjs.Tween.get(displayText,{loop:true})
+                .to({scaleX:1.1 * self.scale,scaleY:1.1 * self.scale},200,createjs.Ease.linear)
+                .wait(1000)
+                .to({scaleX:1 * self.scale,scaleY:1 * self.scale},200,createjs.Ease.linear);
+
+			displayScore = new createjs.Text(scoreToDisplay,"100px Impact","white");
+			displayScore.lineWidth = 200;
+			displayScore.textAlign = "center";
+			displayScore.outline = 8 * this.scale;
+			displayScore.x = w/2;
+			displayScore.y = h/2 - (100 * this.scale);
+			displayScore.scaleX = displayScore.scaleY = this.scale;
+
+			d2 = displayScore.clone();
+			d2.outline = false;
+			d2.color = "black";
+
+            createjs.Tween.get(displayScore,{loop:true})
+                .to({scaleX:1.1 * self.scale,scaleY:1.1 * self.scale},200,createjs.Ease.linear)
+                .wait(1000)
+                .to({scaleX:1 * self.scale,scaleY:1 * self.scale},200,createjs.Ease.linear);
+            createjs.Tween.get(d2,{loop:true})
+                .to({scaleX:1.1 * self.scale,scaleY:1.1 * self.scale},200,createjs.Ease.linear)
+                .wait(1000)
+                .to({scaleX:1 * self.scale,scaleY:1 * self.scale},200,createjs.Ease.linear);
+			
+			container.addChild(displayScore);
+			container.addChild(d2);
+			container.addChild(displayText);
 		}
 	
 	}
