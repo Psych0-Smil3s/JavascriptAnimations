@@ -122,7 +122,6 @@ this.Game = this.Game || {};
                 parallaxObjects.push(line);
             }
 
-            if (dis)
             showFinishDisplay();
 
             score.scale = scale;
@@ -217,8 +216,6 @@ this.Game = this.Game || {};
                 displayText.x = w/2;
                 displayText.y = h/2;
                 displayText.scaleX = displayText.scaleY = scale;
-
-                createjs.Tween.get(displayText,{loop:true}).to({scaleX:1.3 * scale,scaleY:1.3 * scale},200,createjs.Ease.linear);
 
                 displayScore = new createjs.Text(scoreToDisplay,"100px Impact","black");
                 displayScore.lineWidth = 200;
