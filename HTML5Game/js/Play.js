@@ -121,9 +121,19 @@ this.Game = this.Game || {};
                 background2.addChild(line);
                 parallaxObjects.push(line);
             }
+			
+			// if the score is already rendered, remove and re-scale
+			if (displayScore != null) {
+				stage.removeChild(displayScore);
+				stage.removeChild(d2);
+				stage.removeChild(displayText);
 
-            if (dis)
-            showFinishDisplay();
+				setFinishDisplay();
+				
+				stage.addChild(displayScore);
+				stage.addChild(d2);
+				stage.addChild(displayText);
+			}
 
             score.scale = scale;
 
@@ -201,41 +211,30 @@ this.Game = this.Game || {};
 			}
 		}
 
-        function showFinishDisplay() {
-            if (displayScore == null) {
+        function setFinishDisplay() {
+			// display 1 less than the Total, as this will have been incremented but not yet displayed! (unless 0);
+			var scoreToDisplay = score.Total > 0 ? score.Total - 1 : 0;
 
-                stage.removeChild(displayScore);
-                stage.removeChild(d2);
-                stage.removeChild(displayText);
+			displayText = new createjs.Text("Seconds!","50px Impact","black");
+			displayText.lineWidth = 200;
+			displayText.textAlign = "center";
+			displayText.x = w/2;
+			displayText.y = h/2;
+			displayText.scaleX = displayText.scaleY = scale;
 
-                // display 1 less than the Total, as this will have been incremented but not yet displayed! (unless 0);
-                var scoreToDisplay = score.Total > 0 ? score.Total - 1 : 0;
+			createjs.Tween.get(displayText,{loop:true}).to({scaleX:1.3 * scale,scaleY:1.3 * scale},200,createjs.Ease.linear);
 
-                displayText = new createjs.Text("Seconds!","50px Impact","black");
-                displayText.lineWidth = 200;
-                displayText.textAlign = "center";
-                displayText.x = w/2;
-                displayText.y = h/2;
-                displayText.scaleX = displayText.scaleY = scale;
+			displayScore = new createjs.Text(scoreToDisplay,"100px Impact","black");
+			displayScore.lineWidth = 200;
+			displayScore.textAlign = "center";
+			displayScore.outline = 8 * scale;
+			displayScore.x = w/2;
+			displayScore.y = h/2 - (100 * scale);
+			displayScore.scaleX = displayScore.scaleY = scale;
 
-                createjs.Tween.get(displayText,{loop:true}).to({scaleX:1.3 * scale,scaleY:1.3 * scale},200,createjs.Ease.linear);
-
-                displayScore = new createjs.Text(scoreToDisplay,"100px Impact","black");
-                displayScore.lineWidth = 200;
-                displayScore.textAlign = "center";
-                displayScore.outline = 8 * scale;
-                displayScore.x = w/2;
-                displayScore.y = h/2 - (100 * scale);
-                displayScore.scaleX = displayScore.scaleY = scale;
-
-                d2 = displayScore.clone();
-                d2.outline = false;
-                d2.color = "white";
-
-                stage.addChild(displayScore);
-                stage.addChild(d2);
-                stage.addChild(displayText);
-            }
+			d2 = displayScore.clone();
+			d2.outline = false;
+			d2.color = "white"; 
         }
 
 
@@ -244,7 +243,14 @@ this.Game = this.Game || {};
 			// ticker is still going, recreating this value in case user minimises screen and we need to use new scale value
 			// note: in event handler for click - change currentState to INIT, set score to 0, remove score
 
-            showFinishDisplay();
+			if (displayScore == null) {
+			
+				setFinishDisplay();
+				
+				stage.addChild(displayScore);
+			    stage.addChild(d2);
+			    stage.addChild(displayText);
+			}
 		}
 		
 		function play() {
