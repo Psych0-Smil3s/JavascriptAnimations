@@ -41,15 +41,15 @@ this.Game = this.Game || {};
 
                     if (self.Total !== 0 && self.Total % 5 === 0){
                         createjs.Tween.get(timerCount)
-                            .to({scaleX:0.2 * self.scale,scaleY:0.2 * self.scale})
+                            .to({scaleX:0.3 * self.scale,scaleY:0.3 * self.scale})
                             .to({rotation: 360 }, 300, createjs.Ease.linear)
-                            .to({scaleX:1.2 * self.scale,scaleY:1.2 * self.scale}, 300, createjs.Ease.backOut)
+                            .to({scaleX:1.3 * self.scale,scaleY:1.3 * self.scale}, 300, createjs.Ease.backOut)
                             .to({alpha:0}, 100);
                         t2.color = "red";
                         createjs.Tween.get(t2)
-                            .to({scaleX:0.2 * self.scale,scaleY:0.2 * self.scale})
+                            .to({scaleX:0.3 * self.scale,scaleY:0.3 * self.scale})
                             .to({rotation: 360 }, 300, createjs.Ease.linear)
-                            .to({scaleX:1.2 * self.scale,scaleY:1.2 * self.scale}, 300, createjs.Ease.backOut)
+                            .to({scaleX:1.3 * self.scale,scaleY:1.3 * self.scale}, 300, createjs.Ease.backOut)
                             .to({alpha:0}, 300);
                     }
 				    else {
