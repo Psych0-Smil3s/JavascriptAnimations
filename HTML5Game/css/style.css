@@ -1,7 +1,17 @@
-#wrapper {
-    border: 1px solid black;
-    height:50%;
-    width:50%;
+canvas {
+    opacity: 1;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #31A645),
+        color-stop(1, #008080)
+    );
+    background-image: -o-linear-gradient(bottom, #31A645 0%, #008080 100%);
+    background-image: -moz-linear-gradient(bottom, #31A645 0%, #008080 100%);
+    background-image: -webkit-linear-gradient(bottom, #31A645 0%, #008080 100%);
+    background-image: -ms-linear-gradient(bottom, #31A645 0%, #008080 100%);
+    background-image: linear-gradient(to bottom, #31A645 0%, #008080 100%);;
 }
 canvas.preload {
     background-image: -webkit-gradient(

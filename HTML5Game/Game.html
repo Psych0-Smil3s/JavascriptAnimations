@@ -5,9 +5,8 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<div id="wrapper">
-    <canvas id="canvas" class="canvas preload"></canvas>
-</div>
+
+<canvas id="canvas" class="canvas preload"></canvas>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="js/easeljs-0.7.1.min.js"></script>
@@ -15,10 +14,17 @@
 <script src="js/soundjs-0.5.2.min.js"></script>
 <script src="js/tweenjs-0.5.1.min.js"></script>
 <script src="js/Preloader.js"></script>
+<script src="js/Play.js"></script>
+<script src="js/Utils.js"></script>
+<script src="js/Hero.js"></script>
+<script src="js/Score.js"></script>
+
 <script type="text/javascript" defer="defer">
 
     this.Game = this.Game || {};
     this.globalAssets = [];
+    this.BaseWidth = 500;  //used to calc a consistent scale
+    this.BaseHeight = 500; //used to calc a consistent scale
 
     (function() {
 
@@ -29,15 +35,15 @@
             this.load = function() {
 
                 var startGame = function() {
-
+                    var Play = new Game.Play();
+                    Play.init();
                 }
-
-                $('#canvas').attr("width", $('#wrapper').width());
-                $('#canvas').attr("height", $('#wrapper').height());
 
                 var Preloader = new Game.Preloader({
                     images:[
-                        {imageURL:"http://media.parlingo.com/website/live/messagepacks/plaudits/X2/clap1_1x70.png", imageID:"BooHissImg"}
+                        {imageURL:"img/palringoSprite.png", imageID:"Hero"},
+                        {imageURL:"img/fly.png", imageID:"Fly"},
+                        {imageURL:"img/platformPalringoNew.png", imageID:"PlatformPalringo"}
                     ],
                     audios:[
                         {audioID:"boo-hiss-audio",
@@ -56,8 +62,10 @@
 
     }());
 
-    var palrino = new Game.Loader();
-    palrino.load();
+    // load util functions driver
+    var utils = new Game.Utils();
+    var palringo = new Game.Loader();
+    palringo.load();
 
 </script>
 </body>
