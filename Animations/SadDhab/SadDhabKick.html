@@ -1,0 +1,694 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <style type="text/css">
+        /******************************
+         * The following styles are only
+         * for browser based testing.
+         ******************************/
+        .wrapper {
+            position: relative;
+            width: 600px;
+            margin: 100px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+        .wrapper .editor {
+            margin-top: 10px !important;
+        }
+        /******************************
+         * Message styles
+         ******************************/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .sad-dhab-kick, .sad-dhab-kick * {
+            overflow: visible;
+        }
+        .loader {
+            position: absolute;
+        }
+
+        .sad-dhab-kick {
+            border-radius: inherit;
+            height: 113px;
+            position: relative;
+            border: solid 1px #999;
+            text-align: center;
+            background-image: -webkit-gradient(
+                linear,
+                left top,
+                left bottom,
+                color-stop(0, #000000),
+                color-stop(1, #381D4D)
+            );
+            background-image: -o-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -moz-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -webkit-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -ms-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
+        }
+        .sad-dhab-kick .sad-dhab-kick-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+        }
+        .sad-dhab-kick-header .timestamp, .sad-dhab-kick-header .flags, .sad-dhab-kick-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #666;
+        }
+        .sad-dhab-kick-header .timestamp, .sad-dhab-kick-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+        .sad-dhab-kick-header canvas {
+            z-index: 2;
+            position: relative;
+        }
+        .sad-dhab-kick.msie canvas {
+            display: none;
+        }
+        .sad-dhab-kick.editor, .sad-dhab-kick.msie {
+            background-image: -webkit-gradient(
+                linear,
+                left top,
+                left bottom,
+                color-stop(0, #000000),
+                color-stop(1, #381D4D)
+            );
+            background-image: -o-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -moz-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -webkit-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -ms-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
+        }
+        .sad-dhab-kick.editor .blob, .sad-dhab-kick.msie .blob {
+            position: absolute;
+            left: 44%;
+            margin-top: 5px;
+            width: 76px;
+            height: 102px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/kickSingle.png) center center no-repeat;
+        }
+
+        .platform {
+            height: 20%;
+            width: 100%;
+            background: #cc9966;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .star {
+            display: block;
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #F6F6F6;
+            overflow: hidden;
+            z-index: 2;
+        }
+        .star-top,.star-bottom{
+            position: relative;
+            display: block;
+        }
+        .star-top:before ,
+        .star-top:after ,
+        .star-bottom:before ,
+        .star-bottom:after{
+            content: "";
+            width: 18px;
+            height: 18px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .star-top:before {
+            top: -9px;
+            left: -9px;
+        }
+        .star-top:after {
+            bottom: -9px;
+            left: 9px;
+        }
+        .star-bottom:before {
+            top: 9px;
+            left: -9px;
+        }
+        .star-bottom:after {
+            top: 9px;
+            left: 9px;
+        }
+
+        .star-1 {
+            top: 1%;
+            left: 10%;
+            animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
+            -webkit-animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
+            -moz-animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
+            -ms-animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
+            -o-animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
+            animation-delay:0.25s;
+            -webkit-animation-delay:1s;
+        }
+        .star-2  {
+            top:5%;
+            left:30%;
+            animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
+            -webkit-animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
+            -moz-animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
+            -ms-animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
+            -o-animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
+            animation-delay:0.25s;
+            -webkit-animation-delay:0.25s;
+        }
+        .star-3 {
+            top:1%;
+            left:60%;
+            animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
+            -webkit-animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
+            -moz-animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
+            -ms-animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
+            -o-animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
+            animation-delay:0.5s;
+            -webkit-animation-delay:0.5s;
+        }
+
+        .sad-dhab-kick.editor .star-1, .sad-dhab-kick.msie .star-1 {
+            top: 1%;
+            left: 10%;
+            animation: glitter 4.5s linear 0s infinite normal;
+            -webkit-animation: glitter 4.5s linear 0s infinite normal;
+            -moz-animation: glitter 4.5s linear 0s infinite normal;
+            -ms-animation: glitter 4.5s linear 0s infinite normal;
+            -o-animation: glitter 4.5s linear 0s infinite normal;
+            animation-delay:0.25s;
+            -webkit-animation-delay:1s;
+        }
+        .sad-dhab-kick.editor .star-2, .sad-dhab-kick.msie .star-2 {
+            top:5%;
+            left:30%;
+            animation: glitter 4.5s linear 0s infinite normal;
+            -webkit-animation: glitter 4.5s linear 0s infinite normal;
+            -moz-animation: glitter 4.5s linear 0s infinite normal;
+            -ms-animation: glitter 4.5s linear 0s infinite normal;
+            -o-animation: glitter 4.5s linear 0s infinite normal;
+            animation-delay:0.25s;
+            -webkit-animation-delay:0.25s;
+        }
+        .sad-dhab-kick.editor .star-3, .sad-dhab-kick.msie .star-3 {
+            top:1%;
+            left:60%;
+            animation: glitter 4.5s linear 0s infinite normal;
+            -webkit-animation: glitter 4.5s linear 0s infinite normal;
+            -moz-animation: glitter 4.5s linear 0s infinite normal;
+            -ms-animation: glitter 4.5s linear 0s infinite normal;
+            -o-animation: glitter 4.5s linear 0s infinite normal;
+            animation-delay:0.5s;
+            -webkit-animation-delay:0.5s;
+        }
+
+        @-webkit-keyframes glitter {
+            0%   { -webkit-transform: scale(1.0); opacity: 1; }
+            25%  { -webkit-transform: scale(0.5); opacity: 0; }
+            50%  { -webkit-transform: scale(1.0); opacity: 1; }
+            75%  { -webkit-transform: scale(0.5); opacity: 0; }
+            100% { -webkit-transform: scale(1.0); opacity: 1; }
+        }
+        @-moz-keyframes glitter {
+            0%   { -moz-transform: scale(1.0); opacity: 1; }
+            25%  { -moz-transform: scale(0.5); opacity: 0; }
+            50%  { -moz-transform: scale(1.0); opacity: 1; }
+            75%  { -moz-transform: scale(0.5); opacity: 0; }
+            100% { -moz-transform: scale(1.0); opacity: 1; }
+        }
+        @-webkit-keyframes movecloudsOne {
+            99% {
+                left: 70%;
+            }
+        }
+        @-moz-keyframes movecloudsOne {
+            99% {
+                left: 70%;
+            }
+        }
+        @-webkit-keyframes movecloudsTwo {
+            99% {
+                left: 90%;
+            }
+        }
+        @-moz-keyframes movecloudsTwo {
+            99% {
+                left: 90%;
+            }
+        }
+        @-webkit-keyframes movecloudsThree {
+            99% {
+                left: 50%;
+            }
+        }
+        @-moz-keyframes movecloudsThree {
+            99% {
+                left: 50%;
+            }
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .sad-dhab-kick.editor, .sad-dhab-kick.msie {
+                background-image: -webkit-gradient(
+                    linear,
+                    left top,
+                    left bottom,
+                    color-stop(0, #000000),
+                    color-stop(1, #381D4D)
+                );
+                background-image: -o-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+                background-image: -moz-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+                background-image: -webkit-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+                background-image: -ms-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+                background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
+
+            }
+            .sad-dhab-kick.editor .blob, .sad-dhab-kick.msie .blob {
+                background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/X2/kickSingle.png)  no-repeat;
+                background-size: 76px 102px;
+            }
+        }
+
+        @-moz-document url-prefix() {
+            .sad-dhab-kick.editor, .sad-dhab-kick.msie {
+                background-image: -webkit-gradient(
+                    linear,
+                    left top,
+                    left bottom,
+                    color-stop(0, #000000),
+                    color-stop(1, #381D4D)
+                );
+                background-image: -o-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+                background-image: -moz-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+                background-image: -webkit-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+                background-image: -ms-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+                background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
+            }
+            .sad-dhab-kick.editor .blob, .sad-dhab-kick.msie .blob {
+                background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/X2/kickSingle.png)  no-repeat;
+                background-size: 76px 102px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+
+this.SD = this.SD || {};
+
+/*
+ * Preloader - Image
+ */
+(function($) {
+
+    "use strict";
+
+    function Preloader(o) {
+
+        // Private members
+        var self = this,
+            assets,
+            images,
+            sad_dhab_kick_imagesLoaded,
+            sad_dhab_kick_totalImages;
+
+        // Public members
+        this.publicImages;
+        this.sad_dhab_kick_IsAllImagesLoaded;
+
+        // Constructor
+        this.load = function() {
+
+            this.publicImages = new Array(),
+            this.sad_dhab_kick_IsAllImagesLoaded = false;
+
+            assets =  o || new Object(),
+            images = assets.images,
+            sad_dhab_kick_totalImages = images.length;
+            sad_dhab_kick_imagesLoaded = 0;
+
+            if (sad_dhab_kick_totalImages === 0) return;
+            fireImages();
+        }
+
+        // Private functions
+        function fireImages() {
+            for (var i = 0; i < sad_dhab_kick_totalImages; i++) {
+                preloadImg(images[i].imgUrl, images[i].imageId, images[i].frameCount);
+            }
+        }
+
+        function preloadImg(imgUrl, imageId, frameCount) {
+            var i = new Image();
+            i.id = imageId;
+            i.onload = function() {
+                ++sad_dhab_kick_imagesLoaded;
+                i.sprite_width = i.width;
+                i.sprite_height = i.height / frameCount;
+                self.publicImages.push(i);
+                if (sad_dhab_kick_imagesLoaded === sad_dhab_kick_totalImages)
+                    self.sad_dhab_kick_IsAllImagesLoaded = true;
+            };
+            i.src = imgUrl;
+            i.frame_count = frameCount;
+        }
+    }
+
+    SD.Preloader = Preloader;
+
+}(jQuery));
+
+
+/**
+ * Provide a cross-browser/fall back
+ * solution for the requestAnimationFrame.
+ */
+window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            window.oRequestAnimationFrame      ||
+            window.msRequestAnimationFrame     ||
+            function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+            };
+})();
+
+(function($) {
+
+    "use strict";
+
+    function SadDhabKick(o) {
+
+        var me,
+            preloader,
+            pixelRatio,
+            imageAsset,
+            canvasMidX,
+            canvasMidY,
+            tick = 0,
+            lastUpdateTime = 0,
+            acDelta = 0,
+            msPerFrame = 30,
+            tumbleweedConsts = {};
+
+        this.load = function() {
+
+            if (navigator.userAgent.toLowerCase().indexOf('msie') !== -1) return;
+
+            me = $(o.img).closest('.sad-dhab-kick'),
+            preloader = o.preloader || new Object(),
+            pixelRatio = o.pixelRatio || 1;
+
+            $.each(preloader.publicImages, function(i) {
+                if (this.id === "SadDhabKickImg") imageAsset = preloader.publicImages[i];
+            });
+
+            me.removeClass('msie');
+            var canvas = me.find('.canvas'),
+                    width = me.width(),
+                    height = me.height();
+            canvas.css({
+                width : width,
+                height : height
+            });
+            canvas.attr({
+                'width' : width * pixelRatio,
+                'height' : height * pixelRatio
+            });
+
+            canvasMidX = (canvas[0].width / 2) - (imageAsset.sprite_width / 2);
+            canvasMidY = (canvas[0].height / 2) - (imageAsset.sprite_height / 2);
+
+            if (o.weeds)
+            {
+                tumbleweedConsts = {
+                    ball:{}, // tumbleweed img
+                    left:20 * pixelRatio, // offset by half the weed
+                    right:580 * pixelRatio, // width - half of weed
+                    bottom:93 * pixelRatio, // height - half of weed
+                    centerOffset:-20 * pixelRatio, // pixel offset from the upper-left corner of the weed image to the center of the weed
+                    can:{}, // tumbleweed canvas
+                    weeds:[] // collection of tumbleweeds
+                };
+
+                $.each(preloader.publicImages, function(i) {
+                    if (this.id === "Tumbleweed") tumbleweedConsts.ball = preloader.publicImages[i];
+                });
+
+                for (var i = 0; i < o.weeds.length; i++) {
+                    tumbleweedConsts.weeds.push(o.weeds[i]);
+                }
+
+                tumbleweedConsts.can = document.createElement('canvas');
+                tumbleweedConsts.can.width = width;
+                tumbleweedConsts.can.height = height;
+                $(tumbleweedConsts.can).attr({
+                    'width' : width * pixelRatio,
+                    'height' : height * pixelRatio
+                });
+            }
+
+            sad_dhab_kick_draw(canvas);
+        }
+
+        function sad_dhab_kick_draw(canvas) {
+
+            var delta = Date.now() - lastUpdateTime;
+            if (acDelta > msPerFrame)
+            {
+                acDelta = 0;
+                sad_dhab_kick_render(canvas);
+            }
+            else
+            {
+                acDelta += delta;
+            }
+            lastUpdateTime = Date.now();
+
+            window.requestAnimFrame(
+                function() {sad_dhab_kick_draw(canvas)
+            });
+        }
+
+        function sad_dhab_kick_render(canvas) {
+
+            canvas.each(function() {
+
+                var ctx = this.getContext('2d');
+
+                ctx.clearRect(0, 0, this.width, this.height);
+                ctx.save();
+
+                var scene = sad_dhab_kick_drawScene(this);
+                ctx.drawImage(scene, 0, 0, this.width, this.height);
+
+                var frame = tick % (imageAsset.frame_count),
+                    pos =  frame * imageAsset.sprite_height;
+
+                ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height,
+                        (canvasMidX) | 0,
+                        (canvasMidY + (5 * pixelRatio)) | 0,
+                        imageAsset.sprite_width ,
+                        imageAsset.sprite_height);
+
+                if (o.weeds)
+                {
+                    sad_dhab_kick_drawTumbleWeeds();
+                    ctx.drawImage(tumbleweedConsts.can, 0, 0, this.width, this.height);
+                }
+
+                ctx.restore();
+                tick++;
+            });
+        }
+
+        function sad_dhab_kick_drawScene(par) {
+            if (!par.scene) {
+                var canvas = document.createElement('canvas'),
+                    ctx = canvas.getContext('2d');
+
+                canvas.width = par.width;
+                canvas.height = par.height;
+
+                // base
+                ctx.fillStyle = '#cc9966';
+                ctx.fillRect(0, 90 * pixelRatio, par.width, 90 * pixelRatio);
+
+                par.scene = canvas;
+            }
+            return par.scene;
+        }
+
+        function sad_dhab_kick_drawTumbleWeeds() {
+            var ctx = tumbleweedConsts.can.getContext('2d');
+
+            ctx.clearRect(0, 0, tumbleweedConsts.can.width, tumbleweedConsts.can.height);
+            for (var i = 0; i < tumbleweedConsts.weeds.length; i++) {
+                model(tumbleweedConsts.weeds[i]);
+                draw(tumbleweedConsts.weeds[i]);
+            }
+
+            function model(o) {
+                o.rot += o.rotSpeed * o.direc;
+                o.x += o.xVec;
+                o.yVec += o.gravity;
+                o.y += o.yVec;
+                bounceIf(o);
+            }
+
+            function bounceIf(o) {
+                if (o.y >= tumbleweedConsts.bottom) {
+                    o.y = tumbleweedConsts.bottom;
+                    o.yVec = -1 * o.yVec - o.gravity;
+                }
+                if (o.x >= tumbleweedConsts.right || o.x <= tumbleweedConsts.left) {
+                    o.xVec *= -1;
+                    o.direc *= -1;
+                }
+            }
+
+            function draw(o) {
+                ctx.save();
+                ctx.translate(o.x, o.y);
+                ctx.rotate(o.rot);
+                ctx.drawImage(tumbleweedConsts.ball, tumbleweedConsts.centerOffset, tumbleweedConsts.centerOffset);
+                ctx.restore();
+            }
+        }
+    }
+
+    SD.SadDhabKick = SadDhabKick;
+
+}(jQuery));
+
+
+(function(){
+
+    "use strict";
+
+    function Weed(o) {
+        this.rot = o.rot || 0;
+        this.gravity = o.gravity || 1;
+        this.x = o.x || 0;
+        this.y = o.y || 0;
+        this.xVec = o.xVec || 0;
+        this.yVec = o.yVec || 0;
+        this.direc = o.direc || 1;
+        this.rotSpeed = o.rotSpeed || 0.2;
+    }
+
+    SD.Weed = Weed;
+
+})();
+
+(function() {
+
+    var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
+    var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/sad_dhab/' + (pixelRatio === 1 ? 'kickStrip180.png' : 'X2/kickStrip180.png');
+    var imgSrcTwo = 'http://media.parlingo.com/website/live/messagepacks/sad_dhab/' + (pixelRatio === 1 ? 'tumbleweed.png' : 'X2/tumbleweed.png');
+
+    var Preloader = new SD.Preloader({
+        images:[
+                    {containerId:"sad-dhab-kick", imgUrl:imgSrc, imageId:"SadDhabKickImg", frameCount:45},
+                    {containerId:"sad-dhab-kick-Foreground", imgUrl:imgSrcTwo, imageId:"Tumbleweed", frameCount:1}
+               ]
+    });
+    Preloader.load();
+
+    function Loader() {
+
+        this.load = function(img) {
+
+            "use strict";
+
+            var poller = setInterval(poll, 50);
+
+            function poll() {
+                if (Preloader.sad_dhab_kick_IsAllImagesLoaded === true) {
+                    clearInterval(poller);
+                    var weedsArray = createWeeds();
+                    var SadDhabKick = new SD.SadDhabKick({img:img, preloader:Preloader, pixelRatio:pixelRatio, weeds:weedsArray});
+                    SadDhabKick.load();
+                }
+            }
+
+            function createWeeds() {
+                var weed1 = new SD.Weed({
+                    rot: 0,
+                    gravity: 0.5,
+                    x: 20 * pixelRatio,
+                    y: 90 * pixelRatio,
+                    xVec: 2 * pixelRatio,
+                    yVec: 0,
+                    direc: 1,
+                    rotSpeed: 0.2
+                });
+
+                var weed2 = new SD.Weed({
+                    rot: 0,
+                    gravity: 0.5,
+                    x: 570 * pixelRatio,
+                    y: 90 * pixelRatio,
+                    xVec: 1.5 * pixelRatio,
+                    yVec: 0,
+                    direc: 1,
+                    rotSpeed: 0.1
+                });
+
+                var weedsArray = [weed1, weed2];
+                return weedsArray;
+            }
+        };
+    }
+
+    SD.Loader = Loader;
+
+}());
+
+//]]>
+</script>
+
+<div class="sad-dhab-kick msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="new SD.Loader().load(this)"/>
+    <div class="sad-dhab-kick-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname"></strong>
+    </div>
+
+    <!-- 3 stars - AVOID using js for positioning  -->
+    <figure class="star star-1"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
+    <figure class="star star-2"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
+    <figure class="star star-3"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
+
+    <div class="blob"></div>
+    <canvas class="canvas"></canvas>
+</div>
+
+<div class="sad-dhab-kick editor">
+    <figure class="star star-1"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
+    <figure class="star star-2"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
+    <figure class="star star-3"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
+    <div class="platform"></div>
+    <div class="blob"></div>
+</div>
+</div>
+</body>
+</html>
