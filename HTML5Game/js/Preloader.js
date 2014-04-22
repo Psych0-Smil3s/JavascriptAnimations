@@ -85,14 +85,16 @@ this.Game = this.Game || {};
 
         stageContainer = new createjs.Container();
         window.addEventListener('resize', resize, false);
+
         function resize() {
+
             var widthRatio = canvas.width / $('#wrapper').width();
             var heightRatio = canvas.height / $('#wrapper').height();
             var scaleRatio = Math.max(widthRatio / heightRatio);
             stageContainer.scaleX = stageContainer.scaleY = scaleRatio;
+            loadingBarContainer.scaleX = stageContainer.scaleY = scaleRatio;
             stage.update();
         }
-
 
 
         var loadingImage = new createjs.Bitmap(o.imageURL);
@@ -123,14 +125,12 @@ this.Game = this.Game || {};
         loadingBarContainer.addChild(loadingBar, frame);
         loadingBarContainer.x = Math.round(canvas.width/2 - loadingBarWidth/2);
         loadingBarContainer.y = Math.round(canvas.height/2 - loadingBarHeight/2);
-        stage.addChild(loadingBarContainer);
 
-
-        //stageContainer.addChild(loadingBarContainer);
         stageContainer.addChild(loadProgressLabel);
         stageContainer.addChild(loadingImage);
-        stage.addChild(stageContainer);
 
+        stage.addChild(stageContainer);
+        stage.addChild(loadingBarContainer);
 
 
         this.handleProgress = function() {
