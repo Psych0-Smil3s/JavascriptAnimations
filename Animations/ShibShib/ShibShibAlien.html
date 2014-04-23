@@ -1,0 +1,614 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Document</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+<style type="text/css">
+.wrapper {
+    position: relative;
+    width: 600px;
+    margin: 100px;
+    overflow: visible;
+    border-radius: 5px;
+}
+.wrapper .editor {
+    margin-top: 10px !important;
+}
+/******************************
+ * Message styles
+ ******************************/
+
+* {
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+}
+.shibshibalien, .shibshibalien * {
+    overflow: visible;
+}
+.shibshibalien {
+    background: #fff;
+    border-radius: inherit;
+    height: 113px;
+    position: relative;
+    border: solid 1px #ccc;
+}
+.shibshibalien .shibshibalien-header {
+    width: 100%;
+    position: absolute;
+    z-index: 11;
+    top: 0;
+    left: 0;
+}
+.shibshibalien-header .timestamp, .shibshibalien-header .flags, .shibshibalien-header .nickname {
+    float: left;
+    padding: 2px 5px;
+    color: #dfa33b;
+}
+.shibshibalien-header .timestamp, .shibshibalien-header .flags {
+    float: right;
+    padding-left: 10px;
+}
+
+.shib-content {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 100%; /* 50% */
+}
+
+.shib-content-display {
+    position: absolute;
+    left: 0;
+    top: 13px;
+    width: 100%; /* 50% */
+}
+
+.background {
+    position: relative;
+    width:100%;
+    height: 113px;
+    max-height:113px;
+}
+
+.DUBAI {
+    content: url("http://media.parlingo.com/website/live/messagepacks/shibshibwar/Dubai.png");
+}
+.EGYPT {
+    content: url("http://media.parlingo.com/website/live/messagepacks/shibshibwar/Egypt.png");
+}
+.JORDAN {
+    content: url("http://media.parlingo.com/website/live/messagepacks/shibshibwar/Jordan.png");
+}
+.LEBANON {
+    content: url("http://media.parlingo.com/website/live/messagepacks/shibshibwar/lebanon.png");
+}
+.SUDAN {
+    content: url("http://media.parlingo.com/website/live/messagepacks/shibshibwar/Sudan.png");
+}
+.SUDIA {
+    content: url("http://media.parlingo.com/website/live/messagepacks/shibshibwar/Sudia.png");
+}
+.SYRIA {
+    content: url("http://media.parlingo.com/website/live/messagepacks/shibshibwar/Syria.png");
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.control-container {
+    height:20px;
+    width:100%;
+    background-color:#fff;
+    opacity: 0.8;
+    position:absolute;
+    bottom:0;
+}
+
+.background-control {
+    float: right;
+    width:50%
+}
+
+.charachter-control {
+    float: left;
+    width: 50%;
+}
+
+.control-desc {
+    margin-left: 10px;
+    font-weight:bold;
+}
+
+.arrow-left {
+    display: block;
+    margin-left: 10px;
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right:10px solid darkred;
+}
+
+.current-text {
+    opacity: 1;
+    font-weight:bold;
+    margin-right: 10px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.arrow-right {
+    display: block;
+    margin-right: 10px;
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid darkred;
+}
+
+.alien-positioning {
+    float:left;
+}
+
+.userMessage
+{
+    height: 70px;
+    width: 150px;
+    background-color:transparent;
+    background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
+
+    /* font-size: 20px; padding: 5px; -- adjust size and padding */
+
+    border: none;
+    font-weight:bold;
+    margin: 0px;
+    z-index:9999;
+    text-wrap: avoid;
+    white-space: pre-wrap;
+    word-wrap : break-word;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    resize:vertical;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.userMessageDisplay
+{
+    -webkit-animation: fadein 3s; /* Safari and Chrome */
+    -moz-animation: fadein 3s; /* Firefox */
+    -ms-animation: fadein 3s; /* Internet Explorer */
+    -o-animation: fadein 3s; /* Opera */
+    animation: fadein 3s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari and Chrome */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Opera */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.bubble
+{
+    position: absolute;
+    float: right;
+    right:0;
+    width: 150px;
+    height: 70px;
+    padding: 0px;
+    margin-right: 10px;
+    margin-top: 7px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: #000000 solid 3px;
+}
+.bubble:after
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent #FFFFFF;
+    display: block;
+    width: 0;
+    z-index: 1;
+    left: -10px;
+    top: 25px;
+}
+.bubble:before
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 12px 12px 12px 0;
+    border-color: transparent #000;
+    display: block;
+    width: 0;
+    z-index: 0;
+    left: -14px;
+    top: 23px;
+}
+
+.alien {
+    background: url(http://media.parlingo.com/website/live/messagepacks/shibshibwar/alienSprite.png) repeat-x;
+    width: 106px; height: 90px;
+}
+.FATTY { background-position: 0 0; }
+.BOSS { background-position: 0 -92px; }
+.LADY { background-position: 0 -184px; }
+.DUMB { background-position: 0 -276px; }
+.PINK { background-position: 0 -368px; }
+
+
+.shibshibalien.msie {
+    background: url("http://media.parlingo.com/website/live/messagepacks/shibshibwar/Dubai.png") repeat-x;
+    background-size: 100%;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    .shibshibalien.editor, .shibshibalien.msie {
+
+    }
+    .alien {
+        background: url(http://media.parlingo.com/website/live/messagepacks/shibshibwar/X2/alienSprite.png) repeat-x;
+        background-size: 100%
+    }
+    .FATTY {  background-position: 0 0; }
+    .BOSS{  background-position: 0 -91px; }
+    .LADY{  background-position: 0 -182px; }
+    .DUMB{  background-position: 0 -273px; }
+    .PINK{  background-position: 0 -364px; }
+}
+
+@-moz-document url-prefix() {
+    .shibshibalien.editor, .shibshibalien.msie {
+
+    }
+    .alien {
+        background: url(http://media.parlingo.com/website/live/messagepacks/shibshibwar/X2/alienSprite.png) repeat-x;
+        background-size: 100%
+    }
+    .FATTY {  background-position: 0 0; }
+    .BOSS{  background-position: 0 -91px; }
+    .LADY{  background-position: 0 -182px; }
+    .DUMB{  background-position: 0 -273px; }
+    .PINK{  background-position: 0 -364px; }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="shibshibalien editor msie">
+        <img class="background DUBAI" />
+
+        <div class="shib-content">
+
+            <div class="bubble">
+                <form class="form">
+                    <textarea name="userMessage" class="userMessage" max-newlines="4" max-length="60" maxlength="60"></textarea>
+                    <textarea name="message" class="message" max-newlines="4" max-length="63" maxlength="63" style="display:none"></textarea>
+                </form>
+            </div>
+            <div class="alien alien-positioning ANGRY"></div>
+        </div>
+
+        <div class="control-container">
+            <div class="charachter-control">
+                <span class="arrow-left left alienImg"></span>
+                <span class="current-text left">FATTY</span>
+                <span class="arrow-right left alienImg"></span>
+            </div>
+            <div class="background-control">
+                <span class="arrow-right right backgroundImg"></span>
+                <span class="current-text right">DUBAI</span>
+                <span class="arrow-left right backgroundImg"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" defer="defer">
+    //<![CDATA[
+
+    // Namespace
+    this.Shib = this.Shib || {};
+
+    (function(){
+
+        function Dictionary() {
+            var dictionary = Object.create(null); // prototype-less
+            this.setData = function(key, val) { dictionary[key] = val; }
+            this.getData = function(key) { return dictionary[key]; }
+        }
+
+        Shib.Dictionary = Dictionary;
+
+    }());
+
+    (function($){
+
+        function shibshibalien() {
+
+            var self = this;
+            var backgroundKey = 0;
+            var alienKey = 0;
+            var dictionary = null;
+            var dictionary2 = null;
+            var currentDirection = null;
+            var directionEnum = { left: 0, right: 1 };
+
+
+            self.init = function() {
+                dictionary = new Shib.Dictionary();
+                dictionary.setData(0, "DUBAI");
+                dictionary.setData(1, "EGYPT");
+                dictionary.setData(2, "JORDAN");
+                dictionary.setData(3, "LEBANON");
+                dictionary.setData(4, "SUDAN");
+                dictionary.setData(5, "SUDIA");
+                dictionary.setData(6, "SYRIA");
+
+                dictionary2 = new Shib.Dictionary();
+                dictionary2.setData(0, "FATTY");
+                dictionary2.setData(1, "BOSS");
+                dictionary2.setData(2, "LADY");
+                dictionary2.setData(3, "DUMB");
+                dictionary2.setData(4, "PINK");
+
+                $('.message').val(backgroundKey + "|" + alienKey);
+                setUpBGEventListeners();
+            }
+
+            function setUpBGEventListeners() {
+
+                $('.arrow-left.backgroundImg').bind('click', function(e) {
+                    e.preventDefault();
+                    currentDirection = directionEnum.left;
+                    switchBackgrounds.call(this,currentDirection);
+                });
+
+                $('.arrow-right.backgroundImg').bind('click', function(e) {
+                    e.preventDefault();
+                    currentDirection = directionEnum.right;
+                    switchBackgrounds.call(this,currentDirection);
+                });
+
+                $('.arrow-left.alienImg').bind('click', function(e) {
+                    e.preventDefault();
+                    currentDirection = directionEnum.left;
+                    switchalien.call(this,currentDirection);
+                });
+
+                $('.arrow-right.alienImg').bind('click', function(e) {
+                    e.preventDefault();
+                    currentDirection = directionEnum.right;
+                    switchalien.call(this,currentDirection);
+                });
+
+                $('.userMessage').keyup(function() {
+                    var me = $(this).closest('.shibshibalien.editor');
+                    setMessageString(me.find('.message'));
+                });
+
+                function switchBackgrounds(direction) {
+                    var me = $(this).closest('.shibshibalien.editor');
+
+                    if (me.hasClass( "msie" )) { me.removeClass("msie"); }
+
+                    if (me.hasClass('busy')) { return; }
+                    me.addClass('busy');
+
+                    var currentbackgroundClass = dictionary.getData(backgroundKey);
+
+                    var newbackgroundKey = (direction == directionEnum.left) ?
+                            ((backgroundKey == 0) ? 6 : backgroundKey - 1) :
+                            ((backgroundKey == 6) ? 0 : backgroundKey + 1);
+
+                    var newbackgroundClass = dictionary.getData(newbackgroundKey);
+
+                    me.find('.background').fadeOut("fast", function() {
+                        $(this).removeClass(currentbackgroundClass);
+                        $(this).addClass(newbackgroundClass);
+                        $(this).fadeIn("fast");
+                        $('.current-text.right').text(newbackgroundClass.replace("_"," "));
+                        var pulse = ((direction == directionEnum.left) ? '.arrow-left' : '.arrow-right') + '.backgroundImg';
+                        pulseControlls(pulse);
+                    });
+
+                    backgroundKey = newbackgroundKey;
+                    setMessageString(me.find('.message'));
+                    me.closest('.shibshibalien').removeClass('busy');
+                }
+
+                function switchalien(direction) {
+                    var me = $(this).closest('.shibshibalien.editor');
+
+                    if (me.hasClass('busy')) { return; }
+                    me.addClass('busy');
+
+                    var currentalienClass = dictionary2.getData(alienKey);
+
+                    var newalienKey = (direction == directionEnum.left) ?
+                            ((alienKey == 0) ? 4 : alienKey - 1) :
+                            ((alienKey == 4) ? 0 : alienKey + 1);
+
+                    var newalienClass = dictionary2.getData(newalienKey);
+
+                    me.find('.alien').fadeOut("fast", function() {
+                        $(this).removeClass(currentalienClass);
+                        $(this).addClass(newalienClass);
+                        $(this).fadeIn("fast");
+                        $('.current-text.left').text(newalienClass.replace("_"," "));
+                        var pulse = ((direction == directionEnum.left) ? '.arrow-left' : '.arrow-right') + '.alienImg';
+                        pulseControlls(pulse);
+                    });
+
+                    alienKey = newalienKey;
+                    setMessageString(me.find('.message'));
+                    me.closest('.shibshibalien').removeClass('busy');
+                }
+            }
+
+            function setMessageString(message) {
+                var usermessage = $('.userMessage').val();
+                var messageKey = backgroundKey + "|" + alienKey;
+                $('.message').val(usermessage + messageKey);
+            }
+
+            function pulseControlls(pulse) {
+                $(pulse).effect("pulsate", {times:1}, 300 );
+            }
+        }
+
+        Shib.shibshibalien = shibshibalien;
+
+    }(jQuery));
+
+    var ShibShib = new Shib.shibshibalien();
+    ShibShib.init();
+
+    //]]>
+</script>
+
+<div class="wrapper">
+    <div class="shibshibalien display">
+        <img id="background" class="background" />
+        <div class="shibshibalien-header">
+            <span class="timestamp"></span>
+            <span class="flags"></span>
+            <strong class="nickname"></strong>
+        </div>
+
+        <div class="shib-content-display">
+            <div class="alien alien-positioning"></div>
+            <div class="bubble userMessageDisplay">
+                <div class="userMessage" id="message"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" defer="defer">
+    //<![CDATA[
+
+    // Namespace
+    this.Shib = this.Shib || {};
+
+    (function(){
+
+        function Dictionary() {
+            var dictionary = Object.create(null); // prototype-less
+            this.setData = function(key, val) { dictionary[key] = val; }
+            this.getData = function(key) { return dictionary[key]; }
+        }
+
+        Shib.Dictionary = Dictionary;
+
+    }());
+
+    (function(){
+
+        var dictionary = null;
+        var dictionary2 = null;
+        var me = "";
+        var message = "";
+        var msgPackWidth = "";
+        var MSG_PACK_WIDTH_BOUND = 500;
+
+        function shibshibalienDisplay() {
+            this.init = function() {
+
+                dictionary = new Shib.Dictionary();
+                dictionary.setData(0, "DUBAI");
+                dictionary.setData(1, "EGYPT");
+                dictionary.setData(2, "JORDAN");
+                dictionary.setData(3, "LEBANON");
+                dictionary.setData(4, "SUDAN");
+                dictionary.setData(5, "SUDIA");
+                dictionary.setData(6, "SYRIA");
+
+                dictionary2 = new Shib.Dictionary();
+                dictionary2.setData(0, "FATTY");
+                dictionary2.setData(1, "BOSS");
+                dictionary2.setData(2, "LADY");
+                dictionary2.setData(3, "DUMB");
+                dictionary2.setData(4, "PINK");
+
+                me = $('.shibshibalien.display:not(.processed)');
+                msgPackWidth = $(me).width();
+
+                message = me.find('.userMessage').text();
+                me.find('.userMessage').text('');
+
+                setMessageContent();
+                setMessgaeText();
+
+                me.addClass("processed");
+            }
+
+            function setMessageContent() {
+                var messageKey = message.substring(message.length - 3, message.length);
+                var bgAndalien = messageKey.split("|");
+                var backgroundClass = dictionary.getData(bgAndalien[0]);
+                var alienClass = dictionary2.getData(bgAndalien[1]);
+                me.find('.background').addClass(backgroundClass);
+                me.find('.alien').addClass(alienClass);
+            }
+
+            function setMessgaeText() {
+                if (msgPackWidth > MSG_PACK_WIDTH_BOUND) {
+                    $('.shib-content-display').css({width: "50%" });
+                }
+
+                if (message.length > 3) {
+                    var messageText = message.substring(0, message.length - 3);
+                    me.find('.userMessage').text(messageText);
+                }
+            }
+        }
+
+        Shib.shibshibalienDisplay = shibshibalienDisplay;
+
+    }());
+
+    var ShibShibDisplay = new Shib.shibshibalienDisplay();
+    ShibShibDisplay.init();
+
+    //]]>
+</script>
