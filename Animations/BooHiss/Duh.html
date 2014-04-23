@@ -66,12 +66,19 @@
         .boo-hiss-duh.editor, .boo-hiss-duh.msie {
             background: #fff;
         }
-        .boo-hiss-duh.editor .blob, .boo-hiss-duh.msie .blob {
+        .boo-hiss-duh.editor .blob{
+             margin: 0 auto;
+             margin-top: 10px;
+             width: 100px;
+             height: 98px;
+             background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/duhSingle.png) center center no-repeat;
+         }
+        .boo-hiss-duh.msie .blob {
             margin: 0 auto;
             margin-top: 10px;
-            width: 100px;
-            height: 98px;
-            background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/duhSingle.png) center center no-repeat;
+            width: 90px;
+            height: 89px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/duhSingleSmall.png) center center no-repeat;
         }
 
         @media only screen and (-webkit-min-device-pixel-ratio: 2) {
@@ -79,11 +86,17 @@
                 background: #fff;
                 background-size: 456px 113px;
             }
-            .boo-hiss-duh.editor .blob, .boo-hiss-duh.msie .blob {
+            .boo-hiss-duh.editor .blob {
                 margin: 0 auto;
                 margin-top: 10px;
                 background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingle.png)  no-repeat;
                 background-size: 100px 98px;
+            }
+            .boo-hiss-duh.msie .blob {
+                margin: 0 auto;
+                margin-top: 15px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingleSmall.png) center center no-repeat;
+                background-size: 90px 89px;
             }
         }
 
@@ -94,7 +107,7 @@
             }
             .boo-hiss-duh.editor .blob, .boo-hiss-duh.msie .blob {
                 margin: 0 auto;
-                margin-top: 10px;
+                margin-top: 15px;
                 background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingle.png)  no-repeat;
                 background-size: 100px 98px;
             }
@@ -127,7 +140,11 @@ this.BH = this.BH || {};
         var audios = assets.audios;
 
         var boo_hiss_imagesLoaded, boo_hiss_totalImages,
-                boo_hiss_isImagesLoaded, boo_hiss_isAudioLoaded, poller;
+            boo_hiss_isImagesLoaded, boo_hiss_isAudioLoaded, poller;
+
+        var storageFiles,
+            date = new Date(),
+            todaysDate = (date.getMonth() + 1).toString() + date.getDate().toString();
 
         // Public members
         this.boo_hiss_preloaderComplete = false;
@@ -168,18 +185,64 @@ this.BH = this.BH || {};
         }
 
         function preloadImg(imgUrl, imageId, frameCount) {
+
+            /* TESTING */
+            //localStorage.clear();
+            //return;
+            /* TESTING */
+
+            storageFiles  = JSON.parse(localStorage.getItem("storageFiles")) || {};
+
             var i = new Image();
             i.id = imageId;
-            i.onload = function() {
+            i.frame_count = frameCount;
+
+            var updateImageProps = function() {
                 ++boo_hiss_imagesLoaded;
                 i.sprite_width = i.width;
                 i.sprite_height = Math.round(i.height / frameCount);
                 self.publicImages.push(i);
                 if (boo_hiss_imagesLoaded == boo_hiss_totalImages)
                     boo_hiss_isImagesLoaded = true;
-            };
-            i.src = imgUrl;
-            i.frame_count = frameCount;
+            }
+
+            if (storageFiles.imageId !== "duh" || storageFiles.date < todaysDate) {
+                i.addEventListener("load", function () {
+                    var imgCanvas = document.createElement("canvas"),
+                        imgContext = imgCanvas.getContext("2d");
+
+                    imgCanvas.width = i.width;
+                    imgCanvas.height = i.height;
+                    imgContext.drawImage(i, 0, 0, i.width, i.height);
+
+                    // creta duh  namespace using imageid
+                    //storageFiles.duh.imageData
+
+                    storageFiles.imageData = imgCanvas.toDataURL("image/png");
+                    storageFiles.date = todaysDate;
+                    storageFiles.imageId = "duh";
+
+                    try {
+                        if (typeof window.localStorage!== "undefined"){
+                            localStorage.setItem("storageFiles", JSON.stringify(storageFiles));
+                        }
+                    }
+                    catch (e) {
+                        // local storage is full - clear it
+                        localStorage.clear();
+                    }
+
+                    updateImageProps();
+
+                }, false);
+                i.src = imgUrl;
+            }
+            else {
+                // get the one whrtr id = duh
+
+                i.src = storageFiles.imageData;
+                updateImageProps();
+            }
         }
 
         // Audio loader with  event handlers
@@ -327,8 +390,8 @@ window.requestAnimFrame = (function(){
                     ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, (this.width / 2) | 0, (this.height / 2) | 0);
                 }
 
-                var frame = tick % imageAsset.frame_count,
-                    pos = frame *  imageAsset.sprite_height;
+                var frame = tick % (imageAsset.frame_count - 1),
+                        pos = Math.ceil(frame *  imageAsset.sprite_height);
 
                 ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height,
                               (canvasMidX + (9 * pixelRatio)) | 0,
@@ -416,7 +479,8 @@ window.requestAnimFrame = (function(){
             "use strict";
 
             var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
-            var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/boohiss/' + (pixelRatio === 1 ? 'duh2.png' : 'X2/duh.png'); // img2.png || X2/img.png
+            //var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/boohiss/' + (pixelRatio === 1 ? 'duh2.png' : 'X2/duh.png'); // img2.png || X2/img.png
+            var imgSrc = "C:/JavascriptAnimations/Animations/BooHiss/img/SMALL/Compressed/bum2.png"; // testing local storage
 
             var Preloader = new BH.Preloader({
                 images:[

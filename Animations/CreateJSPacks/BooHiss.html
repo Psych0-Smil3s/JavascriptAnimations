@@ -127,7 +127,6 @@ this.BH = this.BH || {};
             assets = o || new Object(),
             images = assets.images,
             audios = assets.audios,
-            //me = $(o.img).closest('.boo-hiss'),
             FRAME_COUNT = 70;
 
         var queue = new createjs.LoadQueue(false);
@@ -170,12 +169,6 @@ this.BH = this.BH || {};
                 audio.preload = "auto";
                 audio.volume = 1;
                 self.publicAudios.push(audio);
-
-                audio.addEventListener('ended', function(){
-                    audio.pause();
-                    audio.currentTime = 0;
-                    //self.boo_hiss_isSoundPlaying = false;
-                });
             }
         }
 
@@ -197,47 +190,102 @@ this.BH = this.BH || {};
         var me = $(o.img).closest('.boo-hiss'),
             preloader = o.preloader || new Object(),
             pixelRatio = o.pixelRatio || 1,
-            characterImage = preloader.publicImages[0];
+            characterImage = preloader.publicImages[0],
+            stageAudio = preloader.publicAudios[0],
+            shape = new createjs.Shape(),
+            shape2 = new createjs.Shape(),
+            canvas = setCanvas(),
+            stage = new createjs.Stage(canvas);
 
-        var canvas = document.getElementById('canvas');
-        var width = me.width(),
-            height = me.height();
-        me.find('.canvas').css({
-            width : width,
-            height : height
-        });
-
-        var stage = new createjs.Stage(canvas);
-
-        if (pixelRatio) {
-            //stage.width  = me.width()  * pixelRatio;
-            //stage.height = me.height() * pixelRatio;
-        }
+        setEventListners();
 
         var spritesheet = new createjs.SpriteSheet({
-            "images": [characterImage],
-            "frames": {"height": 90 * pixelRatio, "count": 1, "width": 106 * pixelRatio},
-            "animations": { play: [0]}
+            images: [characterImage],
+            frames: { height: characterImage.sprite_height, width: characterImage.sprite_width, count:70},
+            animations: {play:[0,69]}
         });
 
-        var character = new createjs.Sprite(spritesheet);
-        character.RegX = Math.floor((600 / 2) - (characterImage.sprite_width / 2));
-        character.RegY = Math.floor((113 / 2) - (characterImage.sprite_height / 2));
-        character.x = Math.floor(600 / 2);
-        character.y = Math.floor(113 / 2);
-
-        //character.gotoAndPlay("play");
-        //character.framerate = 50;
+        var character = new createjs.Sprite(spritesheet, "play");
+        character.x = Math.floor((canvas.width / 2)  - (characterImage.sprite_width / 2));
+        character.y = Math.floor((canvas.height / 2) - (characterImage.sprite_height / 2));
         stage.addChild(character);
-        stage.update();
 
-        /*createjs.Ticker.addEventListener("tick", tick);
+        drawSpeaker();
+
+        createjs.Ticker.addEventListener("tick", tick);
         createjs.Ticker.useRAF = true;
-        createjs.Ticker.setFPS(50);
+        createjs.Ticker.setFPS(20);
+
+
 
         function tick(event) {
             stage.update();
-        }*/
+        }
+
+        function setCanvas() {
+
+            var canvas = document.createElement('canvas'),
+                id = Math.floor(Math.random() * new Date().getTime()),
+                width = me.width(),
+                height = me.height();
+
+            canvas.setAttribute('id', id.toString());
+            me[0].appendChild(canvas);
+
+            $(canvas).css({
+                width : width,
+                height : height
+            });
+
+            $(canvas).attr({
+                'width' :  width * pixelRatio,
+                'height' : height * pixelRatio
+            });
+
+            return canvas;
+        }
+
+        function drawSpeaker() {
+            shape.graphics.beginFill("#999");
+            shape.graphics.moveTo(8 * pixelRatio,85 * pixelRatio); // x,y
+            shape.graphics.lineTo(20 * pixelRatio,95 * pixelRatio);
+            shape.graphics.lineTo(20 * pixelRatio,75 * pixelRatio);
+            shape.graphics.beginFill("#999");
+            shape.graphics.drawRoundRect(5 * pixelRatio, 80 * pixelRatio, 10 * pixelRatio, 10 * pixelRatio, 2 * pixelRatio); // x,y,w,h,r
+            stage.addChild(shape);
+            shape.cache(8 * pixelRatio,65 * pixelRatio, 50, 50);
+
+            var x = 23 * pixelRatio, y = 85  * pixelRatio,
+                radius = 8 * pixelRatio, startAngle = 1.5 * Math.PI, endAngle = 0.5 * Math.PI,
+                counterClockwise = false;
+            shape2.graphics.setStrokeStyle(1 * pixelRatio,"round").beginStroke("#999");
+            shape2.graphics.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+
+
+            var radius = 5 * pixelRatio , x = 22 * pixelRatio;
+            shape2.graphics.beginStroke("#999");
+            shape2.graphics.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+            stage.addChild(shape2);
+            shape2.cache(8 * pixelRatio,65 * pixelRatio, 50, 50);
+        }
+
+        function setEventListners() {
+            stage.addEventListener("stagemousedown", function() {
+                if (!preloader.boo_hiss_isSoundPlaying) {
+                    stageAudio.play();
+                    preloader.boo_hiss_isSoundPlaying = true;
+                    stage.removeChild(shape);
+                    stage.removeChild(shape2);
+                }
+            });
+
+            stageAudio.addEventListener('ended', function(){
+                stageAudio.pause();
+                stageAudio.currentTime = 0;
+                preloader.boo_hiss_isSoundPlaying = false;
+                drawSpeaker();
+            });
+        }
     }
 
     BH.Boo_Hiss = Boo_Hiss;
@@ -249,10 +297,22 @@ this.BH = this.BH || {};
 
     "use strict";
 
-    function Loader() {
+    var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
+    var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'clap1_1x70.png';
 
-        var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
-        var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/plaudits/' + (pixelRatio === 1 ? '' : 'X2/') + 'clap1_1x70.png';
+    var Preloader = new BH.Preloader({
+        images:[
+            {imageURL:imgSrc, imageID:"BooHissImg"}
+        ],
+        audios:[
+            {audioID:"boo-hiss-audio", audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg"||
+                    "http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3"||
+                    "http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a"||
+                    "http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav"}
+        ]
+    });
+
+    function Loader() {
 
         this.load = function(img) {
 
@@ -260,22 +320,10 @@ this.BH = this.BH || {};
                 $(img).closest('.boo-hiss').removeClass('msie');
             }
 
-            var Preloader = new BH.Preloader({
-                images:[
-                    {imageURL:imgSrc, imageID:"BooHissImg"}
-                ],
-                audios:[
-                    {audioID:"boo-hiss-audio", audioSrc:"http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.ogg"||
-                            "http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.mp3"||
-                            "http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.m4a"||
-                            "http://media.parlingo.com/website/live/messagepacks/plaudits/audio/Plaudit3Audio.wav"}
-                ]
-                //,img:img
-            });
-
             var poller = setInterval(poll, 50);
 
             function poll() {
+
                 if (Preloader.publicImages.length > 0) {
                     clearInterval(poller);
                     var Boo_Hiss = new BH.Boo_Hiss({img:img, preloader:Preloader, pixelRatio:pixelRatio});
@@ -299,7 +347,6 @@ this.BH = this.BH || {};
         <strong class="nickname">test</strong>
     </div>
     <div class="blob"></div>
-    <canvas id="canvas" class="canvas"></canvas>
 </div>
 
 <div class="boo-hiss editor">

@@ -362,6 +362,7 @@ window.requestAnimFrame = (function(){
                 var frame = tick % (imageAssetTwo.frame_count - 1),
                         pos = Math.ceil(frame *  imageAssetTwo.sprite_height);
 
+
                 // inner right
                 ctx.drawImage(imageAssetTwo, 0, pos, imageAssetTwo.sprite_width, imageAssetTwo.sprite_height,
                         (canvasMidX + (75 * pixelRatio)) | 0,
