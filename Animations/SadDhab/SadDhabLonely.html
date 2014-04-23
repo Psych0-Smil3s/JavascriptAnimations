@@ -25,14 +25,14 @@
             margin: 0;
             padding: 0;
         }
-        .sad-dhab-kick, .sad-dhab-kick * {
+        .sad-dhab-lonely, .sad-dhab-lonely * {
             overflow: visible;
         }
         .loader {
             position: absolute;
         }
 
-        .sad-dhab-kick {
+        .sad-dhab-lonely {
             border-radius: inherit;
             height: 113px;
             position: relative;
@@ -51,50 +51,21 @@
             background-image: -ms-linear-gradient(bottom, #000000 0%, #381D4D 100%);
             background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
         }
-        .sad-dhab-kick .sad-dhab-kick-header {
+        .sad-dhab-lonely .sad-dhab-lonely-header {
             width: 100%;
             position: absolute;
             z-index: 11;
             top: 0;
             left: 0;
         }
-        .sad-dhab-kick-header .timestamp, .sad-dhab-kick-header .flags, .sad-dhab-kick-header .nickname {
+        .sad-dhab-lonely-header .timestamp, .sad-dhab-lonely-header .flags, .sad-dhab-lonely-header .nickname {
             float: left;
             padding: 2px 5px;
             color: #666;
         }
-        .sad-dhab-kick-header .timestamp, .sad-dhab-kick-header .flags {
+        .sad-dhab-lonely-header .timestamp, .sad-dhab-lonely-header .flags {
             float: right;
             padding-left: 10px;
-        }
-        .sad-dhab-kick-header canvas {
-            z-index: 2;
-            position: relative;
-        }
-        .sad-dhab-kick.msie canvas {
-            display: none;
-        }
-        .sad-dhab-kick.editor, .sad-dhab-kick.msie {
-            background-image: -webkit-gradient(
-                linear,
-                left top,
-                left bottom,
-                color-stop(0, #000000),
-                color-stop(1, #381D4D)
-            );
-            background-image: -o-linear-gradient(bottom, #000000 0%, #381D4D 100%);
-            background-image: -moz-linear-gradient(bottom, #000000 0%, #381D4D 100%);
-            background-image: -webkit-linear-gradient(bottom, #000000 0%, #381D4D 100%);
-            background-image: -ms-linear-gradient(bottom, #000000 0%, #381D4D 100%);
-            background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
-        }
-        .sad-dhab-kick.editor .blob, .sad-dhab-kick.msie .blob {
-            position: absolute;
-            left: 44%;
-            margin-top: 5px;
-            width: 76px;
-            height: 102px;
-            background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/kickSingle.png) center center no-repeat;
         }
 
         .platform {
@@ -103,6 +74,115 @@
             background: #cc9966;
             position: absolute;
             bottom: 0;
+        }
+
+        .bubbles {
+            animation: glitter 3s linear 0s infinite normal;
+            -webkit-animation: glitter 3s linear 0s infinite normal;
+            -moz-animation: glitter 3s linear 0s infinite normal;
+            -ms-animation: glitter 3s linear 0s infinite normal;
+            -o-animation: glitter 3s linear 0s infinite normal;
+        }
+
+        .bubble {
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            position: absolute;
+        }
+
+        .x1 {
+            top: 10%;
+            -webkit-transform: scale(0.9);
+            -moz-transform: scale(0.9);
+            transform: scale(0.9);
+            opacity: 0.2;
+            -webkit-animation: moveclouds 5s linear infinite, sideWays 7s ease-in-out infinite alternate;
+            -moz-animation: moveclouds 5s linear infinite;
+            -o-animation: moveclouds 5s linear infinite;
+        }
+
+        .x2 {
+            top: 30%;
+            left: 25%;
+            -webkit-transform: scale(0.6);
+            -moz-transform: scale(0.6);
+            transform: scale(0.6);
+            opacity: 0.17;
+            -webkit-animation: moveclouds 5s linear infinite, sideWays 5s ease-in-out infinite alternate;
+            -moz-animation: moveclouds 5s linear infinite;
+            -o-animation: moveclouds 5s linear infinite;
+        }
+        .x3 {
+            top: 50%;
+            left: 40%;
+            -webkit-transform: scale(0.8);
+            -moz-transform: scale(0.8);
+            transform: scale(0.8);
+            opacity: 0.1;
+            -webkit-animation: moveclouds 5s linear infinite, sideWays 7s ease-in-out infinite alternate;
+            -moz-animation: moveclouds 5s linear infinite;
+            -o-animation: moveclouds 5s linear infinite;
+        }
+        .x4 {
+            top: 25%;
+            left: 65%;
+            -webkit-transform: scale(0.75);
+            -moz-transform: scale(0.75);
+            transform: scale(0.75);
+            opacity: 0.15;
+            -webkit-animation: moveclouds 5s linear infinite, sideWays 5s ease-in-out infinite alternate;
+            -moz-animation: moveclouds 5s linear infinite;
+            -o-animation: moveclouds 5s linear infinite;
+        }
+        .x5 {
+            top: 30%;
+            left: 80%;
+            -webkit-transform: scale(0.8);
+            -moz-transform: scale(0.8);
+            transform: scale(0.8);
+            opacity: 0.1;
+            -webkit-animation: moveclouds 5s linear infinite, sideWays 1s ease-in-out infinite alternate;
+            -moz-animation: moveclouds 5s linear infinite;
+            -o-animation: moveclouds 5s linear infinite;
+        }
+        @-webkit-keyframes moveclouds {
+            80% {
+                top: 70%
+            }
+        }
+        @-moz-keyframes moveclouds {
+            80% {
+                top: 70%
+            }
+        }
+        @-o-keyframes moveclouds {
+
+            80% {
+                top: 70%
+            }
+        }
+        @-webkit-keyframes sideWays {
+            100% {
+                margin-left:10px;
+            }
+        }
+        @-webkit-keyframes glitter {
+            0%   {  opacity: 1; }
+            25%  {  opacity: 0; }
+            50%  {  opacity: 1; }
+            75%  {  opacity: 0; }
+            100% {  opacity: 1; }
+        }
+        @-moz-keyframes glitter {
+            0%   {  opacity: 1; }
+            25%  {  opacity: 0; }
+            50%  {  opacity: 1; }
+            75%  {  opacity: 0; }
+            100% {  opacity: 1; }
         }
 
         .star {
@@ -149,119 +229,86 @@
 
         .star-1 {
             top: 1%;
-            left: 10%;
-            animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
-            -webkit-animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
-            -moz-animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
-            -ms-animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
-            -o-animation: glitter 4.5s linear 0s infinite normal, movecloudsThree 10s linear infinite;
+            left: 35%;
+            animation: glitter2 4.5s linear 0s infinite normal;
+            -webkit-animation: glitter2 4.5s linear 0s infinite normal;
+            -moz-animation: glitter2 4.5s linear 0s infinite normal;
+            -ms-animation: glitter2 4.5s linear 0s infinite normal;
+            -o-animation: glitter2 4.5s linear 0s infinite normal;
             animation-delay:0.25s;
             -webkit-animation-delay:1s;
         }
-        .star-2  {
+        .star-2 {
             top:5%;
-            left:30%;
-            animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
-            -webkit-animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
-            -moz-animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
-            -ms-animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
-            -o-animation: glitter 4.5s linear 0s infinite normal, movecloudsOne 10s linear infinite;
+            left:45%;
+            animation: glitter2 4.5s linear 0s infinite normal;
+            -webkit-animation: glitter2 4.5s linear 0s infinite normal;
+            -moz-animation: glitter2 4.5s linear 0s infinite normal;
+            -ms-animation: glitter2 4.5s linear 0s infinite normal;
+            -o-animation: glitter2 4.5s linear 0s infinite normal;
             animation-delay:0.25s;
             -webkit-animation-delay:0.25s;
         }
         .star-3 {
             top:1%;
-            left:60%;
-            animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
-            -webkit-animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
-            -moz-animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
-            -ms-animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
-            -o-animation: glitter 4.5s linear 0s infinite normal, movecloudsTwo 10s linear infinite;
-            animation-delay:0.5s;
-            -webkit-animation-delay:0.5s;
-        }
-
-        .sad-dhab-kick.editor .star-1, .sad-dhab-kick.msie .star-1 {
-            top: 1%;
-            left: 35%;
-            animation: glitter 4.5s linear 0s infinite normal;
-            -webkit-animation: glitter 4.5s linear 0s infinite normal;
-            -moz-animation: glitter 4.5s linear 0s infinite normal;
-            -ms-animation: glitter 4.5s linear 0s infinite normal;
-            -o-animation: glitter 4.5s linear 0s infinite normal;
-            animation-delay:0.25s;
-            -webkit-animation-delay:1s;
-        }
-        .sad-dhab-kick.editor .star-2, .sad-dhab-kick.msie .star-2 {
-            top:5%;
-            left:45%;
-            animation: glitter 4.5s linear 0s infinite normal;
-            -webkit-animation: glitter 4.5s linear 0s infinite normal;
-            -moz-animation: glitter 4.5s linear 0s infinite normal;
-            -ms-animation: glitter 4.5s linear 0s infinite normal;
-            -o-animation: glitter 4.5s linear 0s infinite normal;
-            animation-delay:0.25s;
-            -webkit-animation-delay:0.25s;
-        }
-        .sad-dhab-kick.editor .star-3, .sad-dhab-kick.msie .star-3 {
-            top:1%;
             left:55%;
-            animation: glitter 4.5s linear 0s infinite normal;
-            -webkit-animation: glitter 4.5s linear 0s infinite normal;
-            -moz-animation: glitter 4.5s linear 0s infinite normal;
-            -ms-animation: glitter 4.5s linear 0s infinite normal;
-            -o-animation: glitter 4.5s linear 0s infinite normal;
+            animation: glitter2 4.5s linear 0s infinite normal;
+            -webkit-animation: glitter2 4.5s linear 0s infinite normal;
+            -moz-animation: glitter2 4.5s linear 0s infinite normal;
+            -ms-animation: glitter2 4.5s linear 0s infinite normal;
+            -o-animation: glitter2 4.5s linear 0s infinite normal;
             animation-delay:0.5s;
             -webkit-animation-delay:0.5s;
         }
 
-        @-webkit-keyframes glitter {
+        @-webkit-keyframes glitter2 {
             0%   { -webkit-transform: scale(1.0); opacity: 1; }
             25%  { -webkit-transform: scale(0.5); opacity: 0; }
             50%  { -webkit-transform: scale(1.0); opacity: 1; }
             75%  { -webkit-transform: scale(0.5); opacity: 0; }
             100% { -webkit-transform: scale(1.0); opacity: 1; }
         }
-        @-moz-keyframes glitter {
+        @-moz-keyframes glitter2 {
             0%   { -moz-transform: scale(1.0); opacity: 1; }
             25%  { -moz-transform: scale(0.5); opacity: 0; }
             50%  { -moz-transform: scale(1.0); opacity: 1; }
             75%  { -moz-transform: scale(0.5); opacity: 0; }
             100% { -moz-transform: scale(1.0); opacity: 1; }
         }
-        @-webkit-keyframes movecloudsOne {
-            99% {
-                left: 70%;
-            }
+
+        .sad-dhab-lonely-header canvas {
+            z-index: 2;
+            position: relative;
         }
-        @-moz-keyframes movecloudsOne {
-            99% {
-                left: 70%;
-            }
+        .sad-dhab-lonely.msie canvas {
+            display: none;
         }
-        @-webkit-keyframes movecloudsTwo {
-            99% {
-                left: 90%;
-            }
+        .sad-dhab-lonely.editor, .sad-dhab-lonely.msie {
+            background-image: -webkit-gradient(
+                linear,
+                left top,
+                left bottom,
+                color-stop(0, #000000),
+                color-stop(1, #381D4D)
+            );
+            background-image: -o-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -moz-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -webkit-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: -ms-linear-gradient(bottom, #000000 0%, #381D4D 100%);
+            background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
         }
-        @-moz-keyframes movecloudsTwo {
-            99% {
-                left: 90%;
-            }
-        }
-        @-webkit-keyframes movecloudsThree {
-            99% {
-                left: 50%;
-            }
-        }
-        @-moz-keyframes movecloudsThree {
-            99% {
-                left: 50%;
-            }
+        .sad-dhab-lonely.editor .blob, .sad-dhab-lonely.msie .blob {
+            position: absolute;
+            left: 42%;
+            top: 47%;
+            margin-top: 5px;
+            width: 100px;
+            height: 50px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/lonelySingle.png) center center no-repeat;
         }
 
         @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-            .sad-dhab-kick.editor, .sad-dhab-kick.msie {
+            .sad-dhab-lonely.editor, .sad-dhab-lonely.msie {
                 background-image: -webkit-gradient(
                     linear,
                     left top,
@@ -276,14 +323,14 @@
                 background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
 
             }
-            .sad-dhab-kick.editor .blob, .sad-dhab-kick.msie .blob {
-                background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/X2/kickSingle.png)  no-repeat;
-                background-size: 76px 102px;
+            .sad-dhab-lonely.editor .blob, .sad-dhab-lonely.msie .blob {
+                background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/X2/lonelySingle.png)  no-repeat;
+                background-size: 100px 50px;
             }
         }
 
         @-moz-document url-prefix() {
-            .sad-dhab-kick.editor, .sad-dhab-kick.msie {
+            .sad-dhab-lonely.editor, .sad-dhab-lonely.msie {
                 background-image: -webkit-gradient(
                     linear,
                     left top,
@@ -297,9 +344,9 @@
                 background-image: -ms-linear-gradient(bottom, #000000 0%, #381D4D 100%);
                 background-image: linear-gradient(to bottom, #000000 0%, #381D4D 100%);
             }
-            .sad-dhab-kick.editor .blob, .sad-dhab-kick.msie .blob {
-                background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/X2/kickSingle.png)  no-repeat;
-                background-size: 76px 102px;
+            .sad-dhab-lonely.editor .blob, .sad-dhab-lonely.msie .blob {
+                background: url(http://media.parlingo.com/website/live/messagepacks/sad_dhab/X2/lonelySingle.png)  no-repeat;
+                background-size: 100px 50px;
             }
         }
     </style>
@@ -323,33 +370,33 @@ this.SD = this.SD || {};
 
         // Private members
         var self = this,
-            assets,
-            images,
-            sad_dhab_kick_imagesLoaded,
-            sad_dhab_kick_totalImages;
+                assets,
+                images,
+                sad_dhab_lonely_imagesLoaded,
+                sad_dhab_lonely_totalImages;
 
         // Public members
         this.publicImages;
-        this.sad_dhab_kick_IsAllImagesLoaded;
+        this.sad_dhab_lonely_IsAllImagesLoaded;
 
         // Constructor
         this.load = function() {
 
             this.publicImages = new Array(),
-            this.sad_dhab_kick_IsAllImagesLoaded = false;
+                    this.sad_dhab_lonely_IsAllImagesLoaded = false;
 
             assets =  o || new Object(),
-            images = assets.images,
-            sad_dhab_kick_totalImages = images.length;
-            sad_dhab_kick_imagesLoaded = 0;
+                    images = assets.images,
+                    sad_dhab_lonely_totalImages = images.length;
+            sad_dhab_lonely_imagesLoaded = 0;
 
-            if (sad_dhab_kick_totalImages === 0) return;
+            if (sad_dhab_lonely_totalImages === 0) return;
             fireImages();
         }
 
         // Private functions
         function fireImages() {
-            for (var i = 0; i < sad_dhab_kick_totalImages; i++) {
+            for (var i = 0; i < sad_dhab_lonely_totalImages; i++) {
                 preloadImg(images[i].imgUrl, images[i].imageId, images[i].frameCount);
             }
         }
@@ -358,12 +405,12 @@ this.SD = this.SD || {};
             var i = new Image();
             i.id = imageId;
             i.onload = function() {
-                ++sad_dhab_kick_imagesLoaded;
+                ++sad_dhab_lonely_imagesLoaded;
                 i.sprite_width = i.width;
                 i.sprite_height = i.height / frameCount;
                 self.publicImages.push(i);
-                if (sad_dhab_kick_imagesLoaded === sad_dhab_kick_totalImages)
-                    self.sad_dhab_kick_IsAllImagesLoaded = true;
+                if (sad_dhab_lonely_imagesLoaded === sad_dhab_lonely_totalImages)
+                    self.sad_dhab_lonely_IsAllImagesLoaded = true;
             };
             i.src = imgUrl;
             i.frame_count = frameCount;
@@ -390,34 +437,35 @@ window.requestAnimFrame = (function(){
             };
 })();
 
+
 (function($) {
 
     "use strict";
 
-    function SadDhabKick(o) {
+    function SadDhabLonely(o) {
 
         var me,
-            preloader,
-            pixelRatio,
-            imageAsset,
-            canvasMidX,
-            canvasMidY,
-            tick = 0,
-            lastUpdateTime = 0,
-            acDelta = 0,
-            msPerFrame = 30,
-            tumbleweedConsts = {};
+                preloader,
+                pixelRatio,
+                imageAsset,
+                canvasMidX,
+                canvasMidY,
+                tick = 0,
+                lastUpdateTime = 0,
+                acDelta = 0,
+                msPerFrame = 30,
+                tumbleweedConsts = {};
 
         this.load = function() {
 
             if (navigator.userAgent.toLowerCase().indexOf('msie') !== -1) return;
 
-            me = $(o.img).closest('.sad-dhab-kick'),
-            preloader = o.preloader || new Object(),
-            pixelRatio = o.pixelRatio || 1;
+            me = $(o.img).closest('.sad-dhab-lonely'),
+                    preloader = o.preloader || new Object(),
+                    pixelRatio = o.pixelRatio || 1;
 
             $.each(preloader.publicImages, function(i) {
-                if (this.id === "SadDhabKickImg") imageAsset = preloader.publicImages[i];
+                if (this.id === "SadDhabLonelyImg") imageAsset = preloader.publicImages[i];
             });
 
             me.removeClass('msie');
@@ -465,16 +513,16 @@ window.requestAnimFrame = (function(){
                 });
             }
 
-            sad_dhab_kick_draw(canvas);
+            sad_dhab_lonely_draw(canvas);
         }
 
-        function sad_dhab_kick_draw(canvas) {
+        function sad_dhab_lonely_draw(canvas) {
 
             var delta = Date.now() - lastUpdateTime;
             if (acDelta > msPerFrame)
             {
                 acDelta = 0;
-                sad_dhab_kick_render(canvas);
+                sad_dhab_lonely_render(canvas);
             }
             else
             {
@@ -483,11 +531,11 @@ window.requestAnimFrame = (function(){
             lastUpdateTime = Date.now();
 
             window.requestAnimFrame(
-                function() {sad_dhab_kick_draw(canvas)
-            });
+                    function() {sad_dhab_lonely_draw(canvas)
+                    });
         }
 
-        function sad_dhab_kick_render(canvas) {
+        function sad_dhab_lonely_render(canvas) {
 
             canvas.each(function() {
 
@@ -496,21 +544,23 @@ window.requestAnimFrame = (function(){
                 ctx.clearRect(0, 0, this.width, this.height);
                 ctx.save();
 
-                var scene = sad_dhab_kick_drawScene(this);
+                var scene = sad_dhab_lonely_drawScene(this);
                 ctx.drawImage(scene, 0, 0, this.width, this.height);
 
                 var frame = tick % (imageAsset.frame_count),
-                    pos =  frame * imageAsset.sprite_height;
+                        pos =  frame * imageAsset.sprite_height;
+
+                window.console.log(imageAsset.sprite_height);
 
                 ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height,
                         (canvasMidX) | 0,
-                        (canvasMidY + (5 * pixelRatio)) | 0,
+                        (canvasMidY + (25 * pixelRatio)) | 0,
                         imageAsset.sprite_width ,
                         imageAsset.sprite_height);
 
                 if (o.weeds)
                 {
-                    sad_dhab_kick_drawTumbleWeeds();
+                    sad_dhab_lonely_drawTumbleWeeds();
                     ctx.drawImage(tumbleweedConsts.can, 0, 0, this.width, this.height);
                 }
 
@@ -519,10 +569,10 @@ window.requestAnimFrame = (function(){
             });
         }
 
-        function sad_dhab_kick_drawScene(par) {
+        function sad_dhab_lonely_drawScene(par) {
             if (!par.scene) {
                 var canvas = document.createElement('canvas'),
-                    ctx = canvas.getContext('2d');
+                        ctx = canvas.getContext('2d');
 
                 canvas.width = par.width;
                 canvas.height = par.height;
@@ -536,7 +586,7 @@ window.requestAnimFrame = (function(){
             return par.scene;
         }
 
-        function sad_dhab_kick_drawTumbleWeeds() {
+        function sad_dhab_lonely_drawTumbleWeeds() {
             var ctx = tumbleweedConsts.can.getContext('2d');
 
             ctx.clearRect(0, 0, tumbleweedConsts.can.width, tumbleweedConsts.can.height);
@@ -574,7 +624,7 @@ window.requestAnimFrame = (function(){
         }
     }
 
-    SD.SadDhabKick = SadDhabKick;
+    SD.SadDhabLonely = SadDhabLonely;
 
 }(jQuery));
 
@@ -601,14 +651,14 @@ window.requestAnimFrame = (function(){
 (function() {
 
     var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
-    var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/sad_dhab/' + (pixelRatio === 1 ? 'kickStrip180.png' : 'X2/kickStrip180.png');
+    var imgSrc = 'http://media.parlingo.com/website/live/messagepacks/sad_dhab/' + (pixelRatio === 1 ? 'lonelyStrip180.png' : 'X2/lonelyStrip180.png');
     var imgSrcTwo = 'http://media.parlingo.com/website/live/messagepacks/sad_dhab/' + (pixelRatio === 1 ? 'tumbleweed.png' : 'X2/tumbleweed.png');
 
     var Preloader = new SD.Preloader({
         images:[
-                    {containerId:"sad-dhab-kick", imgUrl:imgSrc, imageId:"SadDhabKickImg", frameCount:45},
-                    {containerId:"sad-dhab-kick-Foreground", imgUrl:imgSrcTwo, imageId:"Tumbleweed", frameCount:1}
-               ]
+            {containerId:"sad-dhab-lonely", imgUrl:imgSrc, imageId:"SadDhabLonelyImg", frameCount:45},
+            {containerId:"sad-dhab-lonely-Foreground", imgUrl:imgSrcTwo, imageId:"Tumbleweed", frameCount:1}
+        ]
     });
     Preloader.load();
 
@@ -621,11 +671,11 @@ window.requestAnimFrame = (function(){
             var poller = setInterval(poll, 50);
 
             function poll() {
-                if (Preloader.sad_dhab_kick_IsAllImagesLoaded === true) {
+                if (Preloader.sad_dhab_lonely_IsAllImagesLoaded === true) {
                     clearInterval(poller);
                     var weedsArray = createWeeds();
-                    var SadDhabKick = new SD.SadDhabKick({img:img, preloader:Preloader, pixelRatio:pixelRatio, weeds:weedsArray});
-                    SadDhabKick.load();
+                    var SadDhabLonely = new SD.SadDhabLonely({img:img, preloader:Preloader, pixelRatio:pixelRatio, weeds:weedsArray});
+                    SadDhabLonely.load();
                 }
             }
 
@@ -665,15 +715,22 @@ window.requestAnimFrame = (function(){
 //]]>
 </script>
 
-<div class="sad-dhab-kick msie">
+<div class="sad-dhab-lonely msie">
     <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="new SD.Loader().load(this)"/>
-    <div class="sad-dhab-kick-header">
+    <div class="sad-dhab-lonely-header">
         <span class="timestamp"></span>
         <span class="flags"></span>
         <strong class="nickname"></strong>
     </div>
 
-    <!-- 3 stars - AVOID using js for positioning  -->
+    <div class="bubbles">
+        <div class="bubble x1"></div>
+        <div class="bubble x2"></div>
+        <div class="bubble x3"></div>
+        <div class="bubble x4"></div>
+        <div class="bubble x5"></div>
+    </div>
+
     <figure class="star star-1"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
     <figure class="star star-2"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
     <figure class="star star-3"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
@@ -682,10 +739,20 @@ window.requestAnimFrame = (function(){
     <canvas class="canvas"></canvas>
 </div>
 
-<div class="sad-dhab-kick editor">
+<div class="sad-dhab-lonely editor">
+
+    <div class="bubbles">
+        <div class="bubble x1"></div>
+        <div class="bubble x2"></div>
+        <div class="bubble x3"></div>
+        <div class="bubble x4"></div>
+        <div class="bubble x5"></div>
+    </div>
+
     <figure class="star star-1"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
     <figure class="star star-2"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
     <figure class="star star-3"><figure class="star-top"></figure><figure class="star-bottom"></figure></figure>
+
     <div class="platform"></div>
     <div class="blob"></div>
 </div>
