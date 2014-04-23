@@ -1,0 +1,359 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+    <style type="text/css">
+        /******************************
+         * The following styles are only
+         * for browser based testing.
+         ******************************/
+        .wrapper {
+            position: relative;
+            width: 600px;
+            margin: 100px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+        .wrapper .editor {
+            margin-top: 10px !important;
+        }
+        /******************************
+         * Message styles
+         ******************************/
+        * {
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+        }
+        .boo-hiss-duh, .boo-hiss-duh * {
+            overflow: visible;
+        }
+        .loader {
+            position: absolute;
+        }
+        .boo-hiss-duh {
+            border-radius: inherit;
+            height: 113px;
+            position: relative;
+            background: #fff;
+            border: solid 1px #999;
+            text-align: center;
+        }
+        .boo-hiss-duh .boo-hiss-duh-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+        }
+        .boo-hiss-duh-header .timestamp, .boo-hiss-duh-header .flags, .boo-hiss-duh-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #666;
+        }
+        .boo-hiss-duh-header .timestamp, .boo-hiss-duh-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+        .boo-hiss-duh-header canvas {
+            z-index: 2;
+            position: relative;
+        }
+        .boo-hiss-duh.msie canvas {
+            display: none;
+        }
+        .boo-hiss-duh.editor, .boo-hiss-duh.msie {
+            background: #fff;
+        }
+        .boo-hiss-duh.editor .blob{
+            margin: 0 auto;
+            margin-top: 10px;
+            width: 100px;
+            height: 98px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/duhSingle.png) center center no-repeat;
+        }
+        .boo-hiss-duh.msie .blob {
+            margin: 0 auto;
+            margin-top: 20px;
+            width: 90px;
+            height: 89px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/duhSingleSmall.png) center center no-repeat;
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .boo-hiss-duh.editor, .boo-hiss-duh.msie {
+                background: #fff;
+                background-size: 456px 113px;
+            }
+            .boo-hiss-duh.editor .blob {
+                margin: 0 auto;
+                margin-top: 10px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingle.png)  no-repeat;
+                background-size: 100px 98px;
+            }
+            .boo-hiss-duh.msie .blob {
+                margin: 0 auto;
+                margin-top: 20px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingleSmall.png) center center no-repeat;
+                background-size: 90px 89px;
+            }
+        }
+
+        @-moz-document url-prefix() {
+            .boo-hiss-duh.editor, .boo-hiss-duh.msie {
+                background: #fff;
+                background-size: 456px 113px;
+            }
+            .boo-hiss-duh.editor .blob {
+                margin: 0 auto;
+                margin-top: 10px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingle.png)  no-repeat;
+                background-size: 100px 98px;
+            }
+            .boo-hiss-duh.msie .blob {
+                margin: 0 auto;
+                margin-top: 20px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/duhSingleSmall.png) center center no-repeat;
+                background-size: 90px 89px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+/**
+ * Provide a cross-browser/fall back
+ * solution for the requestAnimationFrame.
+ */
+window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            window.oRequestAnimationFrame      ||
+            window.msRequestAnimationFrame     ||
+            function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+            };
+})();
+
+/**
+ * Preload the scene images.
+ */
+var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
+
+        duh_imagesLoaded = 0,
+        duh_totalImages = 1,
+        duh_frameCount = 90,
+
+        duh_currentFrame = 0,
+        duh_isSoundSupported = false,
+        duh_isSoundPlaying = false,
+
+        duh_sprite = new Image(),
+        duh_sprite_width,
+        duh_sprite_height;
+
+duh_sprite.onload = function() {
+    duh_imagesLoaded++;
+    duh_sprite_width = this.width;
+    duh_sprite_height = (this.height / duh_frameCount);
+};
+duh_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/boohiss/' + (pixelRatio === 1 ? 'duh2.png' : 'X2/duh.png'); // img2.png || X2/img.png
+
+var duh_audio = new Audio();
+var source = document.createElement('source');
+
+if (duh_audio.canPlayType('audio/ogg;')) {
+    source.type= 'audio/ogg';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/boohiss/audio/duh.ogg';
+    duh_isSoundSupported = true;
+} else if (duh_audio.canPlayType('audio/mpeg')) {
+    source.type= 'audio/mpeg';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/boohiss/audio/duh.mp3';
+    duh_isSoundSupported = true;
+} else if (duh_audio.canPlayType('audio/mp4a-latm')) {
+    source.type= 'audio/mp4a-latm';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/boohiss/audio/duh.m4a';
+    duh_isSoundSupported = true;
+} else if (duh_audio.canPlayType('audio/x-wav')) {
+    source.type= 'audio/x-wav';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/boohiss/audio/duh.wav';
+    duh_isSoundSupported = true;
+}
+duh_audio.appendChild(source);
+
+function duh_render(c, me) {
+
+    if (duh_imagesLoaded < duh_totalImages)
+        return;
+    else
+        me.removeClass('msie');
+
+    var can = $('canvas#' + c);
+    can.each(function() {
+        var tick = $(this).parent().data('tick'),
+                ctx = this.getContext('2d');
+
+        ctx.clearRect(0, 0, this.width, this.height);
+        ctx.save();
+
+        if (!duh_isSoundPlaying && duh_isSoundSupported) {
+            var scene = duh_drawScene(this);
+            ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+        }
+
+        var frame = tick % (duh_frameCount - 1),
+                pos = Math.ceil(frame *  duh_sprite_height);
+
+        duh_currentFrame = frame;
+
+        ctx.drawImage(duh_sprite, 0, pos, duh_sprite_width, duh_sprite_height, Math.floor((this.width / 2) - (duh_sprite_width / 2)) + 13 * pixelRatio , Math.floor((this.height / 2) - (duh_sprite_height / 2)) + 7 * pixelRatio , (duh_sprite_width / 1.1) | 0, (duh_sprite_height / 1.1) | 0);
+
+        ctx.restore();
+
+        $(this).parent().data('tick', tick+1);
+    });
+}
+
+function duh_drawScene(par) {
+    if (!par.scene) {
+        var canvas = document.createElement('canvas'),
+                ctx = canvas.getContext('2d');
+
+
+        canvas.width = par.width;
+        canvas.height = par.height;
+
+        ctx.beginPath();
+        ctx.fillStyle = '#999';
+        ctx.moveTo(40 * pixelRatio,70 * pixelRatio);
+        ctx.lineTo(65 * pixelRatio,95 * pixelRatio);
+        ctx.lineTo(65 * pixelRatio,45 * pixelRatio);
+        ctx.fill();
+
+        ctx.fillRect(35 * pixelRatio, 60 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+
+        // add .5 to straddle the pixels - make drawing smoother
+        var x = 70.5 * pixelRatio;
+        var y = 70.5  * pixelRatio;
+        var radius = 10;
+        var startAngle = 1.5 * Math.PI;
+        var endAngle = 0.5 * Math.PI;
+        var counterClockwise = false;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#999';
+        ctx.stroke();
+
+        ctx.beginPath();
+        radius = 20;
+        x = 70.5 * pixelRatio;
+        ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+        ctx.stroke();
+
+        par.scene = canvas;
+    }
+    return par.scene;
+}
+
+function duh_draw(c, me) {
+
+    setTimeout(function() {
+
+        window.requestAnimFrame(
+                function() {duh_draw(c, me)
+                });
+
+        duh_render(c, me);
+
+    }, 50);
+}
+
+function duh_setIsSoundSupported(me) {
+
+    var clip = me.find('.clip');
+
+    clip.find('source').each(function() {
+        // !! converts value to a boolean and ensures a boolean type.
+        if (!!(this.parentNode.canPlayType && this.parentNode.canPlayType($(this).attr('type')).replace(/no/, ''))) {
+            duh_isSoundSupported = true;
+            return false;
+        }
+    });
+    return clip;
+}
+
+function duh_loaded(preloaded) {
+    var me = $(this).closest('.boo-hiss-duh');
+    if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+
+        setTimeout(function() {
+            me.data('tick', 0);
+            var canvas = me.find('.canvas'),
+                    width = me.width(),
+                    height = me.height();
+            canvas.css({
+                width : width,
+                height : height
+            });
+            if (pixelRatio) {
+                canvas.attr({
+                    'width' : width * pixelRatio,
+                    'height' : height * pixelRatio
+                });
+            }
+
+            //var clip = duh_setIsSoundSupported(me);
+            var id = Math.floor(Math.random() * new Date().getTime());
+            canvas.attr('id', id);
+            duh_draw(id, me);
+
+            if (duh_isSoundSupported) {
+
+                var sound = duh_audio;
+                sound.volume = 1;
+
+                sound.addEventListener('ended',function(){
+                    sound.pause();
+                    sound.currentTime = 0;
+                    duh_isSoundPlaying = false;
+                });
+
+                me.click(function(e) {
+                    e.preventDefault();
+
+                    if (!duh_isSoundPlaying) {
+                        sound.play();
+                        duh_isSoundPlaying = true;
+                    }
+                });
+            }
+
+        }, 200);
+    }
+}
+//]]>
+</script>
+<div class="boo-hiss-duh msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="duh_loaded.call(this)"/>
+    <div class="boo-hiss-duh-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname"></strong>
+    </div>
+    <div class="blob"></div>
+    <canvas class="canvas"></canvas>
+</div>
+<div class="boo-hiss-duh editor">
+    <div class="blob"></div>
+</div>
+
+</div>
+</body>
+</html>

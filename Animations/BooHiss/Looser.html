@@ -66,7 +66,7 @@
         .boo-hiss-looser.editor, .boo-hiss-looser.msie {
             background: #fff;
         }
-        .boo-hiss-looser.editor .blob, .boo-hiss-looser.msie .blob {
+        .boo-hiss-looser.editor .blob {
             margin: 0 auto;
             margin-top: 5px;
             width: 64px;
@@ -74,16 +74,30 @@
             background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/looserSingle.png) center center no-repeat;
         }
 
+        .boo-hiss-looser.msie .blob {
+            margin: 0 auto;
+            margin-top: 15px;
+            width: 58px;
+            height: 90px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/looserSingleSmall.png) center center no-repeat;
+        }
+
         @media only screen and (-webkit-min-device-pixel-ratio: 2) {
             .boo-hiss-looser.editor, .boo-hiss-looser.msie {
                 background: #fff;
                 background-size: 456px 113px;
             }
-            .boo-hiss-looser.editor .blob, .boo-hiss-looser.msie .blob {
+            .boo-hiss-looser.editor .blob {
                 margin: 0 auto;
                 margin-top: 5px;
                 background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/looserSingle.png)  no-repeat;
                 background-size: 64px 102px;
+            }
+            .boo-hiss-looser.msie .blob {
+                margin: 0 auto;
+                margin-top: 15px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/looserSingleSmall.png) center center no-repeat;
+                background-size: 58px 90px;
             }
         }
 
@@ -332,9 +346,9 @@ window.requestAnimFrame = (function(){
 
                 ctx.drawImage(imageAsset, 0, pos, imageAsset.sprite_width, imageAsset.sprite_height,
                         (canvasMidX + (18 * pixelRatio)) | 0,
-                        (canvasMidY + (5 * pixelRatio)) | 0,
-                        imageAsset.sprite_width ,
-                        (imageAsset.sprite_height / 1.1) | 0);
+                        (canvasMidY + (15 * pixelRatio)) | 0,
+                        imageAsset.sprite_width / 1.1 ,
+                        (imageAsset.sprite_height / 1.2) | 0);
 
                 ctx.restore();
 
@@ -459,7 +473,7 @@ window.requestAnimFrame = (function(){
     <div class="boo-hiss-looser-header">
         <span class="timestamp"></span>
         <span class="flags"></span>
-        <strong class="nickname">test</strong>
+        <strong class="nickname"></strong>
     </div>
     <div class="blob"></div>
     <canvas class="canvas"></canvas>

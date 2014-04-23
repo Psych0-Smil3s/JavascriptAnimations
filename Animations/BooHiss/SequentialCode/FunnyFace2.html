@@ -1,0 +1,340 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+    <style type="text/css">
+        /******************************
+         * The following styles are only
+         * for browser based testing.
+         ******************************/
+        .wrapper {
+            position: relative;
+            width: 600px;
+            margin: 100px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+        .wrapper .editor {
+            margin-top: 10px !important;
+        }
+        /******************************
+         * Message styles
+         ******************************/
+        * {
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+        }
+        .boo-hiss-funny, .boo-hiss-funny * {
+            overflow: visible;
+        }
+        .loader {
+            position: absolute;
+        }
+        .boo-hiss-funny {
+            border-radius: inherit;
+            height: 113px;
+            position: relative;
+            background: #fff;
+            border: solid 1px #999;
+            text-align: center;
+        }
+        .boo-hiss-funny .boo-hiss-funny-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+        }
+        .boo-hiss-funny-header .timestamp, .boo-hiss-funny-header .flags, .boo-hiss-funny-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #666;
+        }
+        .boo-hiss-funny-header .timestamp, .boo-hiss-funny-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+        .boo-hiss-funny-header canvas {
+            z-index: 2;
+            position: relative;
+        }
+        .boo-hiss-funny.msie canvas {
+            display: none;
+        }
+        .boo-hiss-funny.editor, .boo-hiss-funny.msie {
+            background: #fff;
+        }
+        .boo-hiss-funny.editor .blob, .boo-hiss-funny.msie .blob {
+            margin: 0 auto;
+            margin-top: 5px;
+            width: 76px;
+            height: 102px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/funnyfaceSingle.png) center center no-repeat;
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .boo-hiss-funny.editor, .boo-hiss-funny.msie {
+                background: #fff;
+                background-size: 456px 113px;
+            }
+            .boo-hiss-funny.editor .blob, .boo-hiss-funny.msie .blob {
+                margin: 0 auto;
+                margin-top: 5px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/funnyfaceSingle.png)  no-repeat;
+                background-size: 76px 102px;
+            }
+        }
+
+        @-moz-document url-prefix() {
+            .boo-hiss-funny.editor, .boo-hiss-funny.msie {
+                background: #fff;
+                background-size: 456px 113px;
+            }
+            .boo-hiss-funny.editor .blob, .boo-hiss-funny.msie .blob {
+                margin: 0 auto;
+                margin-top: 5px;
+                background: url(http://media.parlingo.com/website/live/messagepacks/boohiss/X2/funnyfaceSingle.png)  no-repeat;
+                background-size: 76px 102px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+/**
+ * Provide a cross-browser/fall back
+ * solution for the requestAnimationFrame.
+ */
+window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            window.oRequestAnimationFrame      ||
+            window.msRequestAnimationFrame     ||
+            function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+            };
+})();
+
+/**
+ * Preload the scene images.
+ */
+var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2),
+
+        funny_face_imagesLoaded = 0,
+        funny_face_totalImages = 1,
+        funny_face_frameCount = 80,
+
+        funny_face_currentFrame = 0,
+        funny_face_isSoundSupported = false,
+        funny_face_isSoundPlaying = false,
+
+        funny_face_sprite = new Image(),
+        funny_face_sprite_width,
+        funny_face_sprite_height;
+
+    funny_face_sprite.onload = function() {
+    funny_face_imagesLoaded++;
+    funny_face_sprite_width = this.width;
+    funny_face_sprite_height = (this.height / funny_face_frameCount);
+};
+funny_face_sprite.src = 'http://media.parlingo.com/website/live/messagepacks/boohiss/' + (pixelRatio === 1 ? 'funnyface2.png' : 'X2/funnyface.png'); // img2.png || X2/img.png
+
+var funny_face_audio = new Audio();
+var source = document.createElement('source');
+
+if (funny_face_audio.canPlayType('audio/ogg;')) {
+    source.type= 'audio/ogg';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/boohiss/audio/funnyface.ogg';
+    funny_face_isSoundSupported = true;
+} else if (funny_face_audio.canPlayType('audio/mpeg')) {
+    source.type= 'audio/mpeg';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/boohiss/audio/funnyface.mp3';
+    funny_face_isSoundSupported = true;
+} else if (funny_face_audio.canPlayType('audio/mp4a-latm')) {
+    source.type= 'audio/mp4a-latm';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/boohiss/audio/funnyface.m4a';
+    funny_face_isSoundSupported = true;
+} else if (funny_face_audio.canPlayType('audio/x-wav')) {
+    source.type= 'audio/x-wav';
+    source.src= 'http://media.parlingo.com/website/live/messagepacks/boohiss/audio/funnyface.wav';
+    funny_face_isSoundSupported = true;
+}
+funny_face_audio.appendChild(source);
+
+function funny_face_render(c, me) {
+
+    if (funny_face_imagesLoaded < funny_face_totalImages)
+        return;
+    else
+        me.removeClass('msie');
+
+    var can = $('canvas#' + c);
+    can.each(function() {
+        var tick = $(this).parent().data('tick'),
+                ctx = this.getContext('2d');
+
+        ctx.clearRect(0, 0, this.width, this.height);
+        ctx.save();
+
+        if (!funny_face_isSoundPlaying && funny_face_isSoundSupported) {
+            var scene = funny_face_drawScene(this);
+            ctx.drawImage(scene, -10 * pixelRatio, 60 * pixelRatio, Math.floor(this.width / 2), Math.floor(this.height / 2));
+        }
+
+        var frame = tick % (funny_face_frameCount - 1),
+                pos = Math.ceil(frame *  funny_face_sprite_height);
+
+        funny_face_currentFrame = frame;
+
+        ctx.drawImage(funny_face_sprite, 0, pos, funny_face_sprite_width, funny_face_sprite_height, Math.floor((this.width / 2) - (funny_face_sprite_width / 2)), (Math.floor((this.height / 2) - (funny_face_sprite_height / 2)) + (5 * pixelRatio)), funny_face_sprite_width, (funny_face_sprite_height / 1.1) | 0);
+
+        ctx.restore();
+
+        $(this).parent().data('tick', tick+1);
+    });
+}
+
+function funny_face_drawScene(par) {
+    if (!par.scene) {
+        var canvas = document.createElement('canvas'),
+                ctx = canvas.getContext('2d');
+
+
+        canvas.width = par.width;
+        canvas.height = par.height;
+
+        ctx.beginPath();
+        ctx.fillStyle = '#999';
+        ctx.moveTo(40 * pixelRatio,70 * pixelRatio);
+        ctx.lineTo(65 * pixelRatio,95 * pixelRatio);
+        ctx.lineTo(65 * pixelRatio,45 * pixelRatio);
+        ctx.fill();
+
+        ctx.fillRect(35 * pixelRatio, 60 * pixelRatio, 20 * pixelRatio, 20 * pixelRatio);
+
+        // add .5 to straddle the pixels - make drawing smoother
+        var x = 70.5 * pixelRatio;
+        var y = 70.5  * pixelRatio;
+        var radius = 10;
+        var startAngle = 1.5 * Math.PI;
+        var endAngle = 0.5 * Math.PI;
+        var counterClockwise = false;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#999';
+        ctx.stroke();
+
+        ctx.beginPath();
+        radius = 20;
+        x = 70.5 * pixelRatio;
+        ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+        ctx.stroke();
+
+        par.scene = canvas;
+    }
+    return par.scene;
+}
+
+function funny_face_draw(c, me) {
+
+    setTimeout(function() {
+
+        window.requestAnimFrame(
+                function() {funny_face_draw(c, me)
+                });
+
+        funny_face_render(c, me);
+
+    }, 50);
+}
+
+function funny_face_setIsSoundSupported(me) {
+
+    var clip = me.find('.clip');
+
+    clip.find('source').each(function() {
+        // !! converts value to a boolean and ensures a boolean type.
+        if (!!(this.parentNode.canPlayType && this.parentNode.canPlayType($(this).attr('type')).replace(/no/, ''))) {
+            funny_face_isSoundSupported = true;
+            return false;
+        }
+    });
+    return clip;
+}
+
+function funny_face_loaded(preloaded) {
+    var me = $(this).closest('.boo-hiss-funny');
+    if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+
+        setTimeout(function() {
+            me.data('tick', 0);
+            var canvas = me.find('.canvas'),
+                    width = me.width(),
+                    height = me.height();
+            canvas.css({
+                width : width,
+                height : height
+            });
+            if (pixelRatio) {
+                canvas.attr({
+                    'width' : width * pixelRatio,
+                    'height' : height * pixelRatio
+                });
+            }
+
+            //var clip = funny_face_setIsSoundSupported(me);
+            var id = Math.floor(Math.random() * new Date().getTime());
+            canvas.attr('id', id);
+            funny_face_draw(id, me);
+
+            if (funny_face_isSoundSupported) {
+
+                var sound = funny_face_audio;
+                sound.volume = 1;
+
+                sound.addEventListener('ended',function(){
+                    sound.pause();
+                    sound.currentTime = 0;
+                    funny_face_isSoundPlaying = false;
+                });
+
+                me.click(function(e) {
+                    e.preventDefault();
+
+                    if (!funny_face_isSoundPlaying) {
+                        sound.play();
+                        funny_face_isSoundPlaying = true;
+                    }
+                });
+            }
+
+        }, 200);
+    }
+}
+//]]>
+</script>
+<div class="boo-hiss-funny msie">
+    <img src="http://media.parlingo.com/website/live/messagepacks/gavintest/shared/tinytrans.gif" class="loader" onload="funny_face_loaded.call(this)"/>
+    <div class="boo-hiss-funny-header">
+        <span class="timestamp"></span>
+        <span class="flags"></span>
+        <strong class="nickname"></strong>
+    </div>
+    <div class="blob"></div>
+    <canvas class="canvas"></canvas>
+</div>
+<div class="boo-hiss-funny editor">
+    <div class="blob"></div>
+</div>
+
+</div>
+</body>
+</html>
