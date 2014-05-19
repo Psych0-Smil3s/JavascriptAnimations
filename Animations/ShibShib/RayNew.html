@@ -155,7 +155,7 @@
 
         /* Display text */
         .poll-display{
-            height: 150px; /* 100% - makes msg stabdard size */
+            height: 100%; /*150px; /* 100% - makes msg stabdard size */
             width: 100%;
             position: relative;
             background: url(http://media.parlingo.com/website/live/messagepacks/poll/palringo_p_50px.png) center no-repeat;
@@ -255,12 +255,43 @@
                     <p id="o2" class="option" style="-webkit-animation-delay:0.5s;">option 2</p>
                     <p id="o3" class="option" style="-webkit-animation-delay:1s;">option 3</p>
                     <p id="o4" class="option" style="-webkit-animation-delay:1.5s;">option 4</p>
-                    <p id="o5" class="option" style="-webkit-animation-delay:2s;">option 5</p>
+                    <p id="o5" class="option" style="-webkit-animation-delay:2s;"></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript" defer="defer">
+//<![CDATA[
+
+this.PollMsg = this.PollMsg || {};
+
+(function(){
+
+    // Dynamic size if 4+ options
+    var OPTION_PADDING = 25;
+
+    function Poll() {
+        $('p.option:empty').each(function(){
+           $(this).remove();
+        });
+
+       if ($('p.option').length > 4) {
+            var noOfAdditionalItems = $('p.option').length - 4;
+            var displayPadding = noOfAdditionalItems * OPTION_PADDING;
+            var messageHeight = $('.poll-display .lower').height() + displayPadding;
+            $('.poll-display').css('height',messageHeight + 'px');
+        }
+    }
+    PollMsg.Display = Poll;
+})();
+
+$(document).ready(function() {
+    new PollMsg.Display();
+});
+//]]>
+</script>
 
 </body>
 </html>
