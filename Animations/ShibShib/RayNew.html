@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Ray Form</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+
+    <style>
+        * {
+            overflow: visible;
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper{
+            font-family: 'Helvetica', 'Lucida Grande', 'Arial', sans-serif;
+        }
+        /* Composer */
+        .rain{
+            padding: 5px; /* 10 */
+        }
+        .border,
+        .rain,
+        .border.start,
+        .rain.start{
+            background-repeat: repeat-x, repeat-x, repeat-x, repeat-x;
+            background-position: 0 0, 0 0, 0 0, 0 0;
+            /* Blue-ish Green Fallback for Mozilla */
+            background-image: -moz-linear-gradient(left, #09BA5E 0%, #00C7CE 15%, #3472CF 26%, #00C7CE 48%, #0CCF91 91%, #09BA5E 100%);
+            /* Add "Highlight" Texture to the Animation */
+            background-image: -webkit-gradient(linear, left top, right top,
+            color-stop(1%,rgba(0,0,0,.3)),
+            color-stop(23%,rgba(0,0,0,.1)),
+            color-stop(40%,rgba(255,231,87,.1)),
+            color-stop(61%,rgba(255,231,87,.2)),
+            color-stop(70%,rgba(255,231,87,.1)),
+            color-stop(80%,rgba(0,0,0,.1)),
+            color-stop(100%,rgba(0,0,0,.25)));
+            /* Starting Color */
+            background-color: #40a69b;
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00BA1B', endColorstr='#00BA1B',GradientType=1 );
+        }
+
+        @-webkit-keyframes colors {
+            0% {background-color: #339999;}
+            15% {background-color: #336666;}
+            30% {background-color: #66cccc;}
+            45% {background-color: #339999;}
+            60% {background-color: #99cccc;}
+            75% {background-color: #33cccc;}
+            90% {background-color: #669999;}
+            100% {background-color: #339999;}
+        }
+        .border,.rain{
+            -webkit-animation-direction: normal;
+            -webkit-animation-duration: 20s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-name: colors;
+            -webkit-animation-timing-function: ease;
+        }
+
+        /* Display */
+        .border-display,
+        .rain-display,
+        .border-display.start-display,
+        .rain-display.start-display{
+            background-repeat: repeat-x, repeat-x, repeat-x, repeat-x;
+            background-position: 0 0, 0 0, 0 0, 0 0;
+            background-color: #40a69b;
+        }
+
+        @-webkit-keyframes colors-display {
+            0% {background-color: #339999;}
+            25% {background-color: #66cccc;}
+            75% {background-color: #99cccc;}
+            100% {background-color: #339999;}
+        }
+        .border-display,.rain-display{
+            -webkit-animation-direction: normal;
+            -webkit-animation-duration: 10s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-name: colors-display;
+            -webkit-animation-timing-function: ease;
+        }
+
+        /* Composer Form */
+        h1{
+            font-size: 16px; /* 16 */
+            color: #339999;
+            font-weight: bold;
+        }
+        .poll form{
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            height: 113px; /* 268 */
+            width: 100%;
+            background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 150, from(#242424), to(#090909));
+            background: -moz-radial-gradient(50% 46% 90deg,circle closest-corner, #242424, #090909);
+        }
+        .poll form textarea{
+            display: inline-block;
+            resize: none;
+            margin-top: 5px;
+            margin-left: 5px;
+            width: 27%; /* 85 */
+            height: 20px; /* 20 */
+            background: #111;
+            /*background-image: -webkit-gradient(
+                linear, left top, left bottom, from(rgba(50,50,50,0.8)),
+                to(rgba(80,80,80,0.2)), color-stop(.5,#333333)
+            );*/
+            outline: 1px solid #333;
+            border: 1px solid #000;
+            padding: 1px; /* 5 */
+            color: #339999;
+            font-size: 11px; /* 16 */
+            transition: all 0.25s ease-in-out;
+            -webkit-transition: all 0.25s ease-in-out;
+            -moz-transition: all 0.25s ease-in-out;
+        }
+        .poll form textarea:focus{
+            outline: 1px solid #555;
+            color: #FFF;
+            box-shadow: 0 0 30px #339999; /* 30 */
+        }
+        .poll form label{
+            font-size: 11px; /* 16 */
+            color: #339999;
+            width: 10%;
+            font-weight: bold;
+        }
+        .poll form .upper{
+            text-align: center;
+            margin-bottom: 5px; /* 25 */
+        }
+        .poll form .upper textarea{
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .poll form .upper .subject {
+            width: 50%;
+        }
+        .poll form .upper .duration {
+            width: 30%; /* 20 */
+        }
+        .poll form .lower{
+            text-align: center;
+        }
+        .poll textarea.option::-webkit-input-placeholder {
+            font-style:italic;
+            text-align:center;
+        }
+
+
+        /* Display text */
+        .poll-display{
+            height: 150px; /* 100% - makes msg stabdard size */
+            width: 100%;
+            position: relative;
+            background: url(http://media.parlingo.com/website/live/messagepacks/poll/palringo_p_50px.png) center no-repeat;
+        }
+        .poll-display p{
+            display: inline-block;
+            /*margin-top: 2px;*/
+            width: 85%;
+            /* height: 10px; /* 20 */
+            padding: 3px; /* 5 */
+            color: #FFF;
+        }
+        .poll-display .upper{
+            text-align: center;
+            vertical-align: middle;
+            background: #111;
+            background-image: -webkit-gradient(
+                linear, left top, left bottom, from(rgba(50,50,50,0.8)),
+                to(rgba(80,80,80,0.2)), color-stop(.5,#333333)
+            );
+            /*padding: 5px;*/
+            font-size: 14px; /* 16 */
+            font-weight: bold;
+        }
+        .poll-display .upper .sub {
+            width: 50%;
+        }
+        .poll-display .upper .duration {
+            width: 20%;
+            text-align: right;
+        }
+        .poll-display label{
+            color: #FFF;
+            width: 20%;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .poll-display .lower{
+            text-align: center;
+            color: white;
+            padding: 2px;
+            /*text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;*/
+        }
+
+        .poll-display .lower p{
+            -webkit-animation: pulsate 5s linear;
+            -webkit-animation-iteration-count: infinite;
+        }
+
+        @-webkit-keyframes pulsate {
+            0% { -webkit-transform: scale(1.0) }
+            50% { -webkit-transform: scale(1.1) }
+            100% { -webkit-transform: scale(1.0) }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="rain poll">
+        <div class="border start">
+            <form>
+                <div class="upper">
+                    <h1>Create Your Poll Text Here</h1>
+                    <textarea class="subject" name="subject" max-newlines="6" max-length="178" placeholder="Subject"></textarea>
+                    <textarea class="duration" name="duration" id="duration" max-newlines="6" max-length="178" placeholder="Duration"></textarea>
+                    <label for="duration">mins</label>
+                </div>
+                <div class="lower">
+                    <textarea class="option" name="o1" max-newlines="6" max-length="178" placeholder="Option"></textarea>
+                    <textarea class="option" name="o2" max-newlines="6" max-length="178" placeholder="Option"></textarea>
+                    <textarea class="option" name="o3" max-newlines="6" max-length="178" placeholder="Option"></textarea>
+                    <textarea class="option" name="o4" max-newlines="6" max-length="178" placeholder="Option" style="width: 45%;"></textarea>
+                    <textarea class="option" name="o5" max-newlines="6" max-length="178" placeholder="Option" style="width: 45%;"></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="wrapper">
+    <div class="rain-display poll">
+        <div class="border-display start-display">
+            <div class="poll-display">
+                <div class="upper">
+                    <p id="subject" class="sub">This is a test Subject</p>
+                    <p id="duration" class="duration">12</p>
+                    <label for="duration">mins</label>
+                </div>
+                <div class="lower">
+                    <p id="o1" class="option" style="-webkit-animation-delay:0s;">option 1</p>
+                    <p id="o2" class="option" style="-webkit-animation-delay:0.5s;">option 2</p>
+                    <p id="o3" class="option" style="-webkit-animation-delay:1s;">option 3</p>
+                    <p id="o4" class="option" style="-webkit-animation-delay:1.5s;">option 4</p>
+                    <p id="o5" class="option" style="-webkit-animation-delay:2s;">option 5</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
