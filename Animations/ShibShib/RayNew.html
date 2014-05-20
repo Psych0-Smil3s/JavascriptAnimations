@@ -197,11 +197,6 @@
             text-align: center;
             color: white;
             padding: 2px;
-            /*text-shadow:
-                -1px -1px 0 #000,
-                1px -1px 0 #000,
-                -1px 1px 0 #000,
-                1px 1px 0 #000;*/
         }
 
         .poll-display .lower p{
@@ -223,7 +218,7 @@
         <div class="border start">
             <form>
                 <div class="upper">
-                    <h1>Create Your Poll Text Here</h1>
+                    <h1>Create and Share Your Poll</h1>
                     <textarea class="subject" name="subject" max-newlines="6" max-length="178" placeholder="Subject"></textarea>
                     <textarea class="duration" name="duration" id="duration" max-newlines="6" max-length="178" placeholder="Duration"></textarea>
                     <label for="duration">mins</label>
@@ -241,26 +236,26 @@
 </div>
 
 
-<div class="wrapper">
+<!--<div class="wrapper">
     <div class="rain-display poll">
         <div class="border-display start-display">
             <div class="poll-display">
                 <div class="upper">
-                    <p id="subject" class="sub">This is a test Subject</p>
-                    <p id="duration" class="duration">12</p>
-                    <label for="duration">mins</label>
+                    <p id="subject" class="sub"></p>
+                    <p id="duration" class="duration"></p>
+                    <label id="durationLabel" for="duration">mins</label>
                 </div>
                 <div class="lower">
-                    <p id="o1" class="option" style="-webkit-animation-delay:0s;">option 1</p>
-                    <p id="o2" class="option" style="-webkit-animation-delay:0.5s;">option 2</p>
-                    <p id="o3" class="option" style="-webkit-animation-delay:1s;">option 3</p>
-                    <p id="o4" class="option" style="-webkit-animation-delay:1.5s;">option 4</p>
+                    <p id="o1" class="option" style="-webkit-animation-delay:0s;"></p>
+                    <p id="o2" class="option" style="-webkit-animation-delay:0.5s;"></p>
+                    <p id="o3" class="option" style="-webkit-animation-delay:1s;"></p>
+                    <p id="o4" class="option" style="-webkit-animation-delay:1.5s;"></p>
                     <p id="o5" class="option" style="-webkit-animation-delay:2s;"></p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 <script type="text/javascript" defer="defer">
 //<![CDATA[
@@ -271,18 +266,44 @@ this.PollMsg = this.PollMsg || {};
 
     // Dynamic size if 4+ options
     var OPTION_PADDING = 25;
+    var STANDARD_MSG_HEIGHT = 113;
 
     function Poll() {
         $('p.option:empty').each(function(){
            $(this).remove();
         });
 
-       if ($('p.option').length > 4) {
-            var noOfAdditionalItems = $('p.option').length - 4;
-            var displayPadding = noOfAdditionalItems * OPTION_PADDING;
-            var messageHeight = $('.poll-display .lower').height() + displayPadding;
-            $('.poll-display').css('height',messageHeight + 'px');
+        var noOfOptions = $('p.option').length;
+
+        //validation
+        if (noOfOptions == 0) {
+            var emptyOption = "<p id='o1' class='option' style='-webkit-animation-delay:0s;'>You didn't provide any options...</p>";
+            $(".poll-display .lower").html(emptyOption);
+            noOfOptions = 1;
         }
+        $('.poll-display .sub:empty').each(function(){
+            $(this).html('No subject :/');
+        });
+        $('.poll-display .duration:empty').each(function(){
+            $(this).html(':(');
+            $('#durationLabel').remove();
+        });
+
+        // calc height of msg attributes
+        var displayLowersSize = noOfOptions * OPTION_PADDING;
+        var displayMsgHeight = $('.poll-display .lower').height() + $('.poll-display .upper').height();
+
+        // set lower msg body
+        if (displayMsgHeight < STANDARD_MSG_HEIGHT) {
+            var messageHeightDeficit = STANDARD_MSG_HEIGHT - displayMsgHeight;
+            var newLowerSize = messageHeightDeficit + displayLowersSize;
+            $('.poll-display .lower').css('height', newLowerSize + 'px');
+            displayMsgHeight = $('.poll-display .lower').height() + $('.poll-display .upper').height();
+        }
+        else {
+            $('.poll-display .lower').css('height', displayLowersSize + 'px');
+        }
+        $('.poll-display').css('height', displayMsgHeight + 'px');
     }
     PollMsg.Display = Poll;
 })();
