@@ -1,0 +1,330 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+<style type="text/css">
+/******************************
+ * The following styles are only
+ * for browser based testing.
+ ******************************/
+.wrapper {
+    position: relative;
+    width: 600px;
+    margin: 100px;
+    overflow: visible;
+    border-radius: 5px;
+}
+.wrapper .editor {
+    margin-top: 10px !important;
+}
+/******************************
+ * Message styles
+ ******************************/
+
+* {
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+}
+.sweets, .sweets * {
+    overflow: visible;
+}
+.loader {
+    position: absolute;
+}
+.sweets {
+    background: #768288 url(http://media.parlingo.com/website/live/messagepacks/ramadan_2014/sweetsFirst.png) no-repeat;
+    border-radius: inherit;
+    height: 113px;
+    /*background-size: 600px 113px;*/
+    background-size: 600px 113px;
+    background-position: left bottom;
+    position: relative;
+    border: solid 1px #999;
+    text-align: center;
+}
+.sweets .sweets-header {
+    width: 100%;
+    position: absolute;
+    z-index: 11;
+    top: 0;
+    left: 0;
+}
+.sweets-header .timestamp, .sweets-header .flags, .sweets-header .nickname {
+    float: left;
+    padding: 2px 5px;
+    color: #fff;
+}
+.sweets-header .timestamp, .sweets-header .flags {
+    float: right;
+    padding-left: 10px;
+}
+
+.sweets-outer
+{
+    margin-left: 110px;
+    margin-top: 20px;
+    margin-right: 3px;/*10px;*/
+}
+
+.sweets-outer.fade
+{
+    -webkit-animation: fadein 3s; /* Safari and Chrome */
+    -moz-animation: fadein 3s; /* Firefox */
+    -ms-animation: fadein 3s; /* Internet Explorer */
+    -o-animation: fadein 3s; /* Opera */
+    animation: fadein 3s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari and Chrome */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Opera */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.sweets-outer.editor
+{
+    margin-top: 10px;
+}
+
+.sweets-message-entry
+{
+
+    border: none;
+    background-color:transparent;
+    background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
+    width: 100%;
+    height:86px;
+    color: #000; /* 663333 */
+    font-weight:bold;
+    padding: 2px;
+    margin: 0px;
+    position:relative;
+    z-index:9999;
+    text-wrap: avoid;
+    white-space: pre-wrap;
+    word-wrap : break-word;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    resize:vertical;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* triangle border */
+.sweets-triangle-border {
+    position:relative;
+    /*margin:1em 0 3em;*/
+    border:2px solid #fff; /* 5 */
+    height:86px;
+    color:#333;
+    background-color:transparent;
+    background:url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+}
+
+/*.sweets-triangle-border:before {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    display: block;
+    width: 0;
+}
+.sweets-triangle-border:after {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    display: block;
+    width: 0;
+}*/
+
+/* triangle border left */
+.sweets-triangle-border.left {
+    margin-left:25px;
+}
+
+/*.sweets-triangle-border.left:before {
+    top: 55px;
+    bottom: auto;
+    left: -25px;
+    border-width: 10px 25px 10px 0;
+    border-color: transparent #fff;
+}
+
+.sweets-triangle-border.left:after {
+    top: 59px;
+    bottom: auto;
+    left: -21px;
+    border-width: 6px 18px 6px 0;
+    border-color: transparent #c17e3a;
+}*/
+
+.sweets.editor, .sweets.msie {
+    background: #768288 url(http://media.parlingo.com/website/live/messagepacks/ramadan_2014/sweetsScene.png) no-repeat;
+    background-size: 600px 113px;
+    background-position: left bottom;
+
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    .sweets.editor, .sweets.msie {
+        background: #768288 url(http://media.parlingo.com/website/live/messagepacks/ramadan_2014/sweetsScene.png) no-repeat;
+        background-size: 600px 113px;
+        background-position: left bottom;
+    }
+
+}
+
+@-moz-document url-prefix() {
+    .sweets.editor, .sweets.msie {
+        background: #768288 url(http://media.parlingo.com/website/live/messagepacks/ramadan_2014/sweetsScene.png) no-repeat;
+        background-size: 600px 113px;
+        background-position: left bottom;
+    }
+
+}
+
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+    <script type="text/javascript" defer="defer">
+        //<![CDATA[
+
+        // Namespace
+        this.MP = this.MP || {};
+
+        (function($){
+
+            $(document).ready(function () {
+
+                var c = new MP.Sweets();
+                c.sweets_loaded();
+
+            });
+
+        }(jQuery));
+
+        (function($){
+
+            function Sweets() {
+
+                this.me = $('.loader').closest('.sweets');
+                this.meBubble =  $('.loader').closest('.sweets .sweets-outer');
+                this.msgPackWidth = $(this.me).width();
+                this.MSG_PACK_WIDTH_BOUND = 500;
+
+                this.sweets_show_bubble = function() {
+                    $(this.meBubble).fadeIn('fast');
+                }
+
+                this.sweets_set_speechBubble_size = function() {
+                    if (this.msgPackWidth > this.MSG_PACK_WIDTH_BOUND) {
+                        this.meBubble.css({width: "35%" });
+                    }
+                }
+
+                this.sweets_loaded = function() {
+
+                    var self = this; // use bind() on events if jquery gets updated to 1.7
+
+                    if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+
+                        $(this.meBubble).hide();
+                        $(this.meBubble).removeClass('fade');
+
+                        this.me.toggleClass('go');
+
+                        // Start the animated gif
+                        if (this.me.hasClass('go')) {
+
+                            this.sweets_set_speechBubble_size();
+
+                            // Create <img> element and give it the animated gif as a src.  To
+                            // force a reload - add a date parameter to the URL
+                            var img = document.createElement('img');
+                            img.src = "http://media.parlingo.com/website/live/messagepacks/ramadan_2014/sweets.gif?p" + new Date().getTime();
+
+                            this.me.removeClass('msie');
+
+                            // Once the image has loaded, set it as the background-image
+                            $(img).load(function(){
+                                self.me.css({backgroundImage: "url("+img.src+" )"});
+                                self.me.css({backgroundRepeat: "no-repeat"});
+                                setTimeout(function() { self.sweets_show_bubble.call(self); }, 1000);
+                            });
+
+                            // Remove the background-image
+                        } else {
+                            this.me.css({backgroundImage: "none"});
+                        }
+                    }
+
+                }
+            }
+
+            MP.Sweets = Sweets;
+
+        }(jQuery));
+
+        //]]>
+    </script>
+
+    <div class="sweets msie">
+        <div class="sweets-header">
+            <span class="timestamp"></span>
+            <span class="flags"></span>
+            <strong class="nickname"></strong>
+        </div>
+        <div class="sweets-outer fade">
+            <div class="sweets-triangle-border left">
+                <p id="message" class="sweets-message-entry loader message-bubble"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="sweets editor">
+        <form>
+            <div class="sweets-outer fade">
+                <p class="sweets-triangle-border left">
+                    <textarea class="sweets-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60"></textarea>
+                </p>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+
+
+</html>

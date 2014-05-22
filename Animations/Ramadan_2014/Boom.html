@@ -1,0 +1,183 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>-->
+<style type="text/css">
+/******************************
+ * The following styles are only
+ * for browser based testing.
+ ******************************/
+.wrapper {
+    position: relative;
+    width: 600px;
+    margin: 100px;
+    overflow: visible;
+    border-radius: 5px;
+}
+.wrapper .editor {
+    margin-top: 10px !important;
+}
+/******************************
+ * Message styles
+ ******************************/
+
+* {
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+}
+.boom-ram, .boom-ram * {
+    overflow: visible;
+}
+.loader {
+    position: absolute;
+}
+.boom-ram {
+
+    background: #768288;
+    border-radius: inherit;
+    height: 113px;
+    position: relative;
+    border: solid 1px #ccc;
+}
+
+.background-boom {
+    content: url(http://media.parlingo.com/website/live/messagepacks/ramadan_2014/boomFirst.png);
+    position: relative;
+    width:100%;
+    margin-top: 23px; /* 21 */
+    height: 90px;
+    max-height:90px;
+    border-radius: inherit;
+}
+
+.boom-ram .boom-ram-header {
+    width: 100%;
+    position: absolute;
+    z-index: 11;
+    top: 0;
+    left: 0;
+}
+.boom-ram-header .timestamp, .boom-ram-header .flags, .boom-ram-header .nickname {
+    float: left;
+    padding: 2px 5px;
+    color: #fff;
+}
+.boom-ram-header .timestamp, .boom-ram-header .flags {
+    float: right;
+    padding-left: 10px;
+}
+
+.boom-ram.editor .background-boom {
+    content: url(http://media.parlingo.com/website/live/messagepacks/ramadan_2014/boomScene.png);
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+
+
+}
+
+@-moz-document url-prefix() {
+
+
+}
+
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+    <script type="text/javascript" defer="defer">
+    //<![CDATA[
+
+    // Namespace
+    this.MP = this.MP || {};
+
+    (function($){
+
+        $(document).ready(function () {
+
+            var c = new MP.Boom();
+            c.boom_loaded();
+
+        });
+
+    }(jQuery));
+
+    (function($){
+
+        function Boom() {
+
+            this.me = $('.background-boom'); //$('.loader').closest('.boom-ram');
+
+            this.boom_loaded = function() {
+
+                var self = this; // use bind() on events if jquery gets updated to 1.7
+
+                if (navigator.userAgent.toLowerCase().indexOf('msie') === -1) {
+
+                    this.me.toggleClass('go');
+
+                    // Start the animated gif
+                    if (this.me.hasClass('go')) {
+
+                        // Create <img> element and give it the animated gif as a src.  To
+                        // force a reload - add a date parameter to the URL
+                        var img = document.createElement('img');
+                        img.src = "http://media.parlingo.com/website/live/messagepacks/ramadan_2014/boom.gif?p" + new Date().getTime();
+
+                        this.me.removeClass('msie');
+
+                        // Once the image has loaded, set it as the background-image
+                        $(img).load(function(){
+                            self.me.css({content: "url("+img.src+" )"});
+                        });
+
+                        // Remove the background-image
+                    } else {
+                        this.me.css({backgroundImage: "none"});
+                    }
+                }
+
+            }
+        }
+
+        MP.Boom = Boom;
+
+    }(jQuery));
+
+    //]]>
+</script>
+
+    <div class="boom-ram msie display">
+        <img class="background-boom" />
+        <div class="boom-ram-header">
+            <span class="timestamp"></span>
+            <span class="flags"></span>
+            <strong class="nickname"></strong>
+        </div>
+        <div>
+            <div>
+                <p id="message" class="boom-ram-message-entry loader message-bubble" style="display: none;"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="boom-ram editor">
+        <img class="background-boom" />
+        <form>
+            <div>
+                <p>
+                    <textarea class="boom-ram-message-entry" name="message" max-newlines="4" max-length="60" maxlength="60" style="display: none;"></textarea>
+                </p>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+
+
+</html>
