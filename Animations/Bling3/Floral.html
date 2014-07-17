@@ -1,0 +1,577 @@
+<!DOCTYPE html public "">
+<head>
+    <meta charset="uft-8">
+    <title>bling3-floral</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <style>
+
+        /* Browser Styles */
+        .wrapper {
+            position: relative;
+            width:255px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+
+        /* Styles Start */
+        * {
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+        }
+        .bling3-floral, .bling3-floral * {
+            overflow: hidden;
+        }
+        .bling3-floral {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_center.png") repeat-x;
+            border-radius: inherit;
+            width:100%;
+            height: 113px;
+            position: relative;
+            text-align: center;
+        }
+        .bling3-floral .bg {
+            position: absolute;
+            height: 113px;
+            max-height:113px;
+            border-radius: inherit;
+            top:0;
+            left:0;
+        }
+
+        .bling3-floral .leftbg {
+            position: absolute;
+            left:0;
+        }
+        .bling3-floral .rightbg {
+            position: absolute;
+            right:0;
+        }
+
+        .bling3-floral  canvas {
+            cursor: crosshair;
+            position: relative;
+        }
+
+        /* Header */
+        .bling3-floral .bling3-floral-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+        }
+        .bling3-floral-header .timestamp, .bling3-floral-header .flags, .bling3-floral-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #e25d3a;
+        }
+        .bling3-floral-header .timestamp, .bling3-floral-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+
+        .bling3-floral-header .flags {
+            color: #892512;
+        }
+
+        .bling3-floral-header .nickname{
+            width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+        }
+
+        /* WINDOWS FALLBACK */
+        .bling3-floral .messageFallback{
+            position: absolute;
+            left: 0;
+            right: 0;
+            top:0;
+            margin: auto;
+            display: block;
+        }
+
+        .bling3-floral .message-bling{
+            overflow-y: auto;
+            height: 90px;
+            padding: 10px;
+            font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+            font-size: 25px; /* default font size */
+            line-height: 100%; /* windows line height */
+            word-wrap: break-word;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            overflow-wrap: normal;
+            color: darkgoldenrod;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+        }
+
+        .bling3-floral .message-bling::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .bling3-floral .message-bling::-webkit-scrollbar-track {
+            display: none;
+        }
+
+        .bling3-floral .message-bling::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        }
+
+        /* Editor */
+        .bling3-floral.editor form {
+            width: 100%;
+            border-radius: inherit;
+            position: absolute;
+            top: 0;
+        }
+        .bling3-floral.editor .content {
+            display: block;
+            padding:0;
+            height: 103px;
+            width:auto;
+            margin:5px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat scroll 0 0 transparent;
+            border-radius: 10px;
+        }
+        .bling3-floral.editor .content textarea {
+            font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+            font-size: 25px;
+            border: none;
+            resize: none;
+            outline: none;
+            background: none;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            color: gold;
+            font-weight: bold;
+            overflow-y: hidden;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div class="wrapper">
+    <div class="bling3-floral display">
+
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_center.png" class="bg" onload="new MP.Loader(this)"/>
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_left.png" class="leftbg"/>
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_right.png" class="rightbg"/>
+
+        <div class="bling3-floral-header">
+            <span class="timestamp"></span>
+            <span class="flags"></span>
+            <strong class="nickname"></strong>
+        </div>
+        <canvas id='canvas'></canvas>
+        <div class="messageFallback">
+            <div id="message" class="message-bling"></div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="bling3-floral editor">
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_center.png" class="bg" />
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_left.png" class="leftbg"/>
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_right.png" class="rightbg"/>
+
+        <form action="">
+            <div class="content">
+                <textarea name="message" class="bling3-floral-textarea" max-length="200" maxlength="200"></textarea>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    //<![CDATA[
+
+    this.MP = this.MP || {};
+
+    (function($){
+
+        "use strict";
+
+        function BlingText() {
+
+            // Application variables
+            var position = {x: 0, y: 0};
+            var counter = 0;
+            var minFontSize = 20;
+            var angleDistortion = 0;
+            var letters = "";
+
+            // Drawing variables
+            var canvas;
+            var context;
+            var mouse = {x: 0, y: 0, down: false};
+
+            // Tap Variables
+            var allowTap = true;
+
+            this.init = function(me) {
+
+                canvas = me.find('#canvas'),
+                        letters = me.find('.message-bling').text(),
+
+                        canvas.width = Math.round(me.width()),
+                        canvas.height = Math.round(me.height());
+                context = $(canvas)[0].getContext("2d");
+
+                canvas.css({
+                    width : canvas.width,
+                    height : canvas.height
+                });
+                canvas.attr({
+                    'width' : canvas.width, // * pixelratio
+                    'height' : canvas.height
+                });
+            }
+
+            this.start = function(client) {
+                position.x =  canvas.width / 2 - 115,
+                mouse.x = canvas.width / 2 - 115,
+                position.y = 45,
+                mouse.y = 45;
+
+                var userInstructions = (client == "other") ? "SWIPE TO REVEAL..." : "TAP ME",
+                    fontSize = 20,
+                    i = 0;
+
+                context.font = 'normal normal bolder ' + fontSize + 'px sans-serif';
+
+                function printInstr (callback) {
+                    setTimeout(function () {
+
+                        var stepSize = textWidth( userInstructions[i], fontSize );
+                        mouse.x += 20;
+                        mouse.y += randomIntFromInterval(-5,5);
+                        var angle = Math.atan2(mouse.y-position.y, mouse.x-position.x);
+
+                        printText(userInstructions[i],angle);
+
+                        if (i < userInstructions.length-1) {
+                            position.x = position.x + Math.cos(angle) * stepSize;
+                            position.y = position.y + Math.sin(angle) * stepSize;
+                            i++;
+                            printInstr(callback);
+                        }
+                        else {
+                            callback(0.1);
+                            registerEventListeners(client);
+                        }
+                    }, 100)
+                }
+
+                //printInstr(clearUserInstructions);
+                tapMessage();
+
+            }
+
+            function registerEventListeners(client) {
+
+                if (client != "other") {
+                    if ('ontouchstart' in document.documentElement) {
+                        $(canvas)[0].addEventListener('touchstart', tapMessage, false);
+                    }
+                    else {
+                        $(canvas)[0].addEventListener('mousedown', tapMessage, false);
+                    }
+                }
+                else {
+                    if ('ontouchstart' in document.documentElement) {
+                        $(canvas)[0].addEventListener('touchmove', mouseMove, false);
+                        $(canvas)[0].addEventListener('touchstart', mouseDown, false);
+                        $(canvas)[0].addEventListener('touchend',   mouseUp,   false);
+                    }
+                    else {
+                        $(canvas)[0].addEventListener('mousemove', mouseMove, false);
+                        $(canvas)[0].addEventListener('mousedown', mouseDown, false);
+                        $(canvas)[0].addEventListener('mouseup',   mouseUp,   false);
+                        $(canvas)[0].addEventListener('mouseout',  mouseUp,  false);
+                        $(canvas)[0].addEventListener('dblclick', doubleClick, false);
+                    }
+                }
+            }
+
+            function clearUserInstructions(value) {
+                setTimeout(function () {
+                    if (value < 1) {
+                        context.clearRect(0,0,canvas.width * value ,canvas.height);
+                        value = value + 0.1;
+                        clearUserInstructions(value);
+                    }
+                    else {
+                        context.clearRect(0,0,canvas.width,canvas.height);
+                    }
+                }, 100);
+                canvas.width = canvas.width; //android bug fallback
+                position = {x: 0, y: 0};
+                mouse = {x: 0, y: 0, down: false};
+            }
+
+            function printText(letter, angle){
+                context.save();
+                context.translate( position.x, position.y);
+                context.rotate( angle );
+                context.textBaseline = 'hanging';
+                context.fill;
+                context.strokeStyle = '#000';
+                context.strokeText(letter, 0, 0);
+
+                // Fill the text.
+                var whiteGrad = context.createLinearGradient(0, 0, 0, 100);
+                whiteGrad.addColorStop(0, '#feef7e');
+                whiteGrad.addColorStop(0.5, '#e87c14');
+                whiteGrad.addColorStop(1, '#feef7e');
+                context.fillStyle = whiteGrad;
+
+                context.shadowBlur=2;
+                context.shadowColor= "#332b00";
+                context.fillText(letter, 0, 0);
+                context.restore();
+            }
+
+            function tapMessage() {
+                //var mousePos = getMousePos(event); // may have to be event[0]touches
+                //mouse.x = mousePos.x etc
+
+                var display = letters,
+                    fontSize = 16,
+                    i = 0;
+
+                switch (canvas.width < 300) {
+                    case (letters.length > 150):
+                        fontSize = 16;
+                        position.x = 10,
+                        mouse.x = 10,
+                        position.y = 10,
+                        mouse.y = 10;
+                        break;
+                    case (letters.length > 100):
+                        fontSize = 20;
+                        position.x = 10,
+                        mouse.x = 10,
+                        position.y = 10,
+                        mouse.y = 10;
+                        break;
+                    case (letters.length > 50):
+                        fontSize = 25;
+                        position.x = 10,
+                        mouse.x = 10,
+                        position.y = 15,
+                        mouse.y = 15;
+                        break;
+                    case (letters.length > 13):
+                        fontSize = 25;
+                        position.x = 10,
+                        mouse.x = 10,
+                        position.y = 35,
+                        mouse.y = 35;
+                        break;
+                    case (letters.length > 0):
+                        fontSize = 30;
+                        position.x = (canvas.width / 2) - (letters.length * 9),
+                        mouse.x = (canvas.width / 2) - (letters.length * 9),
+                        position.y = 40,
+                        mouse.y = 40;
+                        break;
+                }
+
+                /*switch (canvas.width > 300) {
+                    case (letters.length > 0):
+                        fontSize = 30;
+                        position.y = 35,
+                        mouse.y = 35;
+                        break;
+                    case (letters.length > 100):
+                        fontSize = 35;
+                        position.y = 15,
+                        mouse.y = 15;
+                        break;
+                    case (letters.length > 150):
+                        fontSize = 30;
+                        position.y = 10,
+                        mouse.y = 10;
+                        break;
+                }*/
+
+                context.font = 'normal normal bolder ' + fontSize + 'px sans-serif';
+
+                function printInstr () {
+                    setTimeout(function () {
+
+                        var stepSize = textWidth(display[i], fontSize );
+                        mouse.x += 20;
+                        //mouse.y += randomIntFromInterval(-5,5);
+
+                        var angle = 0; //Math.atan2(mouse.y-position.y, mouse.x-position.x);
+
+                        if (position.x > (canvas.width - 10)) {
+                            position.x = 10;
+                            position.y = position.y + 20;
+                        }
+
+                        if (position.y > (canvas.height - 10)) {
+                            position.y = 10;
+                        }
+
+                        printText(display[i],angle);
+
+                        if (i < letters.length-1) {
+                            position.x = position.x + Math.cos(angle) * stepSize;
+                            //position.y = position.y + Math.sin(angle) * stepSize;
+                            i++;
+                            printInstr();
+                        }
+                        else {
+                            allowTap = true;
+                        }
+                    }, 50) // 100
+                }
+
+
+                if (letters.length > 0 && allowTap) {
+                    allowTap = false;
+                    printInstr();
+                }
+            }
+
+            function randomIntFromInterval(min,max)
+            {
+                return Math.floor(Math.random()*(max-min+1)+min);
+            }
+
+            function getMousePos(evt) {
+                // ios fallback = pageX, pageY
+                return {
+                    x: evt.offsetX || evt.pageX,
+                    y: evt.offsetY || evt.pageY
+                };
+            }
+
+            function mouseMove ( event ){
+                var mousePos = getMousePos(event);
+                mouse.x = mousePos.x;
+                mouse.y = mousePos.y;
+                draw();
+            }
+
+            function draw() {
+                if ( mouse.down ) {
+                    var d = distance( position, mouse );
+                    var fontSize = minFontSize + d/2;
+                    var letter = letters[counter];
+                    var stepSize = textWidth( letter, fontSize );
+
+                    if (d > stepSize) {
+
+                        var angle = Math.atan2(mouse.y-position.y, mouse.x-position.x);
+                        context.font = 'normal normal bolder ' + fontSize + 'px sans-serif';
+
+                        printText(letter,angle);
+
+                        // loop message
+                        counter++;
+                        if (counter > letters.length-1) {
+                            counter = 0;
+                        }
+
+                        position.x = position.x + Math.cos(angle) * stepSize;
+                        position.y = position.y + Math.sin(angle) * stepSize;
+
+                    }
+                }
+            }
+
+            function distance( pt, pt2 ){
+
+                var xs = 0;
+                var ys = 0;
+
+                xs = pt2.x - pt.x;
+                xs = xs * xs;
+
+                ys = pt2.y - pt.y;
+                ys = ys * ys;
+
+                return Math.sqrt( xs + ys );
+            }
+
+            function mouseDown( event ){
+                mouse.down = true;
+                var mousePos = getMousePos(event);
+                position.x = mousePos.x;
+                position.y = mousePos.y;
+            }
+
+            function mouseUp( event ){
+                mouse.down = false;
+            }
+
+            function doubleClick( event ) {
+                canvas.width = canvas.width;
+                context.clearRect(0,0,canvas.width,canvas.height);
+            }
+
+            function textWidth( string, size ) {
+                context.font = size + "px Arial";
+                if ( context.fillText ) {
+                    return context.measureText( string ).width;
+                }
+            }
+        }
+
+        MP.BlingText = BlingText;
+
+    })(jQuery);
+
+    (function($){
+
+        var phoneType = ["android", "ipad", "iphone", "ipod", "other"];
+
+        function Loader(img) {
+            var me = $(img).closest('.bling3-floral');
+            me.find('.messageFallback').hide();
+            var ua = navigator.userAgent.toLowerCase();
+
+            var client = null;
+            phoneType.forEach(function(type) {
+                if (client == null && ua.indexOf(type) > -1) {
+                    client = type;
+                }
+            });
+
+            var b = new MP.BlingText();
+            b.init(me);
+            b.start(client); //pass in client
+        }
+
+        MP.Loader = Loader;
+
+    }(jQuery));
+
+
+    //]]>
+</script>
+
+</body>
+</html>
