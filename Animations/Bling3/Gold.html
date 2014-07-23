@@ -40,10 +40,16 @@
         }
 
         .bling3-floral .leftbg {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_left.png") no-repeat;
+            width: 32px;
+            height: 113px;
             position: absolute;
             left:0;
         }
         .bling3-floral .rightbg {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_right.png") no-repeat;
+            width: 191px;
+            height: 113px;
             position: absolute;
             right:0;
         }
@@ -162,6 +168,36 @@
                 1px 1px 0 #000;
         }
 
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .bling3-floral {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_center_2x.png) repeat-x;;
+                background-size: 32px 113px;
+            }
+            .bling3-floral .leftbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_left_2x.png) no-repeat;
+                background-size: 32px 113px;
+            }
+            .bling3-floral .rightbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_right_2x.png) no-repeat;
+                background-size: 191px 113px;
+            }
+        }
+
+        @-moz-document url-prefix() {
+            .bling3-floral {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_center_2x.png) repeat-x;;
+                background-size: 32px 113px;
+            }
+            .bling3-floral .leftbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_left_2x.png) no-repeat;
+                background-size: 32px 113px;
+            }
+            .bling3-floral .rightbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_right_2x.png) no-repeat;
+                background-size: 191px 113px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -171,8 +207,8 @@
     <div class="bling3-floral display">
 
         <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_center.png" class="bg" onload="new MP.Loader(this)"/>
-        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_left.png" class="leftbg"/>
-        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_right.png" class="rightbg"/>
+        <div class="leftbg"></div>
+        <div class="rightbg"></div>
 
         <div class="bling3-floral-header">
             <span class="timestamp"></span>
@@ -188,9 +224,10 @@
 
 <div class="wrapper">
     <div class="bling3-floral editor">
+
         <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_center.png" class="bg" />
-        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_left.png" class="leftbg"/>
-        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/goldbar_right.png" class="rightbg"/>
+        <div class="leftbg"></div>
+        <div class="rightbg"></div>
 
         <form action="">
             <div class="content">
@@ -226,6 +263,7 @@
 
             // Tap Variables
             var allowTap = true;
+            var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
 
             this.init = function(me) {
 
@@ -241,20 +279,20 @@
                     height : canvas.height
                 });
                 canvas.attr({
-                    'width' : canvas.width, // * pixelratio
-                    'height' : canvas.height
+                    'width' : canvas.width * pixelRatio, // * pixelratio
+                    'height' : canvas.height * pixelRatio
                 });
             }
 
             this.start = function(client) {
                 position.x =  canvas.width / 2 - 115,
-                mouse.x = canvas.width / 2 - 115,
+                mouse.x = canvas.width / 2 - 115 ,
                 position.y = 45,
                 mouse.y = 45;
 
-                var userInstructions = (client == "other") ? "SWIPE TO REVEAL..." : "TAP ME",
-                    fontSize = 20,
-                    i = 0;
+                var userInstructions = (client == "android") ? "TAP TO REVEAL..." : "SWIPE TO REVEAL...",
+                        fontSize = 20,
+                        i = 0;
 
                 context.font = 'normal normal bolder ' + fontSize + 'px sans-serif';
 
@@ -282,33 +320,30 @@
                 }
 
                 //printInstr(clearUserInstructions);
+                //registerEventListeners(client);
                 tapMessage();
 
             }
 
             function registerEventListeners(client) {
 
-                if (client != "other") {
-                    if ('ontouchstart' in document.documentElement) {
+                if (client == "android") {
+                    if ("ontouchstart" in document.documentElement)
                         $(canvas)[0].addEventListener('touchstart', tapMessage, false);
-                    }
-                    else {
+                    else
                         $(canvas)[0].addEventListener('mousedown', tapMessage, false);
-                    }
                 }
                 else {
-                    if ('ontouchstart' in document.documentElement) {
-                        $(canvas)[0].addEventListener('touchmove', mouseMove, false);
-                        $(canvas)[0].addEventListener('touchstart', mouseDown, false);
-                        $(canvas)[0].addEventListener('touchend',   mouseUp,   false);
-                    }
-                    else {
-                        $(canvas)[0].addEventListener('mousemove', mouseMove, false);
-                        $(canvas)[0].addEventListener('mousedown', mouseDown, false);
-                        $(canvas)[0].addEventListener('mouseup',   mouseUp,   false);
-                        $(canvas)[0].addEventListener('mouseout',  mouseUp,  false);
-                        $(canvas)[0].addEventListener('dblclick', doubleClick, false);
-                    }
+                    // refactor event listeners (some arn't needed)
+                    $(canvas)[0].addEventListener('mousemove', mouseMove, false);
+                    $(canvas)[0].addEventListener('mousedown', mouseDown, false);
+                    $(canvas)[0].addEventListener('mouseup',   mouseUp,   false);
+                    $(canvas)[0].addEventListener('mouseout',  mouseUp,  false);
+                    $(canvas)[0].addEventListener('dblclick', doubleClick, false);
+
+                    $(canvas)[0].addEventListener('touchmove', mouseMove, false);
+                    $(canvas)[0].addEventListener('touchstart', mouseDown, false);
+                    $(canvas)[0].addEventListener('touchend',   mouseUp,   false);
                 }
             }
 
@@ -334,122 +369,107 @@
                 context.rotate( angle );
                 context.textBaseline = 'hanging';
                 context.fill;
-                context.strokeStyle = '#000';
+                // Create the text border.
+                context.strokeStyle = '#ffff96';
                 context.strokeText(letter, 0, 0);
 
                 // Fill the text.
                 var whiteGrad = context.createLinearGradient(0, 0, 0, 100);
-                whiteGrad.addColorStop(0, '#feef7e');
+                whiteGrad.addColorStop(0, '#e67f22');
                 whiteGrad.addColorStop(0.5, '#e87c14');
-                whiteGrad.addColorStop(1, '#feef7e');
+                whiteGrad.addColorStop(1, '#e67f22');
                 context.fillStyle = whiteGrad;
 
-                context.shadowBlur=2;
-                context.shadowColor= "#332b00";
+                context.shadowOffsetY = 2 * pixelRatio ;
+                context.shadowBlur=2 * pixelRatio;
+                context.shadowColor= "#ffff96";
                 context.fillText(letter, 0, 0);
                 context.restore();
             }
 
             function tapMessage() {
-                //var mousePos = getMousePos(event); // may have to be event[0]touches
-                //mouse.x = mousePos.x etc
+                /*var mousePos = getMousePos(event); // may have to be event[0]touches
+                position.x =  mousePos.x,
+                mouse.x = mousePos.x,
+                position.y = mousePos.y,
+                mouse.y = mousePos.y;*/
 
                 var display = letters,
-                    fontSize = 16,
+                    fontSize = 25 * pixelRatio,
                     i = 0;
 
-                switch (canvas.width < 300) {
+                var metrics = context.measureText(letters),
+                    YDisplacement = 30 * pixelRatio;
+                    position.x = ((canvas.width / 2) - ((letters.length * 13) / 2)) * pixelRatio;
+                    mouse.x =    ((canvas.width / 2) - ((letters.length * 13) / 2)) * pixelRatio;
+                if (position.x < 10) {
+                    position.x = 10 * pixelRatio;
+                    mouse.x = 10 * pixelRatio;
+                }
+                position.y = 45 * pixelRatio;
+                mouse.y = 45 * pixelRatio;
+
+                switch (true) {
                     case (letters.length > 150):
-                        fontSize = 16;
-                        position.x = 10,
-                        mouse.x = 10,
-                        position.y = 10,
-                        mouse.y = 10;
+                        fontSize = 14 * pixelRatio;
+                        YDisplacement = 16 * pixelRatio;
+                        break;
+                    case (letters.length > 125):
+                        fontSize = 16 * pixelRatio;
+                        YDisplacement = 18 * pixelRatio;
                         break;
                     case (letters.length > 100):
-                        fontSize = 20;
-                        position.x = 10,
-                        mouse.x = 10,
-                        position.y = 10,
-                        mouse.y = 10;
+                        fontSize = 17 * pixelRatio;
+                        YDisplacement = 18 * pixelRatio;
+                        break;
+                    case (letters.length > 75):
+                        fontSize = 20 * pixelRatio;
+                        YDisplacement = 20 * pixelRatio;
                         break;
                     case (letters.length > 50):
-                        fontSize = 25;
-                        position.x = 10,
-                        mouse.x = 10,
-                        position.y = 15,
-                        mouse.y = 15;
+                        fontSize = 20 * pixelRatio;
+                        YDisplacement = 25 * pixelRatio;
                         break;
-                    case (letters.length > 13):
-                        fontSize = 25;
-                        position.x = 10,
-                        mouse.x = 10,
-                        position.y = 35,
-                        mouse.y = 35;
-                        break;
-                    case (letters.length > 0):
-                        fontSize = 30;
-                        position.x = (canvas.width / 2) - (letters.length * 9),
-                        mouse.x = (canvas.width / 2) - (letters.length * 9),
-                        position.y = 40,
-                        mouse.y = 40;
+                    case (letters.length > 25):
+                        fontSize = 20 * pixelRatio;
                         break;
                 }
 
-                /*switch (canvas.width > 300) {
-                    case (letters.length > 0):
-                        fontSize = 30;
-                        position.y = 35,
-                        mouse.y = 35;
-                        break;
-                    case (letters.length > 100):
-                        fontSize = 35;
-                        position.y = 15,
-                        mouse.y = 15;
-                        break;
-                    case (letters.length > 150):
-                        fontSize = 30;
-                        position.y = 10,
-                        mouse.y = 10;
-                        break;
-                }*/
-
-                context.font = 'normal normal bolder ' + fontSize + 'px sans-serif';
+                context.font = 'normal normal bolder ' + fontSize + 'px Arial';
 
                 function printInstr () {
                     setTimeout(function () {
 
                         var stepSize = textWidth(display[i], fontSize );
-                        mouse.x += 20;
+                        //mouse.x += 20;
                         //mouse.y += randomIntFromInterval(-5,5);
 
                         var angle = 0; //Math.atan2(mouse.y-position.y, mouse.x-position.x);
 
-                        if (position.x > (canvas.width - 10)) {
-                            position.x = 10;
-                            position.y = position.y + 20;
+                        if (position.x > (canvas.width - 20) * pixelRatio) {
+                            position.x = 10 * pixelRatio;
+                            position.y = position.y + YDisplacement;
                         }
 
-                        if (position.y > (canvas.height - 10)) {
-                            position.y = 10;
+                        if (position.y > (canvas.height - 20) * pixelRatio) {
+                            position.y = 20 * pixelRatio;
                         }
 
                         printText(display[i],angle);
 
                         if (i < letters.length-1) {
-                            position.x = position.x + Math.cos(angle) * stepSize;
-                            //position.y = position.y + Math.sin(angle) * stepSize;
+                            position.x = (position.x + Math.cos(angle) * stepSize);
+                            position.y = (position.y + Math.sin(angle) * stepSize);
                             i++;
                             printInstr();
                         }
                         else {
                             allowTap = true;
                         }
-                    }, 50) // 100
+                    }, 100)
                 }
 
-
-                if (letters.length > 0 && allowTap) {
+                if (allowTap && letters.length > 0) {
                     allowTap = false;
                     printInstr();
                 }
@@ -562,7 +582,7 @@
 
             var b = new MP.BlingText();
             b.init(me);
-            b.start(client); //pass in client
+            b.start("android"); //pass in client
         }
 
         MP.Loader = Loader;
@@ -575,3 +595,23 @@
 
 </body>
 </html>
+        <!--
+                 context.save();
+                context.translate( position.x, position.y);
+                context.rotate( angle );
+                context.textBaseline = 'hanging';
+                context.fill;
+
+                // Fill the text.
+                var whiteGrad = context.createLinearGradient(0, 0, 0, 100);
+                whiteGrad.addColorStop(0, '#e67f22');
+                whiteGrad.addColorStop(0.5, '#e87c14');
+                whiteGrad.addColorStop(1, '#e67f22');
+                context.fillStyle = whiteGrad;
+
+                context.shadowBlur=2;
+                context.shadowOffsetY = 2;
+                context.shadowColor= "#ffff96";
+                context.fillText(letter, 0, 0);
+                context.restore();
+        -->

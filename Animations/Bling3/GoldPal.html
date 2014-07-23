@@ -8,7 +8,7 @@
         /* Browser Styles */
         .wrapper {
             position: relative;
-            width: 600px;
+            width: 255px;
             overflow: visible;
             border-radius: 5px;
         }
@@ -23,23 +23,12 @@
             overflow: hidden;
         }
         .bling3-pal {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_center.png") repeat-x;
             border-radius: inherit;
             width:100%;
             height: 113px;
             position: relative;
             text-align: center;
-            background-image: -webkit-gradient(
-                linear,
-                left top,
-                left bottom,
-                color-stop(0, #6E443B),
-                color-stop(1, #232121)
-            );
-            background-image: -o-linear-gradient(bottom, #6E443B 0%, #232121 100%);
-            background-image: -moz-linear-gradient(bottom, #6E443B 0%, #232121 100%);
-            background-image: -webkit-linear-gradient(bottom, #6E443B 0%, #232121 100%);
-            background-image: -ms-linear-gradient(bottom, #6E443B 0%, #232121 100%);
-            background-image: linear-gradient(to bottom, #6E443B 0%, #232121 100%);100%);
         }
         .bling3-pal .bg {
             position: absolute;
@@ -49,6 +38,22 @@
             top:0;
             left:0;
         }
+
+        .bling3-pal .leftbg {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_left.png") no-repeat;
+            width: 128px;
+            height: 113px;
+            position: absolute;
+            left:0;
+        }
+        .bling3-pal .rightbg {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_right.png") no-repeat;
+            width: 95px;
+            height: 113px;
+            position: absolute;
+            right:0;
+        }
+
         .bling3-pal  canvas {
             cursor: crosshair;
             position: relative;
@@ -160,13 +165,46 @@
                 1px 1px 0 #000;
         }
 
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .bling3-pal {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_center_2x.png) repeat-x;;
+                background-size: 32px 113px;
+            }
+            .bling3-pal .leftbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_left_2x.png) no-repeat;
+                background-size: 128px 113px;
+            }
+            .bling3-pal .rightbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_right_2x.png) no-repeat;
+                background-size: 95px 113px;
+            }
+        }
+
+        @-moz-document url-prefix() {
+            .bling3-pal {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_center_2x.png) repeat-x;;
+                background-size: 32px 113px;
+            }
+            .bling3-pal .leftbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_left_2x.png) no-repeat;
+                background-size: 128px 113px;
+            }
+            .bling3-pal .rightbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_right_2x.png) no-repeat;
+                background-size: 95px 113px;
+            }
+        }
+
     </style>
 </head>
 <body>
 
 <div class="wrapper">
     <div class="bling3-pal display">
-        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/MP_Bling3_04plain.png" class="bg" onload="new MP.Loader(this)"/>
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_center.png" class="bg" onload="new MP.Loader(this)"/>
+        <div class="leftbg"></div>
+        <div class="rightbg"></div>
+
         <div class="bling3-pal-header">
             <span class="timestamp"></span>
             <span class="flags"></span>
@@ -181,7 +219,9 @@
 
 <div class="wrapper">
     <div class="bling3-pal editor">
-        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/MP_Bling3_04plain.png" class="bg" />
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/palringochain_center.png" class="bg"/>
+        <div class="leftbg"></div>
+        <div class="rightbg"></div>
         <form action="">
             <div class="content">
                 <textarea name="message" class="bling3-pal-textarea" max-length="200" maxlength="200"></textarea>
