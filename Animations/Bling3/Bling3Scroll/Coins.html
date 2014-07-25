@@ -1,0 +1,415 @@
+<!DOCTYPE html public "">
+<head>
+    <meta charset="uft-8">
+    <title>bling3-goldbar</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <style>
+
+        /* Browser Styles */
+        .wrapper {
+            position: relative;
+            width: 255px;
+            overflow: visible;
+            border-radius: 5px;
+        }
+
+        /* Styles Start */
+        * {
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+        }
+        .bling3-goldbar, .bling3-goldbar * {
+            overflow: hidden;
+        }
+        .bling3-goldbar {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/coins_center.png") repeat-x;
+            border-radius: inherit;
+            width:100%;
+            height: 113px;
+            position: relative;
+            text-align: center;
+        }
+        .bling3-goldbar .bg {
+            position: absolute;
+            height: 113px;
+            max-height:113px;
+            border-radius: inherit;
+            top:0;
+            left:0;
+        }
+
+        .bling3-goldbar .leftbg {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/coins_left.png") no-repeat;
+            width: 128px;
+            height: 113px;
+            position: absolute;
+            left:0;
+        }
+        .bling3-goldbar .rightbg {
+            background: url("http://media.parlingo.com/website/live/messagepacks/bling3/coins_right.png") no-repeat;
+            width: 111px;
+            height: 113px;
+            position: absolute;
+            right:0;
+        }
+
+        .bling3-goldbar  canvas {
+            cursor: crosshair;
+            position: relative;
+        }
+
+        /* Header */
+        .bling3-goldbar .bling3-goldbar-header {
+            width: 100%;
+            position: absolute;
+            z-index: 11;
+            top: 0;
+            left: 0;
+            opacity: 0.5;
+        }
+        .bling3-goldbar-header .timestamp, .bling3-goldbar-header .flags, .bling3-goldbar-header .nickname {
+            float: left;
+            padding: 2px 5px;
+            color: #fff;
+        }
+        .bling3-goldbar-header .timestamp, .bling3-goldbar-header .flags {
+            float: right;
+            padding-left: 10px;
+        }
+
+        .bling3-goldbar-header .nickname{
+            width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+        }
+
+        /* WINDOWS FALLBACK */
+        .bling3-goldbar .messageFallback{
+            position: absolute;
+            left: 0;
+            right: 0;
+            top:0;
+            margin: auto;
+            display: block;
+        }
+
+        .bling3-goldbar .message-bling{
+            overflow-y: auto;
+            height: 90px;
+            padding: 10px;
+            font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+            font-size: 25px; /* default font size */
+            line-height: 100%; /* windows line height */
+            word-wrap: break-word;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            overflow-wrap: normal;
+            color: darkgoldenrod;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+        }
+
+        .bling3-goldbar .message-bling::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .bling3-goldbar .message-bling::-webkit-scrollbar-track {
+            display: none;
+        }
+
+        .bling3-goldbar .message-bling::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        }
+
+
+        /* Editor */
+        .bling3-goldbar.editor form {
+            width: 100%;
+            border-radius: inherit;
+            position: absolute;
+            top: 0;
+        }
+        .bling3-goldbar.editor .content {
+            display: block;
+            padding:0;
+            height: 103px;
+            width:auto;
+            margin:5px;
+            background: url(http://media.parlingo.com/website/live/messagepacks/love/bear/bg_input.png) repeat scroll 0 0 transparent;
+            border-radius: 10px;
+        }
+        .bling3-goldbar.editor .content textarea {
+            font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+            font-size: 25px;
+            border: none;
+            resize: none;
+            outline: none;
+            background: none;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            font-weight: bold;
+            overflow-y: hidden;
+            color: gold;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .bling3-goldbar {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/coins_center_2x.png) repeat-x;;
+                background-size: 16px 113px;
+            }
+            .bling3-goldbar .leftbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/coins_left_2x.png) no-repeat;
+                background-size: 128px 113px;
+            }
+            .bling3-goldbar .rightbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/coins_right_2x.png) no-repeat;
+                background-size: 111px 113px;
+            }
+        }
+
+        @-moz-document url-prefix() {
+            .bling3-goldbar {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/coins_center_2x.png) repeat-x;;
+                background-size: 16px 113px;
+            }
+            .bling3-goldbar .leftbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/coins_left_2x.png) no-repeat;
+                background-size: 128px 113px;
+            }
+            .bling3-goldbar .rightbg {
+                background: url(http://media.parlingo.com/website/live/messagepacks/bling3/coins_right_2x.png) no-repeat;
+                background-size: 111px 113px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="bling3-goldbar display">
+
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/coins_center.png" class="bg" onload="new MP.Loader(this)"/>
+        <div class="leftbg"></div>
+        <div class="rightbg"></div>
+
+        <div class="bling3-goldbar-header">
+            <span class="timestamp"></span>
+            <span class="flags"></span>
+            <strong class="nickname"></strong>
+        </div>
+        <canvas id='canvas'></canvas>
+        <div class="messageFallback">
+            <div id="message" class="message-bling"></div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="bling3-goldbar editor">
+
+        <img src="http://media.parlingo.com/website/live/messagepacks/bling3/coins_center.png" class="bg" />
+        <div class="leftbg"></div>
+        <div class="rightbg"></div>
+
+        <form action="">
+            <div class="content">
+                <textarea name="message" class="bling3-goldbar-textarea" max-length="200" maxlength="200"></textarea>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    //<![CDATA[
+
+    this.MP = this.MP || {};
+
+    (function($){
+
+        "use strict";
+
+        function BlingText() {
+
+            // Application variables
+            var position = {x: 0, y: 0};
+            var letters = "";
+
+            // Drawing variables
+            var canvas;
+            var context;
+            var mouse = {x: 0, y: 0, down: false};
+
+            var pixelRatio = (window.devicePixelRatio === 1 ? 1 : 2);
+
+            this.init = function(me) {
+
+                canvas = me.find('#canvas'),
+                        letters = me.find('.message-bling').text(),
+
+                        canvas.width = Math.round(me.width()),
+                        canvas.height = Math.round(me.height());
+                context = $(canvas)[0].getContext("2d");
+
+                canvas.css({
+                    width : canvas.width,
+                    height : canvas.height
+                });
+                canvas.attr({
+                    'width' : canvas.width * pixelRatio,
+                    'height' : canvas.height * pixelRatio
+                });
+            }
+
+            this.start = function() {
+
+                tapMessage();
+            }
+
+            function printText(letter, angle){
+                context.save();
+                context.translate( position.x, position.y);
+                context.rotate( angle );
+                context.textBaseline = 'hanging';
+                context.fill;
+                // Create the text border.
+                context.strokeStyle = '#d63e2c';
+                context.strokeText(letter, 0, 0);
+
+                // Fill the text.
+                var whiteGrad = context.createLinearGradient(0, 0, 0, 56);
+                whiteGrad.addColorStop(0, '#faeeb5');
+                whiteGrad.addColorStop(1, '#e67f22');
+                context.fillStyle = whiteGrad;
+
+                context.shadowOffsetY = 2 * pixelRatio ;
+                context.shadowColor= "#d63e2c";
+                context.fillText(letter, 0, 0);
+                context.restore();
+            }
+
+            function tapMessage() {
+
+                var display = letters,
+                        fontSize = 25 * pixelRatio,
+                        i = 0;
+
+                var YDisplacement = 30 * pixelRatio;
+                position.x = ((canvas.width / 2) - ((letters.length * 13) / 2)) * pixelRatio;
+                mouse.x =    ((canvas.width / 2) - ((letters.length * 13) / 2)) * pixelRatio;
+
+                if (position.x < 10) {
+                    position.x = 10 * pixelRatio;
+                    mouse.x = 10 * pixelRatio;
+                }
+
+                position.y = 45 * pixelRatio;
+                mouse.y = 45 * pixelRatio;
+
+                switch (true) {
+                    case (letters.length > 150):
+                        fontSize = 14 * pixelRatio;
+                        YDisplacement = 16 * pixelRatio;
+                        break;
+                    case (letters.length > 125):
+                        fontSize = 16 * pixelRatio;
+                        YDisplacement = 18 * pixelRatio;
+                        break;
+                    case (letters.length > 100):
+                        fontSize = 17 * pixelRatio;
+                        YDisplacement = 18 * pixelRatio;
+                        break;
+                    case (letters.length > 75):
+                        fontSize = 20 * pixelRatio;
+                        YDisplacement = 20 * pixelRatio;
+                        break;
+                    case (letters.length > 50):
+                        fontSize = 20 * pixelRatio;
+                        YDisplacement = 25 * pixelRatio;
+                        break;
+                    case (letters.length > 25):
+                        fontSize = 20 * pixelRatio;
+                        break;
+                }
+
+                context.font = 'normal normal bolder ' + fontSize + 'px Arial';
+
+                function printInstr () {
+                    setTimeout(function () {
+
+                        var stepSize = textWidth(display[i], fontSize );
+
+                        var angle = 0;
+
+                        if (position.x > (canvas.width - 20) * pixelRatio) {
+                            position.x = 10 * pixelRatio;
+                            position.y = position.y + YDisplacement;
+                        }
+
+                        if (position.y > (canvas.height - 20) * pixelRatio) {
+                            position.y = 20 * pixelRatio;
+                        }
+
+                        printText(display[i],angle);
+
+                        if (i < letters.length-1) {
+                            position.x = (position.x + Math.cos(angle) * stepSize);
+                            position.y = (position.y + Math.sin(angle) * stepSize);
+                            i++;
+                            printInstr();
+                        }
+                    }, 100)
+                }
+
+                if (letters.length > 0) {
+                    printInstr();
+                }
+            }
+
+            function textWidth( string, size ) {
+                context.font = size + "px Arial";
+                if ( context.fillText ) {
+                    return context.measureText( string ).width;
+                }
+            }
+        }
+
+        MP.BlingText = BlingText;
+
+    })(jQuery);
+
+    (function($){
+
+        function Loader(img) {
+            var me = $(img).closest('.bling3-goldbar');
+            me.find('.messageFallback').hide();
+
+            var b = new MP.BlingText();
+            b.init(me);
+            b.start();
+        }
+
+        MP.Loader = Loader;
+
+    }(jQuery));
+
+    //]]>
+</script>
+</body>
+
+</html>
+
